@@ -1,0 +1,17 @@
+{
+  "name": "@raincity/runner",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@raincity/s3": "workspace:*",
+    "@raincity/sqs": "workspace:*",
+    "@raincity/sns": "workspace:*"
+  }
+}

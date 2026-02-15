@@ -1,0 +1,5 @@
+pnpm format:staged
+pnpm lint-staged
+pnpm rulesync generate --check
+pnpm syncpack:lint
+pnpm typecheck

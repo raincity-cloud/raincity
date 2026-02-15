@@ -1,0 +1,29 @@
+{
+  "files": {
+    "includes": [
+      "**",
+      "!AGENTS.md",
+      "!CLAUDE.md",
+      "!!.claude",
+      "!!.github",
+      "!!**/dist"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "assist": {
+    "actions": {
+      "recommended": false,
+      "source": {
+        "recommended": false,
+        "organizeImports": "on"
+      }
+    }
+  },
+  "linter": {
+    "enabled": false
+  }
+}
