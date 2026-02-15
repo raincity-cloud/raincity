@@ -1,0 +1,10 @@
+{
+  "dependencyTypes": ["prod", "dev", "peer"],
+  "semverGroups": [
+    {
+      "dependencyTypes": ["prod", "dev", "peer"],
+      "specifierTypes": ["!workspace-protocol"],
+      "range": "^"
+    }
+  ]
+}
