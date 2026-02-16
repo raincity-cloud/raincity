@@ -1,5 +1,5 @@
 {
-  "name": "@raincity/runner",
+  "name": "@raincity/aws-api-shared",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,6 +11,6 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@raincity/s3": "workspace:*"
+    "zod": "^4.3.6"
   }
 }

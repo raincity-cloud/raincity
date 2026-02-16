@@ -15,6 +15,18 @@
     "perf": "error"
   },
   "rules": {
-    "unicorn/require-module-specifiers": "off"
+    "unicorn/require-module-specifiers": "off",
+
+    "eslint/no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "zod",
+            "message": "Use `zod/v4` (legacy `zod` import is disallowed)."
+          }
+        ]
+      }
+    ]
   }
 }
