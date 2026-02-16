@@ -3,7 +3,9 @@ import { dirname } from "node:path";
 import { groupBy } from "lodash-es";
 import type { Code, Import } from "ts-poet";
 import { joinCode } from "ts-poet";
+import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
+import type { BooleanShape } from "./shapes/boolean-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
 import type { SmithyAstModel } from "./smithy-ast-model.js";
 
@@ -15,6 +17,10 @@ interface ShapeEntry<S extends Shape = Shape> {
 }
 
 type OutputPaths = Record<string, string>;
+
+function isBooleanShape(entry: ShapeEntry): entry is ShapeEntry<BooleanShape> {
+  return entry.shape.type === "boolean";
+}
 
 function isStringShape(entry: ShapeEntry): entry is ShapeEntry<StringShape> {
   return entry.shape.type === "string";
@@ -66,6 +72,9 @@ export class CodeGenContext {
       ([key, shape]) => ({ key, shape }),
     );
     const grouped = groupBy(entries, (e) => e.shape.type);
+
+    const booleanShapes = (grouped["boolean"] ?? []).filter(isBooleanShape);
+    generateBooleanShapes(this, booleanShapes);
 
     const stringShapes = (grouped["string"] ?? []).filter(isStringShape);
     generateStringShapes(this, stringShapes);
