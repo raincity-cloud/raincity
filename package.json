@@ -14,6 +14,7 @@
     "lint:check": "oxlint --type-aware --type-check --ignore-path .gitignore --deny-warnings .",
     "lint": "oxlint --fix --type-aware --type-check --ignore-path .gitignore --deny-warnings .",
     "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
     "prepare": "husky",
     "syncpack:lint": "syncpack lint-semver-ranges",
     "syncpack:fix": "syncpack set-semver-ranges"
@@ -31,6 +32,7 @@
     "oxlint-tsgolint": "^0.12.2",
     "rulesync": "^7.2.0",
     "syncpack": "^13.0.4",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }

@@ -13,7 +13,8 @@
 
       "!!.github",
 
-      "!!**/dist"
+      "!!**/dist",
+      "!!**/src/generated"
     ]
   },
   "formatter": {
