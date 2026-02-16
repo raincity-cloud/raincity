@@ -5,8 +5,6 @@ Raincity is a local development tool that simulates AWS services so you can buil
 ## What It Simulates
 
 - S3 (not yet implemented)
-- SQS (not yet implemented)
-- SNS (not yet implemented)
 
 ## Repository Layout
 
@@ -17,8 +15,6 @@ apps/
   runner/         # @raincity/runner - single process runner for all services.
 packages/
   s3/             # @raincity/s3 - local S3 simulator
-  sqs/            # @raincity/sqs - local SQS simulator
-  sns/            # @raincity/sns - local SNS simulator
 ```
 
 ## Getting Started

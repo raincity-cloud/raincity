@@ -230,3 +230,7 @@ vite.config.ts.timestamp-*
 ### CUSTOM: IDE-specific (custom)
 .idea/
 .vscode/
+
+### CUSTOM: Sparse checked out files
+scripts/vendor-aws-models/api-models-aws/
+scripts/vendor-aws-models/build/
