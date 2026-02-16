@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "sources": ["api-models-aws/models/s3/service/2006-03-01/s3-2006-03-01.json"],
+  "maven": {
+    "dependencies": [
+      "software.amazon.smithy:smithy-aws-endpoints:1.66.0",
+      "software.amazon.smithy:smithy-aws-smoke-test-model:1.66.0",
+      "software.amazon.smithy:smithy-aws-traits:1.66.0",
+      "software.amazon.smithy:smithy-rules-engine:1.66.0",
+      "software.amazon.smithy:smithy-smoke-test-traits:1.66.0",
+      "software.amazon.smithy:smithy-waiters:1.66.0"
+    ]
+  }
+}

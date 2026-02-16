@@ -10,7 +10,7 @@
   "scripts": {
     "format:check": "biome check .",
     "format": "biome check --write .",
-    "format:staged": "biome check --write --staged",
+    "format:staged": "biome check --write --staged --no-errors-on-unmatched --files-ignore-unknown=true",
     "lint:check": "oxlint --type-aware --type-check --ignore-path .gitignore --deny-warnings .",
     "lint": "oxlint --fix --type-aware --type-check --ignore-path .gitignore --deny-warnings .",
     "typecheck": "pnpm -r run typecheck",

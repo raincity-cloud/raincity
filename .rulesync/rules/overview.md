@@ -29,8 +29,6 @@ apps/
   runner/         # @raincity/runner — orchestrates the service simulators
 packages/
   s3/             # @raincity/s3 — local S3 simulator
-  sqs/            # @raincity/sqs — local SQS simulator
-  sns/            # @raincity/sns — local SNS simulator
 ```
 
 Internal packages reference each other using the pnpm workspace protocol: `"@raincity/s3": "workspace:*"`.
