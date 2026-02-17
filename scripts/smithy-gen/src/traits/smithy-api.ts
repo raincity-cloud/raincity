@@ -35,6 +35,10 @@ export const sensitiveTrait = {
   "smithy.api#sensitive": markerObjectSchema.strict().optional(),
 };
 
+export const streamingTrait = {
+  "smithy.api#streaming": markerObjectSchema.strict().optional(),
+};
+
 export const traitTrait = {
   "smithy.api#trait": z
     .object({
