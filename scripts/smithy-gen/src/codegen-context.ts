@@ -5,9 +5,11 @@ import type { Code, Import } from "ts-poet";
 import { joinCode } from "ts-poet";
 import { generateBlobShapes } from "./generators/blob-shape-gen.js";
 import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
+import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
 import type { BlobShape } from "./shapes/blob-shape.js";
 import type { BooleanShape } from "./shapes/boolean-shape.js";
+import type { IntegerShape } from "./shapes/integer-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
 import type { SmithyAstModel } from "./smithy-ast-model.js";
 
@@ -26,6 +28,10 @@ function isBlobShape(entry: ShapeEntry): entry is ShapeEntry<BlobShape> {
 
 function isBooleanShape(entry: ShapeEntry): entry is ShapeEntry<BooleanShape> {
   return entry.shape.type === "boolean";
+}
+
+function isIntegerShape(entry: ShapeEntry): entry is ShapeEntry<IntegerShape> {
+  return entry.shape.type === "integer";
 }
 
 function isStringShape(entry: ShapeEntry): entry is ShapeEntry<StringShape> {
@@ -84,6 +90,9 @@ export class CodeGenContext {
 
     const booleanShapes = (grouped["boolean"] ?? []).filter(isBooleanShape);
     generateBooleanShapes(this, booleanShapes);
+
+    const integerShapes = (grouped["integer"] ?? []).filter(isIntegerShape);
+    generateIntegerShapes(this, integerShapes);
 
     const stringShapes = (grouped["string"] ?? []).filter(isStringShape);
     generateStringShapes(this, stringShapes);
