@@ -200,3 +200,159 @@ export const uploadIdMarkerSchema = z.string();
 export const valueSchema = z.string();
 export const versionIdMarkerSchema = z.string();
 export const websiteRedirectLocationSchema = z.string();
+export const abortDateSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const copySourceIfModifiedSinceSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const copySourceIfUnmodifiedSinceSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const creationDateSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const dateSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const ifMatchInitiatedTimeSchema = z.string().regex(
+  new RegExp(
+    "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
+  ),
+).refine((value) => {
+  const parsed = new Date(value);
+  return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
+}, "Invalid IMF-fixdate timestamp");
+export const ifMatchLastModifiedTimeSchema = z.string().regex(
+  new RegExp(
+    "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
+  ),
+).refine((value) => {
+  const parsed = new Date(value);
+  return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
+}, "Invalid IMF-fixdate timestamp");
+export const ifModifiedSinceSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const ifUnmodifiedSinceSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const initiatedSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const lastModifiedSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const lastModifiedTimeSchema = z.string().regex(
+  new RegExp(
+    "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
+  ),
+).refine((value) => {
+  const parsed = new Date(value);
+  return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
+}, "Invalid IMF-fixdate timestamp");
+export const objectLockRetainUntilDateSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const renameSourceIfModifiedSinceSchema = z.string().regex(
+  new RegExp(
+    "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
+  ),
+).refine((value) => {
+  const parsed = new Date(value);
+  return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
+}, "Invalid IMF-fixdate timestamp");
+export const renameSourceIfUnmodifiedSinceSchema = z.string().regex(
+  new RegExp(
+    "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
+  ),
+).refine((value) => {
+  const parsed = new Date(value);
+  return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
+}, "Invalid IMF-fixdate timestamp");
+export const responseExpiresSchema = z.string().regex(
+  new RegExp(
+    "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
+  ),
+).refine((value) => {
+  const parsed = new Date(value);
+  return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
+}, "Invalid IMF-fixdate timestamp");
+export const restoreExpiryDateSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});
+export const sessionExpirationSchema = z.string().regex(
+  new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
+).refine((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return !Number.isNaN(new Date(truncated).getTime());
+}, "Invalid RFC3339 date-time timestamp").transform((value) => {
+  const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
+  return new Date(truncated).toISOString();
+});

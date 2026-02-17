@@ -48,6 +48,10 @@ export const streamingTrait = {
   "smithy.api#streaming": markerObjectSchema.strict().optional(),
 };
 
+export const timestampFormatTrait = {
+  "smithy.api#timestampFormat": z.enum(["date-time", "http-date"]).optional(),
+};
+
 export const traitTrait = {
   "smithy.api#trait": z
     .object({
