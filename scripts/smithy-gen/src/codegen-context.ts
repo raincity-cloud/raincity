@@ -6,10 +6,12 @@ import { joinCode } from "ts-poet";
 import { generateBlobShapes } from "./generators/blob-shape-gen.js";
 import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
 import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
+import { generateLongShapes } from "./generators/long-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
 import type { BlobShape } from "./shapes/blob-shape.js";
 import type { BooleanShape } from "./shapes/boolean-shape.js";
 import type { IntegerShape } from "./shapes/integer-shape.js";
+import type { LongShape } from "./shapes/long-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
 import type { SmithyAstModel } from "./smithy-ast-model.js";
 
@@ -32,6 +34,10 @@ function isBooleanShape(entry: ShapeEntry): entry is ShapeEntry<BooleanShape> {
 
 function isIntegerShape(entry: ShapeEntry): entry is ShapeEntry<IntegerShape> {
   return entry.shape.type === "integer";
+}
+
+function isLongShape(entry: ShapeEntry): entry is ShapeEntry<LongShape> {
+  return entry.shape.type === "long";
 }
 
 function isStringShape(entry: ShapeEntry): entry is ShapeEntry<StringShape> {
@@ -93,6 +99,9 @@ export class CodeGenContext {
 
     const integerShapes = (grouped["integer"] ?? []).filter(isIntegerShape);
     generateIntegerShapes(this, integerShapes);
+
+    const longShapes = (grouped["long"] ?? []).filter(isLongShape);
+    generateLongShapes(this, longShapes);
 
     const stringShapes = (grouped["string"] ?? []).filter(isStringShape);
     generateStringShapes(this, stringShapes);
