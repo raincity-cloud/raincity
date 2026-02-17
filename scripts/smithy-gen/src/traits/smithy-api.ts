@@ -31,6 +31,15 @@ export const patternTrait = {
 
 export const PRIVATE_TRAIT = "smithy.api#private" as const;
 
+export const rangeTrait = {
+  "smithy.api#range": z
+    .object({
+      min: z.number().optional(),
+      max: z.number().optional(),
+    })
+    .strict(),
+};
+
 export const sensitiveTrait = {
   "smithy.api#sensitive": markerObjectSchema.strict().optional(),
 };
