@@ -8,11 +8,13 @@ import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
 import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
 import { generateLongShapes } from "./generators/long-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
+import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
 import type { BlobShape } from "./shapes/blob-shape.js";
 import type { BooleanShape } from "./shapes/boolean-shape.js";
 import type { IntegerShape } from "./shapes/integer-shape.js";
 import type { LongShape } from "./shapes/long-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
+import type { TimestampShape } from "./shapes/timestamp-shape.js";
 import type { SmithyAstModel } from "./smithy-ast-model.js";
 
 type Shape = SmithyAstModel["shapes"][string];
@@ -42,6 +44,12 @@ function isLongShape(entry: ShapeEntry): entry is ShapeEntry<LongShape> {
 
 function isStringShape(entry: ShapeEntry): entry is ShapeEntry<StringShape> {
   return entry.shape.type === "string";
+}
+
+function isTimestampShape(
+  entry: ShapeEntry,
+): entry is ShapeEntry<TimestampShape> {
+  return entry.shape.type === "timestamp";
 }
 
 export class CodeGenContext {
@@ -105,6 +113,11 @@ export class CodeGenContext {
 
     const stringShapes = (grouped["string"] ?? []).filter(isStringShape);
     generateStringShapes(this, stringShapes);
+
+    const timestampShapes = (grouped["timestamp"] ?? []).filter(
+      isTimestampShape,
+    );
+    generateTimestampShapes(this, timestampShapes);
   }
 
   renderFiles(): Map<string, string> {
