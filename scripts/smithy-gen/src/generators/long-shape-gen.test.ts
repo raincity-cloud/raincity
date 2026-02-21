@@ -25,16 +25,16 @@ describe("CodeGenContext long shape generation", () => {
     ctx.generate();
     const files = ctx.renderFiles();
     expect(files.has("s3-schemas")).toBe(true);
-    expect(files.has("common-schemas")).toBe(false);
+    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(false);
   });
 
-  it("routes non-S3 shapes to the common-schemas file", () => {
+  it("routes non-S3 shapes to the common-schemas:com.amazonaws.shared file", () => {
     const ctx = new CodeGenContext(
       makeModel({ "com.amazonaws.shared#Count": { type: "long" } }),
     );
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("common-schemas")).toBe(true);
+    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
     expect(files.has("s3-schemas")).toBe(false);
   });
 

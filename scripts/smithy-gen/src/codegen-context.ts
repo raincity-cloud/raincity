@@ -8,6 +8,7 @@ import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
 import { generateDocumentShapes } from "./generators/document-shape-gen.js";
 import { generateEnumShapes } from "./generators/enum-shape-gen.js";
 import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
+import { generateListShapes } from "./generators/list-shape-gen.js";
 import { generateLongShapes } from "./generators/long-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
 import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
@@ -16,6 +17,7 @@ import type { BooleanShape } from "./shapes/boolean-shape.js";
 import type { DocumentShape } from "./shapes/document-shape.js";
 import type { EnumShape } from "./shapes/enum-shape.js";
 import type { IntegerShape } from "./shapes/integer-shape.js";
+import type { ListShape } from "./shapes/list-shape.js";
 import type { LongShape } from "./shapes/long-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
 import type { TimestampShape } from "./shapes/timestamp-shape.js";
@@ -40,6 +42,10 @@ function isBooleanShape(entry: ShapeEntry): entry is ShapeEntry<BooleanShape> {
 
 function isIntegerShape(entry: ShapeEntry): entry is ShapeEntry<IntegerShape> {
   return entry.shape.type === "integer";
+}
+
+function isListShape(entry: ShapeEntry): entry is ShapeEntry<ListShape> {
+  return entry.shape.type === "list";
 }
 
 function isEnumShape(entry: ShapeEntry): entry is ShapeEntry<EnumShape> {
@@ -91,11 +97,15 @@ export class CodeGenContext {
     if (namespace === "com.amazonaws.s3") {
       return "s3-schemas";
     }
-    return "common-schemas";
+    return `common-schemas:${namespace}`;
   }
 
   registerShape(shapeKey: string, symbol: Import): void {
     this.shapeRegistry.set(shapeKey, symbol);
+  }
+
+  hasRegisteredShape(shapeKey: string): boolean {
+    return this.shapeRegistry.has(shapeKey);
   }
 
   addCode(fileKey: string, codeItem: Code): void {
@@ -138,6 +148,9 @@ export class CodeGenContext {
       isTimestampShape,
     );
     generateTimestampShapes(this, timestampShapes);
+
+    const listShapes = (grouped["list"] ?? []).filter(isListShape);
+    generateListShapes(this, listShapes);
   }
 
   renderFiles(): Map<string, string> {

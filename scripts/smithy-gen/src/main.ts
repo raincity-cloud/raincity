@@ -27,7 +27,7 @@ const s3OutputPath = join(
   "generated",
   "schema.ts",
 );
-const sharedOutputPath = join(
+const sharedOutputDirectory = join(
   __dirname,
   "..",
   "..",
@@ -36,7 +36,6 @@ const sharedOutputPath = join(
   "aws-api-shared",
   "src",
   "generated",
-  "schema.ts",
 );
 
 const fileContent = await readFile(smithyAstModelPath, "utf-8");
@@ -44,9 +43,16 @@ const smithyAstModel = smithyAstModelSchema.parse(JSON.parse(fileContent));
 
 const ctx = new CodeGenContext(smithyAstModel);
 ctx.generate();
-await ctx.writeFiles({
+const outputPaths: Record<string, string> = {
   "s3-schemas": s3OutputPath,
-  "common-schemas": sharedOutputPath,
-});
+};
+for (const fileKey of ctx.renderFiles().keys()) {
+  if (!fileKey.startsWith("common-schemas:")) {
+    continue;
+  }
+  const namespace = fileKey.slice("common-schemas:".length);
+  outputPaths[fileKey] = join(sharedOutputDirectory, `${namespace}.ts`);
+}
+await ctx.writeFiles(outputPaths);
 
 console.log("Code generation complete.");

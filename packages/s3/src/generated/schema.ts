@@ -882,3 +882,88 @@ export const sessionExpirationSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+export const allowedHeadersSchema = z.array(allowedHeaderSchema);
+export const allowedMethodsSchema = z.array(allowedMethodSchema);
+export const allowedOriginsSchema = z.array(allowedOriginSchema);
+// TODO: list member target com.amazonaws.s3#AnalyticsConfiguration is not generated yet.
+export const analyticsConfigurationListSchema = z.array(z.unknown());
+// TODO: smithy.api#xmlName ("Bucket") on list member is not mapped to zod.
+// TODO: list member target com.amazonaws.s3#Bucket is not generated yet.
+export const bucketsSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#CORSRule is not generated yet.
+export const corsRulesSchema = z.array(z.unknown());
+export const checksumAlgorithmListSchema = z.array(checksumAlgorithmSchema);
+// TODO: list member target com.amazonaws.s3#CommonPrefix is not generated yet.
+export const commonPrefixListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#CompletedPart is not generated yet.
+export const completedPartListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#DeleteMarkerEntry is not generated yet.
+export const deleteMarkersSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#DeletedObject is not generated yet.
+export const deletedObjectsSchema = z.array(z.unknown());
+// TODO: smithy.api#xmlName ("EncryptionType") on list member is not mapped to zod.
+export const encryptionTypeListSchema = z.array(encryptionTypeSchema);
+// TODO: list member target com.amazonaws.s3#Error is not generated yet.
+export const errorsSchema = z.array(z.unknown());
+export const eventListSchema = z.array(eventSchema);
+export const exposeHeadersSchema = z.array(exposeHeaderSchema);
+// TODO: list member target com.amazonaws.s3#FilterRule is not generated yet.
+/** <p>A list of containers for the key-value pair that defines the criteria for the filter rule.</p> */
+export const filterRuleListSchema = z.array(z.unknown());
+// TODO: smithy.api#xmlName ("Grant") on list member is not mapped to zod.
+// TODO: list member target com.amazonaws.s3#Grant is not generated yet.
+export const grantsSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#IntelligentTieringConfiguration is not generated yet.
+export const intelligentTieringConfigurationListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#InventoryConfiguration is not generated yet.
+export const inventoryConfigurationListSchema = z.array(z.unknown());
+// TODO: smithy.api#xmlName ("Field") on list member is not mapped to zod.
+export const inventoryOptionalFieldsSchema = z.array(inventoryOptionalFieldSchema);
+// TODO: list member target com.amazonaws.s3#LambdaFunctionConfiguration is not generated yet.
+export const lambdaFunctionConfigurationListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#LifecycleRule is not generated yet.
+export const lifecycleRulesSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#MetricsConfiguration is not generated yet.
+export const metricsConfigurationListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#MultipartUpload is not generated yet.
+export const multipartUploadListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#NoncurrentVersionTransition is not generated yet.
+export const noncurrentVersionTransitionListSchema = z.array(z.unknown());
+export const objectAttributesListSchema = z.array(objectAttributesSchema);
+// TODO: list member target com.amazonaws.s3#ObjectIdentifier is not generated yet.
+export const objectIdentifierListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#Object is not generated yet.
+export const objectListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#ObjectVersion is not generated yet.
+export const objectVersionListSchema = z.array(z.unknown());
+export const optionalObjectAttributesListSchema = z.array(optionalObjectAttributesSchema);
+// TODO: list member target com.amazonaws.s3#OwnershipControlsRule is not generated yet.
+export const ownershipControlsRulesSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#Part is not generated yet.
+export const partsSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#ObjectPart is not generated yet.
+export const partsListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#QueueConfiguration is not generated yet.
+export const queueConfigurationListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#ReplicationRule is not generated yet.
+export const replicationRulesSchema = z.array(z.unknown());
+// TODO: smithy.api#xmlName ("RoutingRule") on list member is not mapped to zod.
+// TODO: list member target com.amazonaws.s3#RoutingRule is not generated yet.
+export const routingRulesSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#ServerSideEncryptionRule is not generated yet.
+export const serverSideEncryptionRulesSchema = z.array(z.unknown());
+// TODO: smithy.api#xmlName ("Tag") on list member is not mapped to zod.
+// TODO: list member target com.amazonaws.s3#Tag is not generated yet.
+export const tagSetSchema = z.array(z.unknown());
+// TODO: smithy.api#xmlName ("Grant") on list member is not mapped to zod.
+// TODO: list member target com.amazonaws.s3#TargetGrant is not generated yet.
+export const targetGrantsSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#Tiering is not generated yet.
+export const tieringListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#TopicConfiguration is not generated yet.
+export const topicConfigurationListSchema = z.array(z.unknown());
+// TODO: list member target com.amazonaws.s3#Transition is not generated yet.
+export const transitionListSchema = z.array(z.unknown());
+// TODO: smithy.api#xmlName ("MetadataEntry") on list member is not mapped to zod.
+// TODO: list member target com.amazonaws.s3#MetadataEntry is not generated yet.
+export const userMetadataSchema = z.array(z.unknown());
