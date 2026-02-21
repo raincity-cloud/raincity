@@ -73,3 +73,5 @@ export const traitTrait = {
     .strict()
     .optional(),
 };
+
+export const UNSTABLE_TRAIT = "smithy.api#unstable";

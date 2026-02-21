@@ -17,8 +17,9 @@ interface TimestampShapeEntry {
   shape: TimestampShape;
 }
 
-type TimestampFormat =
-  NonNullable<TimestampShape["traits"]>["smithy.api#timestampFormat"];
+type TimestampFormat = NonNullable<
+  TimestampShape["traits"]
+>["smithy.api#timestampFormat"];
 
 export function normalizeDateTimeToCanonicalUtc(value: string): string {
   if (!new RegExp(RFC3339_DATE_TIME_PATTERN).test(value)) {

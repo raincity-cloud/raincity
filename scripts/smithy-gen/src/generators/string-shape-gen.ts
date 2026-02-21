@@ -2,6 +2,7 @@ import { camelCase } from "lodash-es";
 import { code, def, imp } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { StringShape } from "../shapes/string-shape.js";
+import { buildSchemaDocumentationComment } from "./schema-documentation-comment.js";
 
 const zImp = imp("z@zod/v4");
 
@@ -31,28 +32,6 @@ export function buildConstraintChain(traits: StringShape["traits"]): string {
   }
 
   return parts.join("");
-}
-
-export function buildSchemaDocumentationComment(
-  documentation: string | undefined,
-): string | undefined {
-  if (!documentation) return undefined;
-
-  const trimmed = documentation.trim();
-  if (!trimmed) return undefined;
-
-  const safeDocumentation = trimmed.replaceAll("*/", "*\\/");
-  const lines = safeDocumentation.split(/\r?\n/);
-
-  if (lines.length === 1) {
-    return `/** ${lines[0]} */`;
-  }
-
-  return [
-    "/**",
-    ...lines.map((line) => (line ? ` * ${line}` : " *")),
-    " */",
-  ].join("\n");
 }
 
 export function generateStringShapes(
