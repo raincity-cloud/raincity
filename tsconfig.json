@@ -4,6 +4,7 @@
     "@tsconfig/node-ts/tsconfig.json"
   ],
   "compilerOptions": {
+    "erasableSyntaxOnly": false,
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
