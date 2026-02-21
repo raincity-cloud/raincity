@@ -3,6 +3,86 @@ import { z } from "zod/v4";
 
 /** Defines an endpoint rule-set used to resolve the client's transport endpoint. */
 export const endpointRuleSetSchema = z.unknown();
+/** The possible delimiters for an ARN resource segment. */
+export enum ResourceDelimiter {
+  /** The `/` character. */
+  FORWARD_SLASH = "/",
+  /** The `:` character. */
+  COLON = ":",
+}
+export const resourceDelimiterSchema = z.enum(ResourceDelimiter);
+/** Designates the target as containing data of a known classification level. */
+export enum data {
+  /**
+   * Customer content means any software (including machine images), data,
+   * text, audio, video or images that customers or any customer end user
+   * transfers to AWS for processing, storage or hosting by AWS services in
+   * connection with the customer’s accounts and any computational results
+   * that customers or any customer end user derive from the foregoing
+   * through their use of AWS services.
+   */
+  CUSTOMER_CONTENT = "content",
+  /**
+   * Account information means information about customers that customers
+   * provide to AWS in connection with the creation or administration of
+   * customers’ accounts.
+   */
+  CUSTOMER_ACCOUNT_INFORMATION = "account",
+  /**
+   * Service Attributes means service usage data related to a customer’s
+   * account, such as resource identifiers, metadata tags, security and
+   * access roles, rules, usage policies, permissions, usage statistics,
+   * logging data, and analytics.
+   */
+  SERVICE_ATTRIBUTES = "usage",
+  /** Designates metadata tags applied to AWS resources. */
+  TAG_DATA = "tagging",
+  /**
+   * Designates security and access roles, rules, usage policies, and
+   * permissions.
+   */
+  PERMISSIONS_DATA = "permissions",
+}
+export const dataSchema = z.enum(data);
+export enum PartitionEndpointPattern {
+  SERVICE_DNSSUFFIX = "service_dnsSuffix",
+  SERVICE_REGION_DNSSUFFIX = "service_region_dnsSuffix",
+  AWS_RECOMMENDED = "aws_recommended",
+}
+export const partitionEndpointPatternSchema = z.enum(PartitionEndpointPattern);
+export enum ChecksumAlgorithm {
+  /** CRC64NVME */
+  CRC64NVME = "CRC64NVME",
+  /** CRC32C */
+  CRC32C = "CRC32C",
+  /** CRC32 */
+  CRC32 = "CRC32",
+  /** SHA1 */
+  SHA1 = "SHA1",
+  /** SHA256 */
+  SHA256 = "SHA256",
+}
+export const checksumAlgorithmSchema = z.enum(ChecksumAlgorithm);
+/** The kind of parameter. */
+export enum ParameterType {
+  STRING = "string",
+  BOOLEAN = "boolean",
+  STRING_ARRAY = "stringArray",
+}
+export const parameterTypeSchema = z.enum(ParameterType);
+export enum ResultType {
+  ENDPOINT = "endpoint",
+  ERROR = "error",
+}
+export const resultTypeSchema = z.enum(ResultType);
+/** An enum representing supported Smithy shape types. */
+export enum ShapeType {
+  /** Indicates a Smithy string shape type. */
+  STRING = "string",
+  /** Indicates a Smithy boolean shape type. */
+  BOOLEAN = "boolean",
+}
+export const shapeTypeSchema = z.enum(ShapeType);
 /** A string representing a service's ARN namespace. */
 export const arnNamespaceSchema = z.string().regex(new RegExp("^[a-z0-9.\\-]{1,63}$"));
 /** A string representing a CloudFormation service name. */

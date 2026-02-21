@@ -1,8 +1,14 @@
 import { z } from "zod/v4";
 import { markerObjectSchema } from "../zod-helpers.js";
 
+export const DEPRECATED_TRAIT = "smithy.api#deprecated" as const;
+
 export const documentationTrait = {
   "smithy.api#documentation": z.string().optional(),
+};
+
+export const enumValueTrait = {
+  "smithy.api#enumValue": z.string().optional(),
 };
 
 export const idRefTrait = {

@@ -21,6 +21,532 @@ export const objectLockEnabledForBucketSchema = z.boolean();
 export const quietSchema = z.boolean();
 export const settingSchema = z.boolean();
 export const skipValidationSchema = z.boolean();
+export enum AnalyticsS3ExportFileFormat {
+  CSV = "CSV",
+}
+export const analyticsS3ExportFileFormatSchema = z.enum(AnalyticsS3ExportFileFormat);
+export enum ArchiveStatus {
+  ARCHIVE_ACCESS = "ARCHIVE_ACCESS",
+  DEEP_ARCHIVE_ACCESS = "DEEP_ARCHIVE_ACCESS",
+}
+export const archiveStatusSchema = z.enum(ArchiveStatus);
+export enum BucketAbacStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const bucketAbacStatusSchema = z.enum(BucketAbacStatus);
+export enum BucketAccelerateStatus {
+  Enabled = "Enabled",
+  Suspended = "Suspended",
+}
+export const bucketAccelerateStatusSchema = z.enum(BucketAccelerateStatus);
+export enum BucketCannedACL {
+  private = "private",
+  public_read = "public-read",
+  public_read_write = "public-read-write",
+  authenticated_read = "authenticated-read",
+}
+export const bucketCannedAclSchema = z.enum(BucketCannedACL);
+export enum BucketLocationConstraint {
+  af_south_1 = "af-south-1",
+  ap_east_1 = "ap-east-1",
+  ap_northeast_1 = "ap-northeast-1",
+  ap_northeast_2 = "ap-northeast-2",
+  ap_northeast_3 = "ap-northeast-3",
+  ap_south_1 = "ap-south-1",
+  ap_south_2 = "ap-south-2",
+  ap_southeast_1 = "ap-southeast-1",
+  ap_southeast_2 = "ap-southeast-2",
+  ap_southeast_3 = "ap-southeast-3",
+  ap_southeast_4 = "ap-southeast-4",
+  ap_southeast_5 = "ap-southeast-5",
+  ca_central_1 = "ca-central-1",
+  cn_north_1 = "cn-north-1",
+  cn_northwest_1 = "cn-northwest-1",
+  EU = "EU",
+  eu_central_1 = "eu-central-1",
+  eu_central_2 = "eu-central-2",
+  eu_north_1 = "eu-north-1",
+  eu_south_1 = "eu-south-1",
+  eu_south_2 = "eu-south-2",
+  eu_west_1 = "eu-west-1",
+  eu_west_2 = "eu-west-2",
+  eu_west_3 = "eu-west-3",
+  il_central_1 = "il-central-1",
+  me_central_1 = "me-central-1",
+  me_south_1 = "me-south-1",
+  sa_east_1 = "sa-east-1",
+  us_east_2 = "us-east-2",
+  us_gov_east_1 = "us-gov-east-1",
+  us_gov_west_1 = "us-gov-west-1",
+  us_west_1 = "us-west-1",
+  us_west_2 = "us-west-2",
+}
+export const bucketLocationConstraintSchema = z.enum(BucketLocationConstraint);
+export enum BucketLogsPermission {
+  FULL_CONTROL = "FULL_CONTROL",
+  READ = "READ",
+  WRITE = "WRITE",
+}
+export const bucketLogsPermissionSchema = z.enum(BucketLogsPermission);
+export enum BucketType {
+  Directory = "Directory",
+}
+export const bucketTypeSchema = z.enum(BucketType);
+export enum BucketVersioningStatus {
+  Enabled = "Enabled",
+  Suspended = "Suspended",
+}
+export const bucketVersioningStatusSchema = z.enum(BucketVersioningStatus);
+export enum ChecksumAlgorithm {
+  CRC32 = "CRC32",
+  CRC32C = "CRC32C",
+  SHA1 = "SHA1",
+  SHA256 = "SHA256",
+  CRC64NVME = "CRC64NVME",
+}
+export const checksumAlgorithmSchema = z.enum(ChecksumAlgorithm);
+export enum ChecksumMode {
+  ENABLED = "ENABLED",
+}
+export const checksumModeSchema = z.enum(ChecksumMode);
+export enum ChecksumType {
+  COMPOSITE = "COMPOSITE",
+  FULL_OBJECT = "FULL_OBJECT",
+}
+export const checksumTypeSchema = z.enum(ChecksumType);
+export enum CompressionType {
+  NONE = "NONE",
+  GZIP = "GZIP",
+  BZIP2 = "BZIP2",
+}
+export const compressionTypeSchema = z.enum(CompressionType);
+export enum DataRedundancy {
+  SingleAvailabilityZone = "SingleAvailabilityZone",
+  SingleLocalZone = "SingleLocalZone",
+}
+export const dataRedundancySchema = z.enum(DataRedundancy);
+export enum DeleteMarkerReplicationStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const deleteMarkerReplicationStatusSchema = z.enum(DeleteMarkerReplicationStatus);
+/**
+ * <p>Encoding type used by Amazon S3 to encode the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html">object keys</a> in the response. Responses are
+ *       encoded only in UTF-8. An object key can contain any Unicode character. However, the XML 1.0 parser
+ *       can't parse certain characters, such as characters with an ASCII value from 0 to 10. For characters that
+ *       aren't supported in XML 1.0, you can add this parameter to request that Amazon S3 encode the keys in the
+ *       response. For more information about characters to avoid in object key names, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html#object-key-guidelines">Object key
+ *         naming guidelines</a>.</p>
+ *          <note>
+ *             <p>When using the URL encoding type, non-ASCII characters that are used in an object's key name will
+ *         be percent-encoded according to UTF-8 code values. For example, the object
+ *           <code>test_file(3).png</code> will appear as <code>test_file%283%29.png</code>.</p>
+ *          </note>
+ */
+export enum EncodingType {
+  url = "url",
+}
+export const encodingTypeSchema = z.enum(EncodingType);
+export enum EncryptionType {
+  NONE = "NONE",
+  SSE_C = "SSE-C",
+}
+export const encryptionTypeSchema = z.enum(EncryptionType);
+/** <p>The bucket event for which to send notifications.</p> */
+export enum Event {
+  s3_ReducedRedundancyLostObject = "s3:ReducedRedundancyLostObject",
+  s3_ObjectCreated_ = "s3:ObjectCreated:*",
+  s3_ObjectCreated_Put = "s3:ObjectCreated:Put",
+  s3_ObjectCreated_Post = "s3:ObjectCreated:Post",
+  s3_ObjectCreated_Copy = "s3:ObjectCreated:Copy",
+  s3_ObjectCreated_CompleteMultipartUpload = "s3:ObjectCreated:CompleteMultipartUpload",
+  s3_ObjectRemoved_ = "s3:ObjectRemoved:*",
+  s3_ObjectRemoved_Delete = "s3:ObjectRemoved:Delete",
+  s3_ObjectRemoved_DeleteMarkerCreated = "s3:ObjectRemoved:DeleteMarkerCreated",
+  s3_ObjectRestore_ = "s3:ObjectRestore:*",
+  s3_ObjectRestore_Post = "s3:ObjectRestore:Post",
+  s3_ObjectRestore_Completed = "s3:ObjectRestore:Completed",
+  s3_Replication_ = "s3:Replication:*",
+  s3_Replication_OperationFailedReplication = "s3:Replication:OperationFailedReplication",
+  s3_Replication_OperationNotTracked = "s3:Replication:OperationNotTracked",
+  s3_Replication_OperationMissedThreshold = "s3:Replication:OperationMissedThreshold",
+  s3_Replication_OperationReplicatedAfterThreshold = "s3:Replication:OperationReplicatedAfterThreshold",
+  s3_ObjectRestore_Delete = "s3:ObjectRestore:Delete",
+  s3_LifecycleTransition = "s3:LifecycleTransition",
+  s3_IntelligentTiering = "s3:IntelligentTiering",
+  s3_ObjectAcl_Put = "s3:ObjectAcl:Put",
+  s3_LifecycleExpiration_ = "s3:LifecycleExpiration:*",
+  s3_LifecycleExpiration_Delete = "s3:LifecycleExpiration:Delete",
+  s3_LifecycleExpiration_DeleteMarkerCreated = "s3:LifecycleExpiration:DeleteMarkerCreated",
+  s3_ObjectTagging_ = "s3:ObjectTagging:*",
+  s3_ObjectTagging_Put = "s3:ObjectTagging:Put",
+  s3_ObjectTagging_Delete = "s3:ObjectTagging:Delete",
+}
+export const eventSchema = z.enum(Event);
+export enum ExistingObjectReplicationStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const existingObjectReplicationStatusSchema = z.enum(ExistingObjectReplicationStatus);
+export enum ExpirationState {
+  ENABLED = "ENABLED",
+  DISABLED = "DISABLED",
+}
+export const expirationStateSchema = z.enum(ExpirationState);
+export enum ExpirationStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const expirationStatusSchema = z.enum(ExpirationStatus);
+export enum ExpressionType {
+  SQL = "SQL",
+}
+export const expressionTypeSchema = z.enum(ExpressionType);
+export enum FileHeaderInfo {
+  USE = "USE",
+  IGNORE = "IGNORE",
+  NONE = "NONE",
+}
+export const fileHeaderInfoSchema = z.enum(FileHeaderInfo);
+export enum FilterRuleName {
+  prefix = "prefix",
+  suffix = "suffix",
+}
+export const filterRuleNameSchema = z.enum(FilterRuleName);
+export enum IntelligentTieringAccessTier {
+  ARCHIVE_ACCESS = "ARCHIVE_ACCESS",
+  DEEP_ARCHIVE_ACCESS = "DEEP_ARCHIVE_ACCESS",
+}
+export const intelligentTieringAccessTierSchema = z.enum(IntelligentTieringAccessTier);
+export enum IntelligentTieringStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const intelligentTieringStatusSchema = z.enum(IntelligentTieringStatus);
+export enum InventoryConfigurationState {
+  ENABLED = "ENABLED",
+  DISABLED = "DISABLED",
+}
+export const inventoryConfigurationStateSchema = z.enum(InventoryConfigurationState);
+export enum InventoryFormat {
+  CSV = "CSV",
+  ORC = "ORC",
+  Parquet = "Parquet",
+}
+export const inventoryFormatSchema = z.enum(InventoryFormat);
+export enum InventoryFrequency {
+  Daily = "Daily",
+  Weekly = "Weekly",
+}
+export const inventoryFrequencySchema = z.enum(InventoryFrequency);
+export enum InventoryIncludedObjectVersions {
+  All = "All",
+  Current = "Current",
+}
+export const inventoryIncludedObjectVersionsSchema = z.enum(InventoryIncludedObjectVersions);
+export enum InventoryOptionalField {
+  Size = "Size",
+  LastModifiedDate = "LastModifiedDate",
+  StorageClass = "StorageClass",
+  ETag = "ETag",
+  IsMultipartUploaded = "IsMultipartUploaded",
+  ReplicationStatus = "ReplicationStatus",
+  EncryptionStatus = "EncryptionStatus",
+  ObjectLockRetainUntilDate = "ObjectLockRetainUntilDate",
+  ObjectLockMode = "ObjectLockMode",
+  ObjectLockLegalHoldStatus = "ObjectLockLegalHoldStatus",
+  IntelligentTieringAccessTier = "IntelligentTieringAccessTier",
+  BucketKeyStatus = "BucketKeyStatus",
+  ChecksumAlgorithm = "ChecksumAlgorithm",
+  ObjectAccessControlList = "ObjectAccessControlList",
+  ObjectOwner = "ObjectOwner",
+  LifecycleExpirationDate = "LifecycleExpirationDate",
+}
+export const inventoryOptionalFieldSchema = z.enum(InventoryOptionalField);
+export enum JSONType {
+  DOCUMENT = "DOCUMENT",
+  LINES = "LINES",
+}
+export const jsonTypeSchema = z.enum(JSONType);
+export enum LocationType {
+  AvailabilityZone = "AvailabilityZone",
+  LocalZone = "LocalZone",
+}
+export const locationTypeSchema = z.enum(LocationType);
+export enum MFADelete {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const mfaDeleteSchema = z.enum(MFADelete);
+export enum MFADeleteStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const mfaDeleteStatusSchema = z.enum(MFADeleteStatus);
+export enum MetadataDirective {
+  COPY = "COPY",
+  REPLACE = "REPLACE",
+}
+export const metadataDirectiveSchema = z.enum(MetadataDirective);
+export enum MetricsStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const metricsStatusSchema = z.enum(MetricsStatus);
+export enum ObjectAttributes {
+  ETAG = "ETag",
+  CHECKSUM = "Checksum",
+  OBJECT_PARTS = "ObjectParts",
+  STORAGE_CLASS = "StorageClass",
+  OBJECT_SIZE = "ObjectSize",
+}
+export const objectAttributesSchema = z.enum(ObjectAttributes);
+export enum ObjectCannedACL {
+  private = "private",
+  public_read = "public-read",
+  public_read_write = "public-read-write",
+  authenticated_read = "authenticated-read",
+  aws_exec_read = "aws-exec-read",
+  bucket_owner_read = "bucket-owner-read",
+  bucket_owner_full_control = "bucket-owner-full-control",
+}
+export const objectCannedAclSchema = z.enum(ObjectCannedACL);
+export enum ObjectLockEnabled {
+  Enabled = "Enabled",
+}
+export const objectLockEnabledSchema = z.enum(ObjectLockEnabled);
+export enum ObjectLockLegalHoldStatus {
+  ON = "ON",
+  OFF = "OFF",
+}
+export const objectLockLegalHoldStatusSchema = z.enum(ObjectLockLegalHoldStatus);
+export enum ObjectLockMode {
+  GOVERNANCE = "GOVERNANCE",
+  COMPLIANCE = "COMPLIANCE",
+}
+export const objectLockModeSchema = z.enum(ObjectLockMode);
+export enum ObjectLockRetentionMode {
+  GOVERNANCE = "GOVERNANCE",
+  COMPLIANCE = "COMPLIANCE",
+}
+export const objectLockRetentionModeSchema = z.enum(ObjectLockRetentionMode);
+/**
+ * <p>The container element for object ownership for a bucket's ownership controls.</p>
+ *          <p>
+ *             <code>BucketOwnerPreferred</code> - Objects uploaded to the bucket change ownership to the bucket
+ *       owner if the objects are uploaded with the <code>bucket-owner-full-control</code> canned ACL.</p>
+ *          <p>
+ *             <code>ObjectWriter</code> - The uploading account will own the object if the object is uploaded with
+ *       the <code>bucket-owner-full-control</code> canned ACL.</p>
+ *          <p>
+ *             <code>BucketOwnerEnforced</code> - Access control lists (ACLs) are disabled and no longer affect
+ *       permissions. The bucket owner automatically owns and has full control over every object in the bucket.
+ *       The bucket only accepts PUT requests that don't specify an ACL or specify bucket owner full control ACLs
+ *       (such as the predefined <code>bucket-owner-full-control</code> canned ACL or a custom ACL in XML format
+ *       that grants the same permissions).</p>
+ *          <p>By default, <code>ObjectOwnership</code> is set to <code>BucketOwnerEnforced</code> and ACLs are
+ *       disabled. We recommend keeping ACLs disabled, except in uncommon use cases where you must control access
+ *       for each object individually. For more information about S3 Object Ownership, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/about-object-ownership.html">Controlling
+ *         ownership of objects and disabling ACLs for your bucket</a> in the
+ *         <i>Amazon S3 User Guide</i>. </p>
+ *          <note>
+ *             <p>This functionality is not supported for directory buckets. Directory buckets use the bucket owner enforced setting for S3 Object Ownership.</p>
+ *          </note>
+ */
+export enum ObjectOwnership {
+  BucketOwnerPreferred = "BucketOwnerPreferred",
+  ObjectWriter = "ObjectWriter",
+  BucketOwnerEnforced = "BucketOwnerEnforced",
+}
+export const objectOwnershipSchema = z.enum(ObjectOwnership);
+export enum ObjectStorageClass {
+  STANDARD = "STANDARD",
+  REDUCED_REDUNDANCY = "REDUCED_REDUNDANCY",
+  GLACIER = "GLACIER",
+  STANDARD_IA = "STANDARD_IA",
+  ONEZONE_IA = "ONEZONE_IA",
+  INTELLIGENT_TIERING = "INTELLIGENT_TIERING",
+  DEEP_ARCHIVE = "DEEP_ARCHIVE",
+  OUTPOSTS = "OUTPOSTS",
+  GLACIER_IR = "GLACIER_IR",
+  SNOW = "SNOW",
+  EXPRESS_ONEZONE = "EXPRESS_ONEZONE",
+  FSX_OPENZFS = "FSX_OPENZFS",
+  FSX_ONTAP = "FSX_ONTAP",
+}
+export const objectStorageClassSchema = z.enum(ObjectStorageClass);
+export enum ObjectVersionStorageClass {
+  STANDARD = "STANDARD",
+}
+export const objectVersionStorageClassSchema = z.enum(ObjectVersionStorageClass);
+export enum OptionalObjectAttributes {
+  RESTORE_STATUS = "RestoreStatus",
+}
+export const optionalObjectAttributesSchema = z.enum(OptionalObjectAttributes);
+export enum OwnerOverride {
+  Destination = "Destination",
+}
+export const ownerOverrideSchema = z.enum(OwnerOverride);
+export enum PartitionDateSource {
+  EventTime = "EventTime",
+  DeliveryTime = "DeliveryTime",
+}
+export const partitionDateSourceSchema = z.enum(PartitionDateSource);
+export enum Payer {
+  Requester = "Requester",
+  BucketOwner = "BucketOwner",
+}
+export const payerSchema = z.enum(Payer);
+export enum Permission {
+  FULL_CONTROL = "FULL_CONTROL",
+  WRITE = "WRITE",
+  WRITE_ACP = "WRITE_ACP",
+  READ = "READ",
+  READ_ACP = "READ_ACP",
+}
+export const permissionSchema = z.enum(Permission);
+export enum Protocol {
+  http = "http",
+  https = "https",
+}
+export const protocolSchema = z.enum(Protocol);
+export enum QuoteFields {
+  ALWAYS = "ALWAYS",
+  ASNEEDED = "ASNEEDED",
+}
+export const quoteFieldsSchema = z.enum(QuoteFields);
+export enum ReplicaModificationsStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const replicaModificationsStatusSchema = z.enum(ReplicaModificationsStatus);
+export enum ReplicationRuleStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const replicationRuleStatusSchema = z.enum(ReplicationRuleStatus);
+export enum ReplicationStatus {
+  COMPLETE = "COMPLETE",
+  PENDING = "PENDING",
+  FAILED = "FAILED",
+  REPLICA = "REPLICA",
+  COMPLETED = "COMPLETED",
+}
+export const replicationStatusSchema = z.enum(ReplicationStatus);
+export enum ReplicationTimeStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const replicationTimeStatusSchema = z.enum(ReplicationTimeStatus);
+/**
+ * <p>If present, indicates that the requester was successfully charged for the request. For more
+ *       information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/RequesterPaysBuckets.html">Using Requester Pays buckets for storage transfers and usage</a> in the <i>Amazon Simple
+ *         Storage Service user guide</i>.</p>
+ *          <note>
+ *             <p>This functionality is not supported for directory buckets.</p>
+ *          </note>
+ */
+export enum RequestCharged {
+  requester = "requester",
+}
+export const requestChargedSchema = z.enum(RequestCharged);
+/**
+ * <p>Confirms that the requester knows that they will be charged for the request. Bucket owners need not
+ *       specify this parameter in their requests. If either the source or destination S3 bucket has Requester
+ *       Pays enabled, the requester will pay for the corresponding charges. For information about
+ *       downloading objects from Requester Pays buckets, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectsinRequesterPaysBuckets.html">Downloading Objects in Requester Pays
+ *         Buckets</a> in the <i>Amazon S3 User Guide</i>.</p>
+ *          <note>
+ *             <p>This functionality is not supported for directory buckets.</p>
+ *          </note>
+ */
+export enum RequestPayer {
+  requester = "requester",
+}
+export const requestPayerSchema = z.enum(RequestPayer);
+export enum RestoreRequestType {
+  SELECT = "SELECT",
+}
+export const restoreRequestTypeSchema = z.enum(RestoreRequestType);
+export enum S3TablesBucketType {
+  aws = "aws",
+  customer = "customer",
+}
+export const s3TablesBucketTypeSchema = z.enum(S3TablesBucketType);
+export enum ServerSideEncryption {
+  AES256 = "AES256",
+  aws_fsx = "aws:fsx",
+  aws_kms = "aws:kms",
+  aws_kms_dsse = "aws:kms:dsse",
+}
+export const serverSideEncryptionSchema = z.enum(ServerSideEncryption);
+export enum SessionMode {
+  ReadOnly = "ReadOnly",
+  ReadWrite = "ReadWrite",
+}
+export const sessionModeSchema = z.enum(SessionMode);
+export enum SseKmsEncryptedObjectsStatus {
+  Enabled = "Enabled",
+  Disabled = "Disabled",
+}
+export const sseKmsEncryptedObjectsStatusSchema = z.enum(SseKmsEncryptedObjectsStatus);
+export enum StorageClass {
+  STANDARD = "STANDARD",
+  REDUCED_REDUNDANCY = "REDUCED_REDUNDANCY",
+  STANDARD_IA = "STANDARD_IA",
+  ONEZONE_IA = "ONEZONE_IA",
+  INTELLIGENT_TIERING = "INTELLIGENT_TIERING",
+  GLACIER = "GLACIER",
+  DEEP_ARCHIVE = "DEEP_ARCHIVE",
+  OUTPOSTS = "OUTPOSTS",
+  GLACIER_IR = "GLACIER_IR",
+  SNOW = "SNOW",
+  EXPRESS_ONEZONE = "EXPRESS_ONEZONE",
+  FSX_OPENZFS = "FSX_OPENZFS",
+  FSX_ONTAP = "FSX_ONTAP",
+}
+export const storageClassSchema = z.enum(StorageClass);
+export enum StorageClassAnalysisSchemaVersion {
+  V_1 = "V_1",
+}
+export const storageClassAnalysisSchemaVersionSchema = z.enum(StorageClassAnalysisSchemaVersion);
+export enum TableSseAlgorithm {
+  aws_kms = "aws:kms",
+  AES256 = "AES256",
+}
+export const tableSseAlgorithmSchema = z.enum(TableSseAlgorithm);
+export enum TaggingDirective {
+  COPY = "COPY",
+  REPLACE = "REPLACE",
+}
+export const taggingDirectiveSchema = z.enum(TaggingDirective);
+export enum Tier {
+  Standard = "Standard",
+  Bulk = "Bulk",
+  Expedited = "Expedited",
+}
+export const tierSchema = z.enum(Tier);
+export enum TransitionDefaultMinimumObjectSize {
+  varies_by_storage_class = "varies_by_storage_class",
+  all_storage_classes_128K = "all_storage_classes_128K",
+}
+export const transitionDefaultMinimumObjectSizeSchema = z.enum(TransitionDefaultMinimumObjectSize);
+export enum TransitionStorageClass {
+  GLACIER = "GLACIER",
+  STANDARD_IA = "STANDARD_IA",
+  ONEZONE_IA = "ONEZONE_IA",
+  INTELLIGENT_TIERING = "INTELLIGENT_TIERING",
+  DEEP_ARCHIVE = "DEEP_ARCHIVE",
+  GLACIER_IR = "GLACIER_IR",
+}
+export const transitionStorageClassSchema = z.enum(TransitionStorageClass);
+export enum Type {
+  CanonicalUser = "CanonicalUser",
+  AmazonCustomerByEmail = "AmazonCustomerByEmail",
+  Group = "Group",
+}
+export const typeSchema = z.enum(Type);
 export const daysSchema = z.number();
 export const daysAfterInitiationSchema = z.number();
 export const getObjectResponseStatusCodeSchema = z.number();
