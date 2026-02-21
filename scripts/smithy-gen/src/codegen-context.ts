@@ -5,12 +5,14 @@ import type { Code, Import } from "ts-poet";
 import { joinCode } from "ts-poet";
 import { generateBlobShapes } from "./generators/blob-shape-gen.js";
 import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
+import { generateDocumentShapes } from "./generators/document-shape-gen.js";
 import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
 import { generateLongShapes } from "./generators/long-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
 import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
 import type { BlobShape } from "./shapes/blob-shape.js";
 import type { BooleanShape } from "./shapes/boolean-shape.js";
+import type { DocumentShape } from "./shapes/document-shape.js";
 import type { IntegerShape } from "./shapes/integer-shape.js";
 import type { LongShape } from "./shapes/long-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
@@ -36,6 +38,12 @@ function isBooleanShape(entry: ShapeEntry): entry is ShapeEntry<BooleanShape> {
 
 function isIntegerShape(entry: ShapeEntry): entry is ShapeEntry<IntegerShape> {
   return entry.shape.type === "integer";
+}
+
+function isDocumentShape(
+  entry: ShapeEntry,
+): entry is ShapeEntry<DocumentShape> {
+  return entry.shape.type === "document";
 }
 
 function isLongShape(entry: ShapeEntry): entry is ShapeEntry<LongShape> {
@@ -104,6 +112,9 @@ export class CodeGenContext {
 
     const booleanShapes = (grouped["boolean"] ?? []).filter(isBooleanShape);
     generateBooleanShapes(this, booleanShapes);
+
+    const documentShapes = (grouped["document"] ?? []).filter(isDocumentShape);
+    generateDocumentShapes(this, documentShapes);
 
     const integerShapes = (grouped["integer"] ?? []).filter(isIntegerShape);
     generateIntegerShapes(this, integerShapes);
