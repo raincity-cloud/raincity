@@ -29,7 +29,7 @@ Internal packages reference each other using the pnpm workspace protocol: `"@rai
 ## Tech Stack
 
 - **Language:** TypeScript 5.9+ with strict settings enabled
-- **Runtime:** Node.js 24+ (native TypeScript execution via `--experimental-strip-types`)
+- **Runtime:** Node.js 24+ with `tsx` for direct TypeScript execution
 - **Package manager:** pnpm 10
 - **Module format:** ES modules (`"type": "module"`)
 
@@ -42,4 +42,4 @@ Internal packages reference each other using the pnpm workspace protocol: `"@rai
 - **Workspace links:** Keep internal workspace dependencies on `workspace:*` (do not convert these to `^` ranges).
 - **Syncpack commands:** Run `pnpm syncpack:lint` to verify ranges and `pnpm syncpack:fix` to auto-fix non-workspace ranges.
 - **Strict TypeScript:** The root `tsconfig.json` enables `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noUnusedLocals`, `noUnusedParameters`, and other strict options. All packages inherit this config.
-- **No build step:** Packages export directly from `src/index.ts`. TypeScript is executed directly by Node 24 without compilation.
+- **No build step:** Packages export directly from `src/index.ts`. TypeScript is executed directly with `tsx` without compilation.
