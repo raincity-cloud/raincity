@@ -11,6 +11,7 @@ import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
 import { generateListShapes } from "./generators/list-shape-gen.js";
 import { generateLongShapes } from "./generators/long-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
+import { generateStructureShapes } from "./generators/structure-shape-gen.js";
 import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
 import type { BlobShape } from "./shapes/blob-shape.js";
 import type { BooleanShape } from "./shapes/boolean-shape.js";
@@ -20,6 +21,7 @@ import type { IntegerShape } from "./shapes/integer-shape.js";
 import type { ListShape } from "./shapes/list-shape.js";
 import type { LongShape } from "./shapes/long-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
+import type { StructureShape } from "./shapes/structure-shape.js";
 import type { TimestampShape } from "./shapes/timestamp-shape.js";
 import type { SmithyAstModel } from "./smithy-ast-model.js";
 
@@ -46,6 +48,12 @@ function isIntegerShape(entry: ShapeEntry): entry is ShapeEntry<IntegerShape> {
 
 function isListShape(entry: ShapeEntry): entry is ShapeEntry<ListShape> {
   return entry.shape.type === "list";
+}
+
+function isStructureShape(
+  entry: ShapeEntry,
+): entry is ShapeEntry<StructureShape> {
+  return entry.shape.type === "structure";
 }
 
 function isEnumShape(entry: ShapeEntry): entry is ShapeEntry<EnumShape> {
@@ -108,6 +116,12 @@ export class CodeGenContext {
     return this.shapeRegistry.has(shapeKey);
   }
 
+  getShapeType(
+    shapeKey: string,
+  ): SmithyAstModel["shapes"][string]["type"] | undefined {
+    return this.model.shapes[shapeKey]?.type;
+  }
+
   addCode(fileKey: string, codeItem: Code): void {
     let codes = this.fileCode.get(fileKey);
     if (!codes) {
@@ -148,6 +162,11 @@ export class CodeGenContext {
       isTimestampShape,
     );
     generateTimestampShapes(this, timestampShapes);
+
+    const structureShapes = (grouped["structure"] ?? []).filter(
+      isStructureShape,
+    );
+    generateStructureShapes(this, structureShapes);
 
     const listShapes = (grouped["list"] ?? []).filter(isListShape);
     generateListShapes(this, listShapes);

@@ -7,9 +7,101 @@ export enum PartitionEndpointPattern {
   AWS_RECOMMENDED = "aws_recommended",
 }
 export const partitionEndpointPatternSchema = z.enum(PartitionEndpointPattern);
-// TODO: list member target aws.endpoints#PartitionEndpointSpecialCase is not generated yet.
-export const partitionEndpointSpecialCaseListSchema = z.array(z.unknown());
-// TODO: list member target aws.endpoints#PartitionSpecialCase is not generated yet.
-export const partitionSpecialCaseListSchema = z.array(z.unknown());
-// TODO: list member target aws.endpoints#RegionSpecialCase is not generated yet.
-export const regionSpecialCaseListSchema = z.array(z.unknown());
+/** Defines the endpoint pattern to apply for a partitional endpoint. */
+export const partitionEndpointSpecialCaseSchema = z.object({
+  /** The special-cased endpoint pattern. */
+  // TODO: structure member target smithy.api#String for PartitionEndpointSpecialCase.endpoint is not generated yet.
+  endpoint: z.unknown().optional(),
+  /** The region to override the defaultGlobalRegion used in this partition. */
+  // TODO: structure member target smithy.api#String for PartitionEndpointSpecialCase.region is not generated yet.
+  region: z.unknown().optional(),
+  /** When true, the special case will apply to dualstack endpoint variants. */
+  // TODO: structure member target smithy.api#Boolean for PartitionEndpointSpecialCase.dualStack is not generated yet.
+  dualStack: z.unknown().optional(),
+  /** When true, the special case will apply to fips endpoint variants. */
+  // TODO: structure member target smithy.api#Boolean for PartitionEndpointSpecialCase.fips is not generated yet.
+  fips: z.unknown().optional(),
+});
+/** Defines the endpoint pattern to apply for all regional endpoints in the given partition. */
+export const partitionSpecialCaseSchema = z.object({
+  /** The special-cased endpoint pattern. */
+  // TODO: structure member target smithy.api#String for PartitionSpecialCase.endpoint is not generated yet.
+  endpoint: z.unknown(),
+  /** When true, the special case will apply to dualstack endpoint variants. */
+  // TODO: structure member target smithy.api#Boolean for PartitionSpecialCase.dualStack is not generated yet.
+  dualStack: z.unknown().optional(),
+  /** When true, the special case will apply to fips endpoint variants. */
+  // TODO: structure member target smithy.api#Boolean for PartitionSpecialCase.fips is not generated yet.
+  fips: z.unknown().optional(),
+});
+/** Defines the endpoint pattern to apply for a region. */
+export const regionSpecialCaseSchema = z.object({
+  /** The special-cased endpoint pattern. */
+  // TODO: structure member target smithy.api#String for RegionSpecialCase.endpoint is not generated yet.
+  endpoint: z.unknown(),
+  /** When true, the special case will apply to dualstack endpoint variants. */
+  // TODO: structure member target smithy.api#Boolean for RegionSpecialCase.dualStack is not generated yet.
+  dualStack: z.unknown().optional(),
+  /** When true, the special case will apply to fips endpoint variants. */
+  // TODO: structure member target smithy.api#Boolean for RegionSpecialCase.fips is not generated yet.
+  fips: z.unknown().optional(),
+  /** Overrides the signingRegion used for this region. */
+  // TODO: structure member target smithy.api#String for RegionSpecialCase.signingRegion is not generated yet.
+  signingRegion: z.unknown().optional(),
+});
+/** Marks that a services has only dualStack endpoints. */
+// TODO: aws.endpoints#endpointsModifier ({}) on structure dualStackOnlyEndpoints is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service","breakingChanges":[{"change":"any"}]}) on structure dualStackOnlyEndpoints is not mapped to zod.
+export const dualStackOnlyEndpointsSchema = z.object({});
+/**
+ * Marks a trait as an endpoints modifier defining trait.
+ *
+ * The targeted trait must only be applied to service shapes,
+ * must be a structure, and must have the `trait` trait.
+ */
+// TODO: smithy.api#trait ({"selector":"structure[trait|trait]","breakingChanges":[{"change":"presence"}]}) on structure endpointsModifier is not mapped to zod.
+export const endpointsModifierSchema = z.object({});
+/** Marks that a services has hand written endpoint rules. */
+// TODO: aws.endpoints#endpointsModifier ({}) on structure rulesBasedEndpoints is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service","breakingChanges":[{"change":"any"}]}) on structure rulesBasedEndpoints is not mapped to zod.
+export const rulesBasedEndpointsSchema = z.object({});
+/**
+ * Marks that a services is non-regionalized and has
+ * a single endpoint in each partition.
+ */
+// TODO: aws.endpoints#endpointsModifier ({}) on structure standardPartitionalEndpoints is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service","conflicts":["aws.endpoints#standardRegionalEndpoints"],"breakingChanges":[{"change":"any"}]}) on structure standardPartitionalEndpoints is not mapped to zod.
+export const standardPartitionalEndpointsSchema = z.object({
+  /** The pattern type to use for the partition endpoint. */
+  endpointPatternType: partitionEndpointPatternSchema,
+  /**
+   * A map of partition to a list of partition endpoint special cases -
+   * partitions that do not follow the services standard patterns or are
+   * located in a region other than the partition's defaultGlobalRegion.
+   */
+  // TODO: structure member target aws.endpoints#PartitionEndpointSpecialCaseMap for standardPartitionalEndpoints.partitionEndpointSpecialCases is not generated yet.
+  partitionEndpointSpecialCases: z.unknown().optional(),
+});
+/**
+ * Marks that a services endpoints should be resolved using
+ * standard regional endpoint patterns.
+ */
+// TODO: aws.endpoints#endpointsModifier ({}) on structure standardRegionalEndpoints is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service","conflicts":["aws.endpoints#standardPartitionalEndpoints"],"breakingChanges":[{"change":"remove"}]}) on structure standardRegionalEndpoints is not mapped to zod.
+export const standardRegionalEndpointsSchema = z.object({
+  /**
+   * A map of partition to partition special cases -
+   * endpoints for a partition that do not follow the standard patterns.
+   */
+  // TODO: structure member target aws.endpoints#PartitionSpecialCaseMap for standardRegionalEndpoints.partitionSpecialCases is not generated yet.
+  partitionSpecialCases: z.unknown().optional(),
+  /**
+   * A map of region to regional special cases -
+   * endpoints for a region that do not follow the standard patterns.
+   */
+  // TODO: structure member target aws.endpoints#RegionSpecialCaseMap for standardRegionalEndpoints.regionSpecialCases is not generated yet.
+  regionSpecialCases: z.unknown().optional(),
+});
+export const partitionEndpointSpecialCaseListSchema = z.array(partitionEndpointSpecialCaseSchema);
+export const partitionSpecialCaseListSchema = z.array(partitionSpecialCaseSchema);
+export const regionSpecialCaseListSchema = z.array(regionSpecialCaseSchema);

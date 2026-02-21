@@ -19,6 +19,112 @@ export const checksumAlgorithmSchema = z.enum(ChecksumAlgorithm);
  * serialized for the input of an EC2 operation.
  */
 export const ec2QueryNameSchema = z.string().regex(new RegExp("^[a-zA-Z_][a-zA-Z_0-9-]*$"));
+/** Contains HTTP protocol configuration for HTTP-based protocols. */
+export const httpConfigurationSchema = z.object({
+  /** The priority ordered list of supported HTTP protocol versions. */
+  // TODO: structure member target aws.protocols#StringList for HttpConfiguration.http is not generated yet.
+  http: z.unknown().optional(),
+  /**
+   * The priority ordered list of supported HTTP protocol versions that
+   * are required when using event streams with the service. If not set,
+   * this value defaults to the value of the `http` member. Any entry in
+   * `eventStreamHttp` MUST also appear in `http`.
+   */
+  // TODO: structure member target aws.protocols#StringList for HttpConfiguration.eventStreamHttp is not generated yet.
+  eventStreamHttp: z.unknown().optional(),
+});
+/**
+ * An RPC-based protocol that sends JSON payloads. This protocol does not use
+ * HTTP binding traits.
+ */
+// TODO: smithy.api#protocolDefinition ({"traits":["smithy.api#timestampFormat","smithy.api#cors","smithy.api#endpoint","smithy.api#hostLabel"]}) on structure awsJson1_0 is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service"}) on structure awsJson1_0 is not mapped to zod.
+export const awsJson10Schema = z.object({});
+/**
+ * An RPC-based protocol that sends JSON payloads. This protocol does not use
+ * HTTP binding traits.
+ */
+// TODO: smithy.api#protocolDefinition ({"traits":["smithy.api#timestampFormat","smithy.api#cors","smithy.api#endpoint","smithy.api#hostLabel"]}) on structure awsJson1_1 is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service"}) on structure awsJson1_1 is not mapped to zod.
+export const awsJson11Schema = z.object({});
+/**
+ * An RPC-based protocol that sends 'POST' requests in the body as
+ * `x-www-form-urlencoded` strings and responses in XML documents. This
+ * protocol does not use HTTP binding traits.
+ */
+// TODO: smithy.api#protocolDefinition ({"traits":["smithy.api#timestampFormat","smithy.api#cors","smithy.api#endpoint","smithy.api#hostLabel","aws.protocols#awsQueryError","smithy.api#xmlAttribute","smithy.api#xmlFlattened","smithy.api#xmlName","smithy.api#xmlNamespace"]}) on structure awsQuery is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service [trait|xmlNamespace]"}) on structure awsQuery is not mapped to zod.
+// TODO: smithy.api#traitValidators ({"UnsupportedProtocolDocument":{"message":"Document types are not supported with awsQuery","selector":"~> member :test(> document)"}}) on structure awsQuery is not mapped to zod.
+export const awsQuerySchema = z.object({});
+/**
+ * Enable backward compatibility when migrating from awsQuery to the awsJson
+ * protocol or Smithy RPC v2 CBOR.
+ */
+// TODO: smithy.api#trait ({"selector":"service :test([trait|aws.protocols#awsJson1_0], [trait|smithy.protocols#rpcv2Cbor])"}) on structure awsQueryCompatible is not mapped to zod.
+export const awsQueryCompatibleSchema = z.object({});
+/**
+ * Provides the value in the 'Code' distinguishing field and HTTP response
+ * code for an operation error.
+ */
+// TODO: smithy.api#trait ({"selector":"structure [trait|error]","breakingChanges":[{"change":"any"}]}) on structure awsQueryError is not mapped to zod.
+export const awsQueryErrorSchema = z.object({
+  /** The value used to distinguish this error shape during serialization. */
+  // TODO: structure member target smithy.api#String for awsQueryError.code is not generated yet.
+  code: z.unknown(),
+  /** The HTTP response code used on a response containing this error shape. */
+  // TODO: structure member target smithy.api#Integer for awsQueryError.httpResponseCode is not generated yet.
+  httpResponseCode: z.unknown(),
+});
+/**
+ * An RPC-based protocol that sends 'POST' requests in the body as Amazon EC2
+ * formatted `x-www-form-urlencoded` strings and responses in XML documents.
+ * This protocol does not use HTTP binding traits.
+ */
+// TODO: smithy.api#protocolDefinition ({"traits":["smithy.api#timestampFormat","smithy.api#cors","smithy.api#endpoint","smithy.api#hostLabel","aws.protocols#ec2QueryName","smithy.api#xmlAttribute","smithy.api#xmlFlattened","smithy.api#xmlName","smithy.api#xmlNamespace"]}) on structure ec2Query is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service [trait|xmlNamespace]"}) on structure ec2Query is not mapped to zod.
+// TODO: smithy.api#traitValidators ({"UnsupportedProtocolDocument":{"message":"Document types are not supported with ec2Query","selector":"~> member :test(> document)"}}) on structure ec2Query is not mapped to zod.
+export const ec2QuerySchema = z.object({});
+/** Indicates that an operation supports checksum validation. */
+// TODO: smithy.api#trait ({"selector":"operation","breakingChanges":[{"change":"remove","severity":"DANGER","message":"Removing the trait removes the ability for clients to do request or response checksums. The service MUST continue to support old clients by supporting the `httpChecksum` trait."},{"change":"remove","severity":"DANGER","message":"`requestAlgorithmMember` was removed, so newly generated clients will no longer be able to pick the request checksum algorithms The service MUST continue to support old clients by supporting `requestAlgorithmMember`.","path":"/requestAlgorithmMember"},{"change":"remove","severity":"DANGER","message":"`requestValidationModeMember` was removed, so newly generated clients will no longer validate response checksums. The service MUST continue to support old clients by supporting `requestValidationModeMember`.","path":"/requestValidationModeMember"},{"change":"remove","severity":"DANGER","message":"Members of `responseAlgorithms` were removed, so newly generated clients will no longer validate response checksums for the removed algorithms. The service MUST continue to support old clients by supporting removed compression algorithms.","path":"/responseAlgorithms/member"}]}) on structure httpChecksum is not mapped to zod.
+export const httpChecksumSchema = z.object({
+  /**
+   * Defines a top-level operation input member that is used to configure
+   * request checksum behavior.
+   */
+  // TODO: structure member target smithy.api#String for httpChecksum.requestAlgorithmMember is not generated yet.
+  requestAlgorithmMember: z.unknown().optional(),
+  /** Indicates an operation requires a checksum in its HTTP request. */
+  // TODO: structure member target smithy.api#Boolean for httpChecksum.requestChecksumRequired is not generated yet.
+  requestChecksumRequired: z.unknown().optional(),
+  /**
+   * Defines a top-level operation input member used to opt-in to response
+   * checksum validation.
+   */
+  // TODO: structure member target smithy.api#String for httpChecksum.requestValidationModeMember is not generated yet.
+  requestValidationModeMember: z.unknown().optional(),
+  /**
+   * Defines the checksum algorithms clients should look for when performing
+   * HTTP response checksum validation.
+   */
+  // TODO: structure member target aws.protocols#ChecksumAlgorithmSet for httpChecksum.responseAlgorithms is not generated yet.
+  responseAlgorithms: z.unknown().optional(),
+});
+/** A RESTful protocol that sends JSON in structured payloads. */
+// TODO: smithy.api#protocolDefinition ({"traits":["smithy.api#timestampFormat","smithy.api#cors","smithy.api#endpoint","smithy.api#hostLabel","smithy.api#http","smithy.api#httpError","smithy.api#httpHeader","smithy.api#httpLabel","smithy.api#httpPayload","smithy.api#httpPrefixHeaders","smithy.api#httpQuery","smithy.api#httpQueryParams","smithy.api#httpResponseCode","aws.protocols#httpChecksum","smithy.api#httpChecksumRequired","smithy.api#jsonName"]}) on structure restJson1 is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service"}) on structure restJson1 is not mapped to zod.
+export const restJson1Schema = z.object({});
+/** A RESTful protocol that sends XML in structured payloads. */
+// TODO: smithy.api#protocolDefinition ({"traits":["smithy.api#timestampFormat","smithy.api#cors","smithy.api#endpoint","smithy.api#hostLabel","smithy.api#http","smithy.api#httpError","smithy.api#httpHeader","smithy.api#httpLabel","smithy.api#httpPayload","smithy.api#httpPrefixHeaders","smithy.api#httpQuery","smithy.api#httpQueryParams","smithy.api#httpResponseCode","aws.protocols#httpChecksum","smithy.api#httpChecksumRequired","smithy.api#xmlAttribute","smithy.api#xmlFlattened","smithy.api#xmlName","smithy.api#xmlNamespace"]}) on structure restXml is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"service"}) on structure restXml is not mapped to zod.
+// TODO: smithy.api#traitValidators ({"UnsupportedProtocolDocument":{"message":"Document types are not supported with restXml","selector":"~> member :test(> document)"}}) on structure restXml is not mapped to zod.
+export const restXmlSchema = z.object({
+  /**
+   * Disables the serialization wrapping of error properties in an 'Error'
+   * XML element.
+   */
+  // TODO: structure member target smithy.api#Boolean for restXml.noErrorWrapping is not generated yet.
+  noErrorWrapping: z.unknown().optional(),
+});
 export const checksumAlgorithmSetSchema = z.array(checksumAlgorithmSchema).min(1).superRefine(
   (items, refinementContext) => {
     const seen = new Map<string, number>();
