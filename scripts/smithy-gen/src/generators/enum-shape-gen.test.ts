@@ -119,7 +119,7 @@ describe("CodeGenContext enum shape generation", () => {
     expect(output).toContain('Enabled = "Enabled",');
   });
 
-  it("routes non-S3 enum shapes to common-schemas", () => {
+  it("routes non-S3 enum shapes to common-schemas:com.amazonaws.shared", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.shared#SharedEnum": {
@@ -136,7 +136,7 @@ describe("CodeGenContext enum shape generation", () => {
 
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("common-schemas")).toBe(true);
+    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
     expect(files.has("s3-schemas")).toBe(false);
   });
 

@@ -117,7 +117,7 @@ describe("CodeGenContext timestamp shape generation", () => {
     expect(output).not.toContain("Invalid IMF-fixdate timestamp");
   });
 
-  it("defaults missing timestamp format to date-time for common-schemas", () => {
+  it("defaults missing timestamp format to date-time for common-schemas:com.amazonaws.shared", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.shared#SharedMissingFormat": {
@@ -127,7 +127,8 @@ describe("CodeGenContext timestamp shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("common-schemas") ?? "";
+    const output =
+      ctx.renderFiles().get("common-schemas:com.amazonaws.shared") ?? "";
     expect(output).toContain(
       "export const sharedMissingFormatSchema = z.string()",
     );
@@ -136,7 +137,7 @@ describe("CodeGenContext timestamp shape generation", () => {
     expect(output).not.toContain("Invalid IMF-fixdate timestamp");
   });
 
-  it("routes non-S3 timestamp shapes to common-schemas", () => {
+  it("routes non-S3 timestamp shapes to common-schemas:com.amazonaws.shared", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.shared#SharedTime": {
@@ -147,7 +148,7 @@ describe("CodeGenContext timestamp shape generation", () => {
     );
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("common-schemas")).toBe(true);
+    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
     expect(files.has("s3-schemas")).toBe(false);
   });
 });

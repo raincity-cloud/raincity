@@ -86,7 +86,7 @@ function resolveTimestampFormatForFile(
     return format;
   }
 
-  if (fileKey === "s3-schemas" || fileKey === "common-schemas") {
+  if (fileKey === "s3-schemas" || fileKey.startsWith("common-schemas:")) {
     return "date-time";
   }
 

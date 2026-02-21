@@ -54,6 +54,8 @@ export const streamingTrait = {
   "smithy.api#streaming": markerObjectSchema.strict().optional(),
 };
 
+export const SUPPRESS_TRAIT = "smithy.api#suppress" as const;
+
 export const timestampFormatTrait = {
   "smithy.api#timestampFormat": z.enum(["date-time", "http-date"]).optional(),
 };
@@ -80,4 +82,12 @@ export const traitTrait = {
     .optional(),
 };
 
+export const uniqueItemsTrait = {
+  "smithy.api#uniqueItems": markerObjectSchema.strict().optional(),
+};
+
 export const UNSTABLE_TRAIT = "smithy.api#unstable";
+
+export const xmlNameTrait = {
+  "smithy.api#xmlName": z.string().optional(),
+};
