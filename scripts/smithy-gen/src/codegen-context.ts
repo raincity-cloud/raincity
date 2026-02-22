@@ -10,6 +10,7 @@ import { generateEnumShapes } from "./generators/enum-shape-gen.js";
 import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
 import { generateListShapes } from "./generators/list-shape-gen.js";
 import { generateLongShapes } from "./generators/long-shape-gen.js";
+import { generateMapShapes } from "./generators/map-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
 import { generateStructureShapes } from "./generators/structure-shape-gen.js";
 import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
@@ -20,6 +21,7 @@ import type { EnumShape } from "./shapes/enum-shape.js";
 import type { IntegerShape } from "./shapes/integer-shape.js";
 import type { ListShape } from "./shapes/list-shape.js";
 import type { LongShape } from "./shapes/long-shape.js";
+import type { MapShape } from "./shapes/map-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
 import type { StructureShape } from "./shapes/structure-shape.js";
 import type { TimestampShape } from "./shapes/timestamp-shape.js";
@@ -48,6 +50,10 @@ function isIntegerShape(entry: ShapeEntry): entry is ShapeEntry<IntegerShape> {
 
 function isListShape(entry: ShapeEntry): entry is ShapeEntry<ListShape> {
   return entry.shape.type === "list";
+}
+
+function isMapShape(entry: ShapeEntry): entry is ShapeEntry<MapShape> {
+  return entry.shape.type === "map";
 }
 
 function isStructureShape(
@@ -170,6 +176,9 @@ export class CodeGenContext {
 
     const listShapes = (grouped["list"] ?? []).filter(isListShape);
     generateListShapes(this, listShapes);
+
+    const mapShapes = (grouped["map"] ?? []).filter(isMapShape);
+    generateMapShapes(this, mapShapes);
   }
 
   renderFiles(): Map<string, string> {
