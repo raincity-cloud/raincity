@@ -35,11 +35,11 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
     expect(output).toContain("export interface AmazonS3Service {");
     expect(output).toContain(
-      "getObject(input: z.infer<typeof getObjectRequestSchema>): z.infer<typeof getObjectOutputSchema>;",
+      "getObject(input: GetObjectRequest): GetObjectOutput;",
     );
   });
 
@@ -83,12 +83,98 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
     expect(output).toContain("* Retrieves an object from S3.");
     expect(output).toContain(
       "* @throws {NoSuchKey} The specified key does not exist.",
     );
+  });
+
+  it("inserts a blank line between service methods", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#GetObjectRequest": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#GetObjectOutput": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#GetObject": {
+          type: "operation",
+          input: { target: "com.amazonaws.s3#GetObjectRequest" },
+          output: { target: "com.amazonaws.s3#GetObjectOutput" },
+        },
+        "com.amazonaws.s3#PutObjectRequest": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#PutObjectOutput": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#PutObject": {
+          type: "operation",
+          input: { target: "com.amazonaws.s3#PutObjectRequest" },
+          output: { target: "com.amazonaws.s3#PutObjectOutput" },
+        },
+        "com.amazonaws.s3#AmazonS3": {
+          type: "service",
+          version: "2006-03-01",
+          operations: [
+            { target: "com.amazonaws.s3#GetObject" },
+            { target: "com.amazonaws.s3#PutObject" },
+          ],
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
+
+    expect(output).toContain(
+      "getObject(input: GetObjectRequest): GetObjectOutput;\n\n  putObject(input: PutObjectRequest): PutObjectOutput;",
+    );
+  });
+
+  it("keeps unresolved operation signatures typed as unknown after tsdoc", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#KnownInput": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#GetObject": {
+          type: "operation",
+          traits: {
+            "smithy.api#documentation": "Retrieves an object from S3.",
+          },
+          input: { target: "com.amazonaws.s3#KnownInput" },
+          output: { target: "com.amazonaws.s3#MissingOutput" },
+        },
+        "com.amazonaws.s3#AmazonS3": {
+          type: "service",
+          version: "2006-03-01",
+          operations: [{ target: "com.amazonaws.s3#GetObject" }],
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
+    const tsDocIndex = output.indexOf(" * Retrieves an object from S3.");
+    const methodIndex = output.indexOf("getObject(input:");
+
+    expect(tsDocIndex).toBeGreaterThan(-1);
+    expect(methodIndex).toBeGreaterThan(tsDocIndex);
+    expect(output).toContain("getObject(input: KnownInput): unknown;");
   });
 
   it("imports cross-namespace operation input and output types", () => {
@@ -118,13 +204,13 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
     expect(output).toContain(
-      'import { sharedInputSchema, sharedOutputSchema } from "./common-schemas:com.amazonaws.shared";',
+      'import type { SharedInput, SharedOutput } from "./com.amazonaws.shared.structures.js";',
     );
     expect(output).toContain(
-      "crossNamespaceOperation(input: z.infer<typeof sharedInputSchema>): z.infer<typeof sharedOutputSchema>;",
+      "crossNamespaceOperation(input: SharedInput): SharedOutput;",
     );
   });
 
@@ -140,11 +226,8 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
-    expect(output).toContain(
-      "// TODO: operation target com.amazonaws.s3#MissingOperation is not generated.",
-    );
     expect(output).toContain("missingOperation(input: unknown): unknown;");
   });
 
@@ -190,12 +273,39 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const serviceOutput = ctx.renderFiles().get("s3-schemas:service") ?? "";
+    const structuresOutput =
+      ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
-    expect(
-      output.indexOf("export const getObjectInputSchema = z.object({});"),
-    ).toBeLessThan(output.indexOf("export interface AmazonS3Service {"));
-    expect(output).toContain("getObject(input:");
-    expect(output).not.toContain("deleteObject(input:");
+    expect(structuresOutput).toContain(
+      "export const getObjectInputSchema = z.object({});",
+    );
+    expect(serviceOutput).toContain("export interface AmazonS3Service {");
+    expect(serviceOutput).toContain("getObject(input:");
+    expect(serviceOutput).not.toContain("deleteObject(input:");
+  });
+
+  it("inserts a blank line between service shapes in the same file", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#AmazonS3": {
+          type: "service",
+          version: "2006-03-01",
+          operations: [],
+        },
+        "com.amazonaws.s3#S3Control": {
+          type: "service",
+          version: "2018-08-20",
+          operations: [],
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
+
+    expect(output).toContain(
+      "export interface AmazonS3Service {}\n\nexport interface S3ControlService {}",
+    );
   });
 });

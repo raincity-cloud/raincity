@@ -6,16 +6,13 @@ export function buildSchemaDocumentationComment(
   const trimmed = documentation.trim();
   if (!trimmed) return undefined;
 
-  const safeDocumentation = trimmed.replaceAll("*/", "*\\/");
-  const lines = safeDocumentation.split(/\r?\n/);
-
-  if (lines.length === 1) {
-    return `/** ${lines[0]} */`;
-  }
+  const lines = trimmed.split(/\r?\n/);
 
   return [
     "/**",
+    " * ```xml",
     ...lines.map((line) => (line ? ` * ${line}` : " *")),
+    " * ```",
     " */",
   ].join("\n");
 }

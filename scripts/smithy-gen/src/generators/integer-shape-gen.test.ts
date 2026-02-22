@@ -43,99 +43,21 @@ describe("buildConstraintChain", () => {
 });
 
 describe("CodeGenContext integer shape generation", () => {
-  it("generates a basic integer schema with no traits", () => {
+  it("does not emit standalone integer schemas", () => {
     const ctx = new CodeGenContext(
       makeModel({ "com.amazonaws.s3#MaxKeys": { type: "integer" } }),
     );
+
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
-      "export const maxKeysSchema = z.number();",
-    );
+    expect(ctx.renderFiles().size).toBe(0);
   });
 
-  it("generates a schema with a min range constraint", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#PartNumber": {
-          type: "integer",
-          traits: { "smithy.api#range": { min: 1 } },
-        },
-      }),
-    );
-    ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain("z.number().min(1)");
-  });
-
-  it("generates a schema with a max range constraint", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#MaxParts": {
-          type: "integer",
-          traits: { "smithy.api#range": { max: 100 } },
-        },
-      }),
-    );
-    ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
-      "z.number().max(100)",
-    );
-  });
-
-  it("generates a schema with min and max range constraints", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#CopySourceVersionId": {
-          type: "integer",
-          traits: { "smithy.api#range": { min: 1, max: 100 } },
-        },
-      }),
-    );
-    ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
-      "z.number().min(1).max(100)",
-    );
-  });
-
-  it("routes com.amazonaws.s3 shapes to the s3-schemas file", () => {
-    const ctx = new CodeGenContext(
-      makeModel({ "com.amazonaws.s3#MaxKeys": { type: "integer" } }),
-    );
-    ctx.generate();
-    const files = ctx.renderFiles();
-    expect(files.has("s3-schemas")).toBe(true);
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(false);
-  });
-
-  it("routes non-S3 shapes to the common-schemas:com.amazonaws.shared file", () => {
+  it("does not emit standalone integer schemas for non-S3 namespaces", () => {
     const ctx = new CodeGenContext(
       makeModel({ "com.amazonaws.shared#Count": { type: "integer" } }),
     );
-    ctx.generate();
-    const files = ctx.renderFiles();
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
-    expect(files.has("s3-schemas")).toBe(false);
-  });
 
-  it("emits multiple shapes from the same namespace into one file", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#Alpha": { type: "integer" },
-        "com.amazonaws.s3#Beta": { type: "integer" },
-      }),
-    );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("alphaSchema");
-    expect(output).toContain("betaSchema");
-  });
-
-  it("camelCases the shape name to produce the schema variable name", () => {
-    const ctx = new CodeGenContext(
-      makeModel({ "com.amazonaws.s3#MyIntegerShape": { type: "integer" } }),
-    );
-    ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
-      "myIntegerShapeSchema",
-    );
+    expect(ctx.renderFiles().size).toBe(0);
   });
 });

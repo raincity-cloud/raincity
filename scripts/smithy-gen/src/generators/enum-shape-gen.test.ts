@@ -8,7 +8,7 @@ function makeModel(shapes: Record<string, EnumShape>): SmithyAstModel {
 }
 
 describe("CodeGenContext enum shape generation", () => {
-  it("generates a native TypeScript enum and a zod enum schema", () => {
+  it("generates a native TypeScript enum without an enum schema export", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#StorageClass": {
@@ -28,16 +28,14 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain("export enum StorageClass {");
-    expect(output).toContain('STANDARD = "STANDARD",');
-    expect(output).toContain('GLACIER = "GLACIER",');
-    expect(output).toContain(
-      "export const storageClassSchema = z.enum(StorageClass);",
-    );
+    expect(output).toContain('Standard = "STANDARD",');
+    expect(output).toContain('Glacier = "GLACIER",');
+    expect(output).not.toContain("storageClassSchema");
   });
 
-  it("puts shape documentation on the generated enum, not on the schema export", () => {
+  it("puts shape documentation on the generated enum", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#Delimiter": {
@@ -56,12 +54,9 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain(
-      "/** The possible delimiters. */\nexport enum Delimiter {",
-    );
-    expect(output).not.toContain(
-      "/** The possible delimiters. */\nexport const delimiterSchema",
+      "/**\n * ```xml\n * The possible delimiters.\n * ```\n */\nexport enum Delimiter {",
     );
   });
 
@@ -91,12 +86,12 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain(
-      '/** The `/` character. */\n  FORWARD_SLASH = "/",',
+      '* The `/` character.\n * ```\n */\n  ForwardSlash = "/",',
     );
-    expect(output).toContain("Comment end token: *\\/");
-    expect(output).toContain('COLON = ":",');
+    expect(output).toContain("Comment end token: */");
+    expect(output).toContain('Colon = ":",');
   });
 
   it("falls back to member key when enumValue is missing", () => {
@@ -115,7 +110,7 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain('Enabled = "Enabled",');
   });
 
@@ -136,8 +131,30 @@ describe("CodeGenContext enum shape generation", () => {
 
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
-    expect(files.has("s3-schemas")).toBe(false);
+    expect(files.has("common-schemas:com.amazonaws.shared:enums")).toBe(true);
+    expect(files.has("s3-schemas:enums")).toBe(false);
+  });
+
+  it("pascalCases enum names and enum member keys", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#storage_class": {
+          type: "enum",
+          members: {
+            STANDARD_IA: {
+              target: "smithy.api#Unit",
+              traits: { "smithy.api#enumValue": "STANDARD_IA" },
+            },
+          },
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
+    expect(output).toContain("export enum StorageClass {");
+    expect(output).toContain('StandardIa = "STANDARD_IA",');
+    expect(output).not.toContain("storageClassSchema");
   });
 
   it("emits multiple enum shapes from the same namespace into one file", () => {
@@ -165,10 +182,10 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain("export enum FirstEnum {");
     expect(output).toContain("export enum SecondEnum {");
-    expect(output).toContain("firstEnumSchema");
-    expect(output).toContain("secondEnumSchema");
+    expect(output).not.toContain("firstEnumSchema");
+    expect(output).not.toContain("secondEnumSchema");
   });
 });

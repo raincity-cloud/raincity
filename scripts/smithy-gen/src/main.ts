@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CodeGenContext } from "./codegen-context.js";
@@ -16,7 +16,7 @@ const smithyAstModelPath = join(
   "aws-model.json",
 );
 
-const s3OutputPath = join(
+const s3GeneratedDir = join(
   __dirname,
   "..",
   "..",
@@ -25,7 +25,6 @@ const s3OutputPath = join(
   "s3",
   "src",
   "generated",
-  "schema.ts",
 );
 const sharedOutputDirectory = join(
   __dirname,
@@ -38,21 +37,57 @@ const sharedOutputDirectory = join(
   "generated",
 );
 
+async function cleanGeneratedDirectory(dir: string): Promise<void> {
+  let entries: Array<{ isFile: () => boolean; name: string }>;
+  try {
+    entries = await readdir(dir, { withFileTypes: true, encoding: "utf8" });
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "ENOENT"
+    ) {
+      return;
+    }
+    throw error;
+  }
+
+  for (const entry of entries) {
+    if (!entry.isFile() || !entry.name.endsWith(".ts")) {
+      continue;
+    }
+
+    // oxlint-disable-next-line no-await-in-loop
+    await rm(join(dir, entry.name));
+  }
+}
+
 const fileContent = await readFile(smithyAstModelPath, "utf-8");
 const smithyAstModel = smithyAstModelSchema.parse(JSON.parse(fileContent));
 
 const ctx = new CodeGenContext(smithyAstModel);
 ctx.generate();
 const outputPaths: Record<string, string> = {
-  "s3-schemas": s3OutputPath,
+  "s3-schemas:service": join(s3GeneratedDir, "service.ts"),
+  "s3-schemas:enums": join(s3GeneratedDir, "enums.ts"),
+  "s3-schemas:structures": join(s3GeneratedDir, "structures.ts"),
+  "s3-schemas:schema": join(s3GeneratedDir, "schema.ts"),
 };
 for (const fileKey of ctx.renderFiles().keys()) {
   if (!fileKey.startsWith("common-schemas:")) {
     continue;
   }
-  const namespace = fileKey.slice("common-schemas:".length);
-  outputPaths[fileKey] = join(sharedOutputDirectory, `${namespace}.ts`);
+  const rest = fileKey.slice("common-schemas:".length);
+  const lastColon = rest.lastIndexOf(":");
+  const filename =
+    lastColon !== -1
+      ? `${rest.slice(0, lastColon)}.${rest.slice(lastColon + 1)}.ts`
+      : `${rest}.ts`;
+  outputPaths[fileKey] = join(sharedOutputDirectory, filename);
 }
+await cleanGeneratedDirectory(s3GeneratedDir);
+await cleanGeneratedDirectory(sharedOutputDirectory);
 await ctx.writeFiles(outputPaths);
 
 console.log("Code generation complete.");

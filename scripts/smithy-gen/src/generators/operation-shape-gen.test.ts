@@ -33,6 +33,8 @@ describe("CodeGenContext operation shape generation", () => {
     const method = ctx.getOperationMethod("com.amazonaws.s3#GetObject");
 
     expect(method?.methodName).toBe("getObject");
+    expect(method?.inputTypeExpr).toBeDefined();
+    expect(method?.outputTypeExpr).toBeDefined();
     expect(method?.tsDoc).toBeUndefined();
   });
 
@@ -93,7 +95,7 @@ describe("CodeGenContext operation shape generation", () => {
     );
   });
 
-  it("tracks unresolved input/output targets in operation method metadata", () => {
+  it("uses unknown types for unresolved input/output targets", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#GetObject": {
@@ -108,15 +110,33 @@ describe("CodeGenContext operation shape generation", () => {
     ctx.generate();
     const method = ctx.getOperationMethod("com.amazonaws.s3#GetObject");
 
-    expect(method?.unresolvedComment).toContain(
-      "com.amazonaws.s3#MissingInput",
-    );
-    expect(method?.unresolvedComment).toContain(
-      "com.amazonaws.s3#MissingOutput",
-    );
+    expect(method?.inputTypeExpr).toBe("unknown");
+    expect(method?.outputTypeExpr).toBe("unknown");
     expect(method?.tsDoc).toContain(
       "* @throws {unknown} This operation may throw an unknown error type (com.amazonaws.s3#MissingError).",
     );
+  });
+
+  it("uses void for built-in smithy.api#Unit outputs", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#GetObjectInput": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#GetObject": {
+          type: "operation",
+          input: { target: "com.amazonaws.s3#GetObjectInput" },
+          output: { target: "smithy.api#Unit" },
+        },
+      }),
+    );
+
+    ctx.generate();
+    const method = ctx.getOperationMethod("com.amazonaws.s3#GetObject");
+
+    expect(method?.outputTypeExpr).toBe("void");
   });
 
   it("does not emit operation functions directly", () => {
@@ -141,7 +161,7 @@ describe("CodeGenContext operation shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
     expect(output).not.toContain("export function getObject(");
   });

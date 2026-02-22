@@ -1,4 +1,4 @@
-import { camelCase } from "lodash-es";
+import { camelCase, upperFirst } from "lodash-es";
 import { code, imp } from "ts-poet";
 import type {
   CodeGenContext,
@@ -6,8 +6,7 @@ import type {
 } from "../codegen-context.js";
 import type { OperationShape } from "../shapes/operation-shape.js";
 import type { SmithyAstModel } from "../smithy-ast-model.js";
-
-const zImp = imp("z@zod/v4");
+import { buildSchemaDocumentationComment } from "./schema-documentation-comment.js";
 
 interface OperationShapeEntry {
   key: string;
@@ -19,7 +18,6 @@ type ShapeRef = string | ReturnType<typeof imp> | ReturnType<typeof code>;
 interface TypeResolution {
   typeExpr: ShapeRef;
   typeName: string;
-  unresolvedTarget?: string;
 }
 
 interface ThrowsEntry {
@@ -27,30 +25,170 @@ interface ThrowsEntry {
   description: string;
 }
 
+function pascalCase(value: string): string {
+  return upperFirst(camelCase(value));
+}
+
 function resolveTypeReference(
   ctx: CodeGenContext,
   target: string,
   fileKey: string,
+  stack = new Set<string>(),
 ): TypeResolution {
+  const builtinType = resolveBuiltinTypeReference(target);
+  if (builtinType) {
+    return builtinType;
+  }
+
   if (!ctx.hasRegisteredShape(target)) {
     return {
       typeExpr: "unknown",
       typeName: "unknown",
-      unresolvedTarget: target,
     };
   }
 
-  const { name: targetName } = ctx.parseShapeKey(target);
-  const targetSchemaName = `${camelCase(targetName)}Schema`;
-  const targetFileKey = ctx.getOutputFile(target);
-  const schemaRef =
-    targetFileKey === fileKey
-      ? targetSchemaName
-      : imp(`${targetSchemaName}@./${targetFileKey}`);
+  if (stack.has(target)) {
+    return {
+      typeExpr: "unknown",
+      typeName: "unknown",
+    };
+  }
+  stack.add(target);
 
+  const { name: targetName } = ctx.parseShapeKey(target);
+  const targetShapeType = ctx.getShapeType(target);
+  if (targetShapeType === "structure") {
+    const typeName = pascalCase(targetName);
+    return resolveNamedTypeReference(ctx, target, fileKey, typeName);
+  }
+
+  if (targetShapeType === "enum") {
+    return resolveNamedTypeReference(
+      ctx,
+      target,
+      fileKey,
+      pascalCase(targetName),
+    );
+  }
+
+  if (targetShapeType === "string" || targetShapeType === "timestamp") {
+    return { typeExpr: "string", typeName: targetName };
+  }
+
+  if (targetShapeType === "boolean") {
+    return { typeExpr: "boolean", typeName: targetName };
+  }
+
+  if (targetShapeType === "integer") {
+    return { typeExpr: "number", typeName: targetName };
+  }
+
+  if (targetShapeType === "long") {
+    return { typeExpr: "bigint", typeName: targetName };
+  }
+
+  if (targetShapeType === "blob") {
+    return { typeExpr: "Uint8Array", typeName: targetName };
+  }
+
+  if (targetShapeType === "document") {
+    return { typeExpr: "unknown", typeName: targetName };
+  }
+
+  if (targetShapeType === "list") {
+    const listShape = ctx.getShape(target);
+    if (listShape?.type !== "list") {
+      return { typeExpr: "unknown", typeName: targetName };
+    }
+    const memberType = resolveTypeReference(
+      ctx,
+      listShape.member.target,
+      fileKey,
+      stack,
+    );
+    return {
+      typeExpr: code`Array<${memberType.typeExpr}>`,
+      typeName: targetName,
+    };
+  }
+
+  if (targetShapeType === "map") {
+    const mapShape = ctx.getShape(target);
+    if (mapShape?.type !== "map") {
+      return { typeExpr: "unknown", typeName: targetName };
+    }
+    const valueType = resolveTypeReference(
+      ctx,
+      mapShape.value.target,
+      fileKey,
+      stack,
+    );
+    return {
+      typeExpr: code`Record<string, ${valueType.typeExpr}>`,
+      typeName: targetName,
+    };
+  }
+
+  if (targetShapeType === "union") {
+    const unionShape = ctx.getShape(target);
+    if (unionShape?.type !== "union") {
+      return { typeExpr: "unknown", typeName: targetName };
+    }
+    const memberTypes = Object.values(unionShape.members).map(
+      (member) =>
+        resolveTypeReference(ctx, member.target, fileKey, stack).typeExpr,
+    );
+    if (memberTypes.length === 0) {
+      return { typeExpr: "unknown", typeName: targetName };
+    }
+    return {
+      typeExpr: code`${memberTypes[0]}${memberTypes
+        .slice(1)
+        .map((memberType) => code` | ${memberType}`)}`,
+      typeName: targetName,
+    };
+  }
+
+  return { typeExpr: "unknown", typeName: targetName };
+}
+
+function resolveBuiltinTypeReference(
+  target: string,
+): TypeResolution | undefined {
+  switch (target) {
+    case "smithy.api#String":
+    case "smithy.api#Timestamp":
+      return { typeExpr: "string", typeName: "string" };
+    case "smithy.api#Boolean":
+      return { typeExpr: "boolean", typeName: "boolean" };
+    case "smithy.api#Integer":
+      return { typeExpr: "number", typeName: "number" };
+    case "smithy.api#Long":
+      return { typeExpr: "bigint", typeName: "bigint" };
+    case "smithy.api#Blob":
+      return { typeExpr: "Uint8Array", typeName: "Uint8Array" };
+    case "smithy.api#Document":
+      return { typeExpr: "unknown", typeName: "unknown" };
+    case "smithy.api#Unit":
+      return { typeExpr: "void", typeName: "void" };
+    default:
+      return undefined;
+  }
+}
+
+function resolveNamedTypeReference(
+  ctx: CodeGenContext,
+  target: string,
+  fileKey: string,
+  typeName: string,
+): TypeResolution {
+  const targetFileKey = ctx.getOutputFile(target);
   return {
-    typeExpr: code`${zImp}.infer<typeof ${schemaRef}>`,
-    typeName: targetName,
+    typeExpr:
+      targetFileKey === fileKey
+        ? typeName
+        : imp(`t:${typeName}@${ctx.getImportPath(targetFileKey)}`),
+    typeName,
   };
 }
 
@@ -91,7 +229,7 @@ function buildThrowsEntries(
 
   return shape.errors.map(({ target }) => {
     const resolved = resolveTypeReference(ctx, target, "");
-    if (resolved.unresolvedTarget) {
+    if (resolved.typeName === "unknown") {
       return {
         typeName: "unknown",
         description: `This operation may throw an unknown error type (${target}).`,
@@ -112,35 +250,28 @@ function buildOperationTsDoc(
   documentation: string | undefined,
   throwsEntries: ThrowsEntry[],
 ): string | undefined {
-  const lines: string[] = [];
-
-  if (documentation) {
-    const safeDocumentation = documentation.trim().replaceAll("*/", "*\\/");
-    lines.push(...safeDocumentation.split(/\r?\n/u));
+  if (throwsEntries.length === 0) {
+    return buildSchemaDocumentationComment(documentation);
   }
 
-  if (throwsEntries.length > 0) {
-    if (lines.length > 0) {
-      lines.push("");
-    }
+  const throwsLines = throwsEntries.map(
+    (entry) =>
+      ` * @throws {${entry.typeName}} ${entry.description.replaceAll("*/", "*\\/")}`,
+  );
 
-    for (const entry of throwsEntries) {
-      const safeDescription = entry.description.replaceAll("*/", "*\\/");
-      lines.push(`@throws {${entry.typeName}} ${safeDescription}`);
-    }
+  const trimmed = documentation?.trim();
+  if (!trimmed) {
+    return ["/**", ...throwsLines, " */"].join("\n");
   }
 
-  if (lines.length === 0) {
-    return undefined;
-  }
-
-  if (lines.length === 1) {
-    return `/** ${lines[0]} */`;
-  }
-
+  const docLines = trimmed.split(/\r?\n/);
   return [
     "/**",
-    ...lines.map((line) => (line ? ` * ${line}` : " *")),
+    " * ```xml",
+    ...docLines.map((line) => (line ? ` * ${line}` : " *")),
+    " * ```",
+    " *",
+    ...throwsLines,
     " */",
   ].join("\n");
 }
@@ -159,22 +290,12 @@ export function generateOperationShapes(
     const throwsEntries = buildThrowsEntries(ctx, shape);
     const documentation = shape.traits?.["smithy.api#documentation"];
     const tsDoc = buildOperationTsDoc(documentation, throwsEntries);
-    const unresolvedTargets = [
-      inputType.unresolvedTarget,
-      outputType.unresolvedTarget,
-    ].filter((target): target is string => target !== undefined);
-
-    const unresolvedComment =
-      unresolvedTargets.length > 0
-        ? `// TODO: operation ${name} references unresolved target(s): ${unresolvedTargets.join(", ")}.`
-        : undefined;
 
     const signature: OperationMethodSignature = {
       methodName: operationName,
       inputTypeExpr: inputType.typeExpr,
       outputTypeExpr: outputType.typeExpr,
       ...(tsDoc ? { tsDoc } : {}),
-      ...(unresolvedComment ? { unresolvedComment } : {}),
     };
     ctx.registerOperationMethod(key, signature);
   }

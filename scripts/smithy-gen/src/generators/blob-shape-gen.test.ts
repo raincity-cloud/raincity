@@ -8,71 +8,23 @@ function makeModel(shapes: Record<string, BlobShape>): SmithyAstModel {
 }
 
 describe("CodeGenContext blob shape generation", () => {
-  it("generates a basic blob schema using z.instanceof(Uint8Array)", () => {
+  it("does not emit standalone blob schemas", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#RequestBody": { type: "blob" },
       }),
     );
+
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
-      "export const requestBodySchema = z.instanceof(Uint8Array);",
-    );
+    expect(ctx.renderFiles().size).toBe(0);
   });
 
-  it("routes com.amazonaws.s3 shapes to the s3-schemas file", () => {
-    const ctx = new CodeGenContext(
-      makeModel({ "com.amazonaws.s3#Body": { type: "blob" } }),
-    );
-    ctx.generate();
-    const files = ctx.renderFiles();
-    expect(files.has("s3-schemas")).toBe(true);
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(false);
-  });
-
-  it("routes non-S3 shapes to the common-schemas:com.amazonaws.shared file", () => {
+  it("does not emit standalone blob schemas for non-S3 namespaces", () => {
     const ctx = new CodeGenContext(
       makeModel({ "com.amazonaws.shared#Payload": { type: "blob" } }),
     );
-    ctx.generate();
-    const files = ctx.renderFiles();
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
-    expect(files.has("s3-schemas")).toBe(false);
-  });
 
-  it("emits multiple blob shapes from the same namespace into one file", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#BodyA": { type: "blob" },
-        "com.amazonaws.s3#BodyB": { type: "blob" },
-      }),
-    );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("bodyASchema");
-    expect(output).toContain("bodyBSchema");
-  });
-
-  it("camelCases the shape name to produce the schema variable name", () => {
-    const ctx = new CodeGenContext(
-      makeModel({ "com.amazonaws.s3#MyBlobType": { type: "blob" } }),
-    );
-    ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain("myBlobTypeSchema");
-  });
-
-  it("generates the same output for a blob shape with the streaming trait", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#StreamingBody": {
-          type: "blob",
-          traits: { "smithy.api#streaming": {} },
-        },
-      }),
-    );
-    ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
-      "export const streamingBodySchema = z.instanceof(Uint8Array);",
-    );
+    expect(ctx.renderFiles().size).toBe(0);
   });
 });

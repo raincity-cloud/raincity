@@ -1,9 +1,5 @@
-import { camelCase } from "lodash-es";
-import { code, def, imp } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { IntegerShape } from "../shapes/integer-shape.js";
-
-const zImp = imp("z@zod/v4");
 
 interface IntegerShapeEntry {
   key: string;
@@ -24,18 +20,8 @@ export function buildConstraintChain(traits: IntegerShape["traits"]): string {
 }
 
 export function generateIntegerShapes(
-  ctx: CodeGenContext,
-  shapes: IntegerShapeEntry[],
+  _ctx: CodeGenContext,
+  _shapes: IntegerShapeEntry[],
 ): void {
-  for (const { key, shape } of shapes) {
-    const { name } = ctx.parseShapeKey(key);
-    const fileKey = ctx.getOutputFile(key);
-    const schemaName = `${camelCase(name)}Schema`;
-    const constraints = buildConstraintChain(shape.traits);
-
-    const schemaCode = code`export const ${def(schemaName)} = ${zImp}.number()${constraints};`;
-
-    ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@./${fileKey}`));
-  }
+  // Integer shapes are inlined at usage sites.
 }

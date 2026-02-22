@@ -8,19 +8,7 @@ function makeModel(shapes: Record<string, DocumentShape>): SmithyAstModel {
 }
 
 describe("CodeGenContext document shape generation", () => {
-  it("generates a basic document schema using z.unknown()", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#RulesDocument": { type: "document" },
-      }),
-    );
-    ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
-      "export const rulesDocumentSchema = z.unknown();",
-    );
-  });
-
-  it("generates a schema with a JSDoc comment from the documentation trait", () => {
+  it("does not emit standalone document schemas", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#RulesDocument": {
@@ -31,73 +19,19 @@ describe("CodeGenContext document shape generation", () => {
         },
       }),
     );
+
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("/** Endpoint resolution rules document */");
-    expect(output).toContain("export const rulesDocumentSchema = z.unknown();");
+    expect(ctx.renderFiles().size).toBe(0);
   });
 
-  it("escapes */ in documentation comments", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#RulesDocument": {
-          type: "document",
-          traits: {
-            "smithy.api#documentation": "Comment end token: */",
-          },
-        },
-      }),
-    );
-    ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("*\\/");
-    expect(output).toContain("export const rulesDocumentSchema = z.unknown();");
-  });
-
-  it("routes com.amazonaws.s3 shapes to the s3-schemas file", () => {
-    const ctx = new CodeGenContext(
-      makeModel({ "com.amazonaws.s3#EndpointRuleSet": { type: "document" } }),
-    );
-    ctx.generate();
-    const files = ctx.renderFiles();
-    expect(files.has("s3-schemas")).toBe(true);
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(false);
-  });
-
-  it("routes non-S3 shapes to the common-schemas:com.amazonaws.shared file", () => {
+  it("does not emit standalone document schemas for non-S3 namespaces", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.shared#EndpointRuleSet": { type: "document" },
       }),
     );
-    ctx.generate();
-    const files = ctx.renderFiles();
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
-    expect(files.has("s3-schemas")).toBe(false);
-  });
 
-  it("emits multiple document shapes from the same namespace into one file", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#RuleSetA": { type: "document" },
-        "com.amazonaws.s3#RuleSetB": { type: "document" },
-      }),
-    );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("ruleSetASchema");
-    expect(output).toContain("ruleSetBSchema");
-  });
-
-  it("camelCases the shape name to produce the schema variable name", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#MyDocumentType": { type: "document" },
-      }),
-    );
-    ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
-      "myDocumentTypeSchema",
-    );
+    expect(ctx.renderFiles().size).toBe(0);
   });
 });

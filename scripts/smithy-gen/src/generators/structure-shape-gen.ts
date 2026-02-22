@@ -1,10 +1,9 @@
-import { camelCase } from "lodash-es";
+import { camelCase, upperFirst } from "lodash-es";
 import { code, def, imp, joinCode } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { StructureShape } from "../shapes/structure-shape.js";
 import type { SmithyAstModel } from "../smithy-ast-model.js";
 import { buildSchemaDocumentationComment } from "./schema-documentation-comment.js";
-import { buildSchemaTraitTodoComments } from "./schema-trait-todo-comment.js";
 
 const zImp = imp("z@zod/v4");
 
@@ -20,20 +19,15 @@ type NumericConstraintTrait = NonNullable<
   NonNullable<StructureMemberTraits>["smithy.api#length"]
 >;
 
-const implementedShapeTraitKeys = new Set<string>(["smithy.api#documentation"]);
-const implementedMemberTraitKeys = new Set<string>([
-  "smithy.api#default",
-  "smithy.api#documentation",
-  "smithy.api#length",
-  "smithy.api#range",
-  "smithy.api#required",
-]);
-
 function buildObjectPropertyName(memberName: string): string {
   if (/^[$A-Z_a-z][$\w]*$/u.test(memberName)) {
     return memberName;
   }
   return JSON.stringify(memberName);
+}
+
+function pascalCase(value: string): string {
+  return upperFirst(camelCase(value));
 }
 
 function indentBlock(block: string, indent: string): string {
@@ -214,6 +208,7 @@ export function generateStructureShapes(
     const { name } = ctx.parseShapeKey(key);
     const fileKey = ctx.getOutputFile(key);
     const schemaName = `${camelCase(name)}Schema`;
+    const typeName = pascalCase(name);
 
     const shapeCommentLines: string[] = [];
     const shapeDocumentation = buildSchemaDocumentationComment(
@@ -222,13 +217,6 @@ export function generateStructureShapes(
     if (shapeDocumentation) {
       shapeCommentLines.push(shapeDocumentation);
     }
-    shapeCommentLines.push(
-      ...buildSchemaTraitTodoComments(
-        shape.traits,
-        implementedShapeTraitKeys,
-        `structure ${name}`,
-      ),
-    );
     const shapeCommentPrefix =
       shapeCommentLines.length > 0 ? `${shapeCommentLines.join("\n")}\n` : "";
 
@@ -246,48 +234,27 @@ export function generateStructureShapes(
         memberComments.push(indentBlock(memberDocumentation, "  "));
       }
 
-      memberComments.push(
-        ...buildSchemaTraitTodoComments(
-          member.traits,
-          implementedMemberTraitKeys,
-          `structure member ${name}.${memberName}`,
-        ).map((line) => `  ${line}`),
-      );
-
       const memberTarget = member.target;
-      let hasResolvedTarget = false;
-      let memberTargetShapeType: ShapeType | undefined;
-      let memberSchemaExpr:
-        | string
-        | ReturnType<typeof imp>
-        | ReturnType<typeof code> = code`${zImp}.unknown()`;
-      if (ctx.hasRegisteredShape(memberTarget)) {
-        hasResolvedTarget = true;
-        memberTargetShapeType = ctx.getShapeType(memberTarget);
-        const { name: memberTargetName } = ctx.parseShapeKey(memberTarget);
-        const memberTargetSchemaName = `${camelCase(memberTargetName)}Schema`;
-        const memberTargetFileKey = ctx.getOutputFile(memberTarget);
-        memberSchemaExpr =
-          memberTargetFileKey === fileKey
-            ? memberTargetSchemaName
-            : imp(`${memberTargetSchemaName}@./${memberTargetFileKey}`);
-      } else {
-        memberComments.push(
-          `  // TODO: structure member target ${memberTarget} for ${name}.${memberName} is not generated yet.`,
-        );
-      }
+      const memberResolution = ctx.resolveSchemaReference(
+        memberTarget,
+        fileKey,
+        {
+          currentShapeKey: key,
+          lazyForSameFile: true,
+        },
+      );
 
       const memberCommentPrefix =
         memberComments.length > 0 ? `${memberComments.join("\n")}\n` : "";
       const memberConstraints = buildMemberConstraintChain(member.traits, {
-        applyDefault: hasResolvedTarget,
-        applyLength: hasResolvedTarget,
-        applyRange: hasResolvedTarget,
+        applyDefault: memberResolution.resolved,
+        applyLength: memberResolution.resolved,
+        applyRange: memberResolution.resolved,
         memberLocation: `structure member ${name}.${memberName}`,
-        targetShapeType: memberTargetShapeType,
+        targetShapeType: memberResolution.shapeType,
       });
       memberEntries.push(
-        code`${memberCommentPrefix}  ${buildObjectPropertyName(memberName)}: ${memberSchemaExpr}${memberConstraints},`,
+        code`${memberCommentPrefix}  ${buildObjectPropertyName(memberName)}: ${memberResolution.expr}${memberConstraints},`,
       );
     }
 
@@ -295,10 +262,11 @@ export function generateStructureShapes(
       memberEntries.length > 0
         ? code`${shapeCommentPrefix}export const ${def(schemaName)} = ${zImp}.object({
 ${joinCode(memberEntries, { on: "\n" })}
-});`
-        : code`${shapeCommentPrefix}export const ${def(schemaName)} = ${zImp}.object({});`;
+});
+export type ${def(typeName)} = ${zImp}.infer<typeof ${schemaName}>;`
+        : code`${shapeCommentPrefix}export const ${def(schemaName)} = ${zImp}.object({});
+export type ${def(typeName)} = ${zImp}.infer<typeof ${schemaName}>;`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@./${fileKey}`));
   }
 }
