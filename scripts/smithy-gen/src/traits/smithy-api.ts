@@ -1,6 +1,10 @@
 import { z } from "zod/v4";
 import { markerObjectSchema } from "../zod-helpers.js";
 
+export const authTrait = {
+  "smithy.api#auth": z.array(z.string()).optional(),
+};
+
 export const authDefinitionTrait = {
   "smithy.api#authDefinition": z
     .object({
@@ -20,6 +24,15 @@ export const documentationTrait = {
   "smithy.api#documentation": z.string().optional(),
 };
 
+export const endpointTrait = {
+  "smithy.api#endpoint": z
+    .object({
+      hostPrefix: z.string(),
+    })
+    .strict()
+    .optional(),
+};
+
 export enum ErrorTraitType {
   Client = "client",
   Server = "server",
@@ -36,6 +49,8 @@ export const enumValueTrait = {
 export const eventPayloadTrait = {
   "smithy.api#eventPayload": markerObjectSchema.strict().optional(),
 };
+
+export const EXAMPLES_TRAIT = "smithy.api#examples" as const;
 
 export const externalDocumentationTrait = {
   "smithy.api#externalDocumentation": z
@@ -75,6 +90,17 @@ export const httpPrefixHeadersTrait = {
   "smithy.api#httpPrefixHeaders": z.string().optional(),
 };
 
+export const httpTrait = {
+  "smithy.api#http": z
+    .object({
+      code: z.int().gte(100).lte(599),
+      method: z.enum(["HEAD", "GET", "POST", "PUT", "PATCH", "DELETE"]),
+      uri: z.string(),
+    })
+    .strict()
+    .optional(),
+};
+
 export const idRefTrait = {
   "smithy.api#idRef": z
     .object({
@@ -109,6 +135,18 @@ export const MIXIN_TRAIT = "smithy.api#mixin" as const;
 
 export const outputTrait = {
   "smithy.api#output": markerObjectSchema.strict().optional(),
+};
+
+export const paginatedTrait = {
+  "smithy.api#paginated": z
+    .object({
+      inputToken: z.string(),
+      outputToken: z.string(),
+      items: z.string().optional(),
+      pageSize: z.string(),
+    })
+    .strict()
+    .optional(),
 };
 
 export const patternTrait = {
