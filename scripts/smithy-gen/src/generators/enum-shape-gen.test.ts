@@ -30,8 +30,8 @@ describe("CodeGenContext enum shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain("export enum StorageClass {");
-    expect(output).toContain('STANDARD = "STANDARD",');
-    expect(output).toContain('GLACIER = "GLACIER",');
+    expect(output).toContain('Standard = "STANDARD",');
+    expect(output).toContain('Glacier = "GLACIER",');
     expect(output).toContain(
       "export const storageClassSchema = z.enum(StorageClass);",
     );
@@ -93,10 +93,10 @@ describe("CodeGenContext enum shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain(
-      '* The `/` character.\n * ```\n */\n  FORWARD_SLASH = "/",',
+      '* The `/` character.\n * ```\n */\n  ForwardSlash = "/",',
     );
     expect(output).toContain("Comment end token: */");
-    expect(output).toContain('COLON = ":",');
+    expect(output).toContain('Colon = ":",');
   });
 
   it("falls back to member key when enumValue is missing", () => {
@@ -138,6 +138,30 @@ describe("CodeGenContext enum shape generation", () => {
     const files = ctx.renderFiles();
     expect(files.has("common-schemas:com.amazonaws.shared:enums")).toBe(true);
     expect(files.has("s3-schemas:enums")).toBe(false);
+  });
+
+  it("pascalCases enum names and enum member keys", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#storage_class": {
+          type: "enum",
+          members: {
+            STANDARD_IA: {
+              target: "smithy.api#Unit",
+              traits: { "smithy.api#enumValue": "STANDARD_IA" },
+            },
+          },
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
+    expect(output).toContain("export enum StorageClass {");
+    expect(output).toContain('StandardIa = "STANDARD_IA",');
+    expect(output).toContain(
+      "export const storageClassSchema = z.enum(StorageClass);",
+    );
   });
 
   it("emits multiple enum shapes from the same namespace into one file", () => {

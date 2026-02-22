@@ -12,13 +12,13 @@ export enum ResourceDelimiter {
    * The `/` character.
    * ```
    */
-  FORWARD_SLASH = "/",
+  ForwardSlash = "/",
   /**
    * ```xml
    * The `:` character.
    * ```
    */
-  COLON = ":",
+  Colon = ":",
 }
 export const resourceDelimiterSchema = z.enum(ResourceDelimiter);
 
@@ -27,7 +27,7 @@ export const resourceDelimiterSchema = z.enum(ResourceDelimiter);
  * Designates the target as containing data of a known classification level.
  * ```
  */
-export enum data {
+export enum Data {
   /**
    * ```xml
    * Customer content means any software (including machine images), data,
@@ -38,7 +38,7 @@ export enum data {
    * through their use of AWS services.
    * ```
    */
-  CUSTOMER_CONTENT = "content",
+  CustomerContent = "content",
   /**
    * ```xml
    * Account information means information about customers that customers
@@ -46,7 +46,7 @@ export enum data {
    * customers’ accounts.
    * ```
    */
-  CUSTOMER_ACCOUNT_INFORMATION = "account",
+  CustomerAccountInformation = "account",
   /**
    * ```xml
    * Service Attributes means service usage data related to a customer’s
@@ -55,19 +55,19 @@ export enum data {
    * logging data, and analytics.
    * ```
    */
-  SERVICE_ATTRIBUTES = "usage",
+  ServiceAttributes = "usage",
   /**
    * ```xml
    * Designates metadata tags applied to AWS resources.
    * ```
    */
-  TAG_DATA = "tagging",
+  TagData = "tagging",
   /**
    * ```xml
    * Designates security and access roles, rules, usage policies, and
    * permissions.
    * ```
    */
-  PERMISSIONS_DATA = "permissions",
+  PermissionsData = "permissions",
 }
-export const dataSchema = z.enum(data);
+export const dataSchema = z.enum(Data);

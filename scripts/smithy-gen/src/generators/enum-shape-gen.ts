@@ -1,4 +1,4 @@
-import { camelCase } from "lodash-es";
+import { camelCase, upperFirst } from "lodash-es";
 import { code, def, imp } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { EnumShape } from "../shapes/enum-shape.js";
@@ -18,6 +18,10 @@ function buildMemberName(memberName: string): string {
   return JSON.stringify(memberName);
 }
 
+function pascalCase(value: string): string {
+  return upperFirst(camelCase(value));
+}
+
 export function generateEnumShapes(
   ctx: CodeGenContext,
   shapes: EnumShapeEntry[],
@@ -25,7 +29,7 @@ export function generateEnumShapes(
   for (const { key, shape } of shapes) {
     const { name } = ctx.parseShapeKey(key);
     const fileKey = ctx.getOutputFile(key);
-    const enumName = name;
+    const enumName = pascalCase(name);
     const schemaName = `${camelCase(name)}Schema`;
 
     const memberLines: string[] = [];
@@ -38,8 +42,9 @@ export function generateEnumShapes(
       }
 
       const enumValue = member.traits?.["smithy.api#enumValue"] ?? memberName;
+      const enumMemberName = pascalCase(memberName);
       memberLines.push(
-        `${buildMemberName(memberName)} = ${JSON.stringify(enumValue)},`,
+        `${buildMemberName(enumMemberName)} = ${JSON.stringify(enumValue)},`,
       );
     }
 

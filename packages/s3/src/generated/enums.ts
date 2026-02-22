@@ -2,13 +2,13 @@
 import { z } from "zod/v4";
 
 export enum AnalyticsS3ExportFileFormat {
-  CSV = "CSV",
+  Csv = "CSV",
 }
 export const analyticsS3ExportFileFormatSchema = z.enum(AnalyticsS3ExportFileFormat);
 
 export enum ArchiveStatus {
-  ARCHIVE_ACCESS = "ARCHIVE_ACCESS",
-  DEEP_ARCHIVE_ACCESS = "DEEP_ARCHIVE_ACCESS",
+  ArchiveAccess = "ARCHIVE_ACCESS",
+  DeepArchiveAccess = "DEEP_ARCHIVE_ACCESS",
 }
 export const archiveStatusSchema = z.enum(ArchiveStatus);
 
@@ -24,55 +24,55 @@ export enum BucketAccelerateStatus {
 }
 export const bucketAccelerateStatusSchema = z.enum(BucketAccelerateStatus);
 
-export enum BucketCannedACL {
-  private = "private",
-  public_read = "public-read",
-  public_read_write = "public-read-write",
-  authenticated_read = "authenticated-read",
+export enum BucketCannedAcl {
+  Private = "private",
+  PublicRead = "public-read",
+  PublicReadWrite = "public-read-write",
+  AuthenticatedRead = "authenticated-read",
 }
-export const bucketCannedAclSchema = z.enum(BucketCannedACL);
+export const bucketCannedAclSchema = z.enum(BucketCannedAcl);
 
 export enum BucketLocationConstraint {
-  af_south_1 = "af-south-1",
-  ap_east_1 = "ap-east-1",
-  ap_northeast_1 = "ap-northeast-1",
-  ap_northeast_2 = "ap-northeast-2",
-  ap_northeast_3 = "ap-northeast-3",
-  ap_south_1 = "ap-south-1",
-  ap_south_2 = "ap-south-2",
-  ap_southeast_1 = "ap-southeast-1",
-  ap_southeast_2 = "ap-southeast-2",
-  ap_southeast_3 = "ap-southeast-3",
-  ap_southeast_4 = "ap-southeast-4",
-  ap_southeast_5 = "ap-southeast-5",
-  ca_central_1 = "ca-central-1",
-  cn_north_1 = "cn-north-1",
-  cn_northwest_1 = "cn-northwest-1",
-  EU = "EU",
-  eu_central_1 = "eu-central-1",
-  eu_central_2 = "eu-central-2",
-  eu_north_1 = "eu-north-1",
-  eu_south_1 = "eu-south-1",
-  eu_south_2 = "eu-south-2",
-  eu_west_1 = "eu-west-1",
-  eu_west_2 = "eu-west-2",
-  eu_west_3 = "eu-west-3",
-  il_central_1 = "il-central-1",
-  me_central_1 = "me-central-1",
-  me_south_1 = "me-south-1",
-  sa_east_1 = "sa-east-1",
-  us_east_2 = "us-east-2",
-  us_gov_east_1 = "us-gov-east-1",
-  us_gov_west_1 = "us-gov-west-1",
-  us_west_1 = "us-west-1",
-  us_west_2 = "us-west-2",
+  AfSouth1 = "af-south-1",
+  ApEast1 = "ap-east-1",
+  ApNortheast1 = "ap-northeast-1",
+  ApNortheast2 = "ap-northeast-2",
+  ApNortheast3 = "ap-northeast-3",
+  ApSouth1 = "ap-south-1",
+  ApSouth2 = "ap-south-2",
+  ApSoutheast1 = "ap-southeast-1",
+  ApSoutheast2 = "ap-southeast-2",
+  ApSoutheast3 = "ap-southeast-3",
+  ApSoutheast4 = "ap-southeast-4",
+  ApSoutheast5 = "ap-southeast-5",
+  CaCentral1 = "ca-central-1",
+  CnNorth1 = "cn-north-1",
+  CnNorthwest1 = "cn-northwest-1",
+  Eu = "EU",
+  EuCentral1 = "eu-central-1",
+  EuCentral2 = "eu-central-2",
+  EuNorth1 = "eu-north-1",
+  EuSouth1 = "eu-south-1",
+  EuSouth2 = "eu-south-2",
+  EuWest1 = "eu-west-1",
+  EuWest2 = "eu-west-2",
+  EuWest3 = "eu-west-3",
+  IlCentral1 = "il-central-1",
+  MeCentral1 = "me-central-1",
+  MeSouth1 = "me-south-1",
+  SaEast1 = "sa-east-1",
+  UsEast2 = "us-east-2",
+  UsGovEast1 = "us-gov-east-1",
+  UsGovWest1 = "us-gov-west-1",
+  UsWest1 = "us-west-1",
+  UsWest2 = "us-west-2",
 }
 export const bucketLocationConstraintSchema = z.enum(BucketLocationConstraint);
 
 export enum BucketLogsPermission {
-  FULL_CONTROL = "FULL_CONTROL",
-  READ = "READ",
-  WRITE = "WRITE",
+  FullControl = "FULL_CONTROL",
+  Read = "READ",
+  Write = "WRITE",
 }
 export const bucketLogsPermissionSchema = z.enum(BucketLogsPermission);
 
@@ -88,29 +88,29 @@ export enum BucketVersioningStatus {
 export const bucketVersioningStatusSchema = z.enum(BucketVersioningStatus);
 
 export enum ChecksumAlgorithm {
-  CRC32 = "CRC32",
-  CRC32C = "CRC32C",
-  SHA1 = "SHA1",
-  SHA256 = "SHA256",
-  CRC64NVME = "CRC64NVME",
+  Crc32 = "CRC32",
+  Crc32C = "CRC32C",
+  Sha1 = "SHA1",
+  Sha256 = "SHA256",
+  Crc64Nvme = "CRC64NVME",
 }
 export const checksumAlgorithmSchema = z.enum(ChecksumAlgorithm);
 
 export enum ChecksumMode {
-  ENABLED = "ENABLED",
+  Enabled = "ENABLED",
 }
 export const checksumModeSchema = z.enum(ChecksumMode);
 
 export enum ChecksumType {
-  COMPOSITE = "COMPOSITE",
-  FULL_OBJECT = "FULL_OBJECT",
+  Composite = "COMPOSITE",
+  FullObject = "FULL_OBJECT",
 }
 export const checksumTypeSchema = z.enum(ChecksumType);
 
 export enum CompressionType {
-  NONE = "NONE",
-  GZIP = "GZIP",
-  BZIP2 = "BZIP2",
+  None = "NONE",
+  Gzip = "GZIP",
+  Bzip2 = "BZIP2",
 }
 export const compressionTypeSchema = z.enum(CompressionType);
 
@@ -142,13 +142,13 @@ export const deleteMarkerReplicationStatusSchema = z.enum(DeleteMarkerReplicatio
  * ```
  */
 export enum EncodingType {
-  url = "url",
+  Url = "url",
 }
 export const encodingTypeSchema = z.enum(EncodingType);
 
 export enum EncryptionType {
-  NONE = "NONE",
-  SSE_C = "SSE-C",
+  None = "NONE",
+  SseC = "SSE-C",
 }
 export const encryptionTypeSchema = z.enum(EncryptionType);
 
@@ -158,33 +158,33 @@ export const encryptionTypeSchema = z.enum(EncryptionType);
  * ```
  */
 export enum Event {
-  s3_ReducedRedundancyLostObject = "s3:ReducedRedundancyLostObject",
-  s3_ObjectCreated_ = "s3:ObjectCreated:*",
-  s3_ObjectCreated_Put = "s3:ObjectCreated:Put",
-  s3_ObjectCreated_Post = "s3:ObjectCreated:Post",
-  s3_ObjectCreated_Copy = "s3:ObjectCreated:Copy",
-  s3_ObjectCreated_CompleteMultipartUpload = "s3:ObjectCreated:CompleteMultipartUpload",
-  s3_ObjectRemoved_ = "s3:ObjectRemoved:*",
-  s3_ObjectRemoved_Delete = "s3:ObjectRemoved:Delete",
-  s3_ObjectRemoved_DeleteMarkerCreated = "s3:ObjectRemoved:DeleteMarkerCreated",
-  s3_ObjectRestore_ = "s3:ObjectRestore:*",
-  s3_ObjectRestore_Post = "s3:ObjectRestore:Post",
-  s3_ObjectRestore_Completed = "s3:ObjectRestore:Completed",
-  s3_Replication_ = "s3:Replication:*",
-  s3_Replication_OperationFailedReplication = "s3:Replication:OperationFailedReplication",
-  s3_Replication_OperationNotTracked = "s3:Replication:OperationNotTracked",
-  s3_Replication_OperationMissedThreshold = "s3:Replication:OperationMissedThreshold",
-  s3_Replication_OperationReplicatedAfterThreshold = "s3:Replication:OperationReplicatedAfterThreshold",
-  s3_ObjectRestore_Delete = "s3:ObjectRestore:Delete",
-  s3_LifecycleTransition = "s3:LifecycleTransition",
-  s3_IntelligentTiering = "s3:IntelligentTiering",
-  s3_ObjectAcl_Put = "s3:ObjectAcl:Put",
-  s3_LifecycleExpiration_ = "s3:LifecycleExpiration:*",
-  s3_LifecycleExpiration_Delete = "s3:LifecycleExpiration:Delete",
-  s3_LifecycleExpiration_DeleteMarkerCreated = "s3:LifecycleExpiration:DeleteMarkerCreated",
-  s3_ObjectTagging_ = "s3:ObjectTagging:*",
-  s3_ObjectTagging_Put = "s3:ObjectTagging:Put",
-  s3_ObjectTagging_Delete = "s3:ObjectTagging:Delete",
+  S3ReducedRedundancyLostObject = "s3:ReducedRedundancyLostObject",
+  S3ObjectCreated = "s3:ObjectCreated:*",
+  S3ObjectCreatedPut = "s3:ObjectCreated:Put",
+  S3ObjectCreatedPost = "s3:ObjectCreated:Post",
+  S3ObjectCreatedCopy = "s3:ObjectCreated:Copy",
+  S3ObjectCreatedCompleteMultipartUpload = "s3:ObjectCreated:CompleteMultipartUpload",
+  S3ObjectRemoved = "s3:ObjectRemoved:*",
+  S3ObjectRemovedDelete = "s3:ObjectRemoved:Delete",
+  S3ObjectRemovedDeleteMarkerCreated = "s3:ObjectRemoved:DeleteMarkerCreated",
+  S3ObjectRestore = "s3:ObjectRestore:*",
+  S3ObjectRestorePost = "s3:ObjectRestore:Post",
+  S3ObjectRestoreCompleted = "s3:ObjectRestore:Completed",
+  S3Replication = "s3:Replication:*",
+  S3ReplicationOperationFailedReplication = "s3:Replication:OperationFailedReplication",
+  S3ReplicationOperationNotTracked = "s3:Replication:OperationNotTracked",
+  S3ReplicationOperationMissedThreshold = "s3:Replication:OperationMissedThreshold",
+  S3ReplicationOperationReplicatedAfterThreshold = "s3:Replication:OperationReplicatedAfterThreshold",
+  S3ObjectRestoreDelete = "s3:ObjectRestore:Delete",
+  S3LifecycleTransition = "s3:LifecycleTransition",
+  S3IntelligentTiering = "s3:IntelligentTiering",
+  S3ObjectAclPut = "s3:ObjectAcl:Put",
+  S3LifecycleExpiration = "s3:LifecycleExpiration:*",
+  S3LifecycleExpirationDelete = "s3:LifecycleExpiration:Delete",
+  S3LifecycleExpirationDeleteMarkerCreated = "s3:LifecycleExpiration:DeleteMarkerCreated",
+  S3ObjectTagging = "s3:ObjectTagging:*",
+  S3ObjectTaggingPut = "s3:ObjectTagging:Put",
+  S3ObjectTaggingDelete = "s3:ObjectTagging:Delete",
 }
 export const eventSchema = z.enum(Event);
 
@@ -195,8 +195,8 @@ export enum ExistingObjectReplicationStatus {
 export const existingObjectReplicationStatusSchema = z.enum(ExistingObjectReplicationStatus);
 
 export enum ExpirationState {
-  ENABLED = "ENABLED",
-  DISABLED = "DISABLED",
+  Enabled = "ENABLED",
+  Disabled = "DISABLED",
 }
 export const expirationStateSchema = z.enum(ExpirationState);
 
@@ -207,26 +207,26 @@ export enum ExpirationStatus {
 export const expirationStatusSchema = z.enum(ExpirationStatus);
 
 export enum ExpressionType {
-  SQL = "SQL",
+  Sql = "SQL",
 }
 export const expressionTypeSchema = z.enum(ExpressionType);
 
 export enum FileHeaderInfo {
-  USE = "USE",
-  IGNORE = "IGNORE",
-  NONE = "NONE",
+  Use = "USE",
+  Ignore = "IGNORE",
+  None = "NONE",
 }
 export const fileHeaderInfoSchema = z.enum(FileHeaderInfo);
 
 export enum FilterRuleName {
-  prefix = "prefix",
-  suffix = "suffix",
+  Prefix = "prefix",
+  Suffix = "suffix",
 }
 export const filterRuleNameSchema = z.enum(FilterRuleName);
 
 export enum IntelligentTieringAccessTier {
-  ARCHIVE_ACCESS = "ARCHIVE_ACCESS",
-  DEEP_ARCHIVE_ACCESS = "DEEP_ARCHIVE_ACCESS",
+  ArchiveAccess = "ARCHIVE_ACCESS",
+  DeepArchiveAccess = "DEEP_ARCHIVE_ACCESS",
 }
 export const intelligentTieringAccessTierSchema = z.enum(IntelligentTieringAccessTier);
 
@@ -237,14 +237,14 @@ export enum IntelligentTieringStatus {
 export const intelligentTieringStatusSchema = z.enum(IntelligentTieringStatus);
 
 export enum InventoryConfigurationState {
-  ENABLED = "ENABLED",
-  DISABLED = "DISABLED",
+  Enabled = "ENABLED",
+  Disabled = "DISABLED",
 }
 export const inventoryConfigurationStateSchema = z.enum(InventoryConfigurationState);
 
 export enum InventoryFormat {
-  CSV = "CSV",
-  ORC = "ORC",
+  Csv = "CSV",
+  Orc = "ORC",
   Parquet = "Parquet",
 }
 export const inventoryFormatSchema = z.enum(InventoryFormat);
@@ -281,11 +281,11 @@ export enum InventoryOptionalField {
 }
 export const inventoryOptionalFieldSchema = z.enum(InventoryOptionalField);
 
-export enum JSONType {
-  DOCUMENT = "DOCUMENT",
-  LINES = "LINES",
+export enum JsonType {
+  Document = "DOCUMENT",
+  Lines = "LINES",
 }
-export const jsonTypeSchema = z.enum(JSONType);
+export const jsonTypeSchema = z.enum(JsonType);
 
 export enum LocationType {
   AvailabilityZone = "AvailabilityZone",
@@ -293,21 +293,21 @@ export enum LocationType {
 }
 export const locationTypeSchema = z.enum(LocationType);
 
-export enum MFADelete {
+export enum MfaDelete {
   Enabled = "Enabled",
   Disabled = "Disabled",
 }
-export const mfaDeleteSchema = z.enum(MFADelete);
+export const mfaDeleteSchema = z.enum(MfaDelete);
 
-export enum MFADeleteStatus {
+export enum MfaDeleteStatus {
   Enabled = "Enabled",
   Disabled = "Disabled",
 }
-export const mfaDeleteStatusSchema = z.enum(MFADeleteStatus);
+export const mfaDeleteStatusSchema = z.enum(MfaDeleteStatus);
 
 export enum MetadataDirective {
-  COPY = "COPY",
-  REPLACE = "REPLACE",
+  Copy = "COPY",
+  Replace = "REPLACE",
 }
 export const metadataDirectiveSchema = z.enum(MetadataDirective);
 
@@ -318,24 +318,24 @@ export enum MetricsStatus {
 export const metricsStatusSchema = z.enum(MetricsStatus);
 
 export enum ObjectAttributes {
-  ETAG = "ETag",
-  CHECKSUM = "Checksum",
-  OBJECT_PARTS = "ObjectParts",
-  STORAGE_CLASS = "StorageClass",
-  OBJECT_SIZE = "ObjectSize",
+  Etag = "ETag",
+  Checksum = "Checksum",
+  ObjectParts = "ObjectParts",
+  StorageClass = "StorageClass",
+  ObjectSize = "ObjectSize",
 }
 export const objectAttributesSchema = z.enum(ObjectAttributes);
 
-export enum ObjectCannedACL {
-  private = "private",
-  public_read = "public-read",
-  public_read_write = "public-read-write",
-  authenticated_read = "authenticated-read",
-  aws_exec_read = "aws-exec-read",
-  bucket_owner_read = "bucket-owner-read",
-  bucket_owner_full_control = "bucket-owner-full-control",
+export enum ObjectCannedAcl {
+  Private = "private",
+  PublicRead = "public-read",
+  PublicReadWrite = "public-read-write",
+  AuthenticatedRead = "authenticated-read",
+  AwsExecRead = "aws-exec-read",
+  BucketOwnerRead = "bucket-owner-read",
+  BucketOwnerFullControl = "bucket-owner-full-control",
 }
-export const objectCannedAclSchema = z.enum(ObjectCannedACL);
+export const objectCannedAclSchema = z.enum(ObjectCannedAcl);
 
 export enum ObjectLockEnabled {
   Enabled = "Enabled",
@@ -343,20 +343,20 @@ export enum ObjectLockEnabled {
 export const objectLockEnabledSchema = z.enum(ObjectLockEnabled);
 
 export enum ObjectLockLegalHoldStatus {
-  ON = "ON",
-  OFF = "OFF",
+  On = "ON",
+  Off = "OFF",
 }
 export const objectLockLegalHoldStatusSchema = z.enum(ObjectLockLegalHoldStatus);
 
 export enum ObjectLockMode {
-  GOVERNANCE = "GOVERNANCE",
-  COMPLIANCE = "COMPLIANCE",
+  Governance = "GOVERNANCE",
+  Compliance = "COMPLIANCE",
 }
 export const objectLockModeSchema = z.enum(ObjectLockMode);
 
 export enum ObjectLockRetentionMode {
-  GOVERNANCE = "GOVERNANCE",
-  COMPLIANCE = "COMPLIANCE",
+  Governance = "GOVERNANCE",
+  Compliance = "COMPLIANCE",
 }
 export const objectLockRetentionModeSchema = z.enum(ObjectLockRetentionMode);
 
@@ -393,29 +393,29 @@ export enum ObjectOwnership {
 export const objectOwnershipSchema = z.enum(ObjectOwnership);
 
 export enum ObjectStorageClass {
-  STANDARD = "STANDARD",
-  REDUCED_REDUNDANCY = "REDUCED_REDUNDANCY",
-  GLACIER = "GLACIER",
-  STANDARD_IA = "STANDARD_IA",
-  ONEZONE_IA = "ONEZONE_IA",
-  INTELLIGENT_TIERING = "INTELLIGENT_TIERING",
-  DEEP_ARCHIVE = "DEEP_ARCHIVE",
-  OUTPOSTS = "OUTPOSTS",
-  GLACIER_IR = "GLACIER_IR",
-  SNOW = "SNOW",
-  EXPRESS_ONEZONE = "EXPRESS_ONEZONE",
-  FSX_OPENZFS = "FSX_OPENZFS",
-  FSX_ONTAP = "FSX_ONTAP",
+  Standard = "STANDARD",
+  ReducedRedundancy = "REDUCED_REDUNDANCY",
+  Glacier = "GLACIER",
+  StandardIa = "STANDARD_IA",
+  OnezoneIa = "ONEZONE_IA",
+  IntelligentTiering = "INTELLIGENT_TIERING",
+  DeepArchive = "DEEP_ARCHIVE",
+  Outposts = "OUTPOSTS",
+  GlacierIr = "GLACIER_IR",
+  Snow = "SNOW",
+  ExpressOnezone = "EXPRESS_ONEZONE",
+  FsxOpenzfs = "FSX_OPENZFS",
+  FsxOntap = "FSX_ONTAP",
 }
 export const objectStorageClassSchema = z.enum(ObjectStorageClass);
 
 export enum ObjectVersionStorageClass {
-  STANDARD = "STANDARD",
+  Standard = "STANDARD",
 }
 export const objectVersionStorageClassSchema = z.enum(ObjectVersionStorageClass);
 
 export enum OptionalObjectAttributes {
-  RESTORE_STATUS = "RestoreStatus",
+  RestoreStatus = "RestoreStatus",
 }
 export const optionalObjectAttributesSchema = z.enum(OptionalObjectAttributes);
 
@@ -437,23 +437,23 @@ export enum Payer {
 export const payerSchema = z.enum(Payer);
 
 export enum Permission {
-  FULL_CONTROL = "FULL_CONTROL",
-  WRITE = "WRITE",
-  WRITE_ACP = "WRITE_ACP",
-  READ = "READ",
-  READ_ACP = "READ_ACP",
+  FullControl = "FULL_CONTROL",
+  Write = "WRITE",
+  WriteAcp = "WRITE_ACP",
+  Read = "READ",
+  ReadAcp = "READ_ACP",
 }
 export const permissionSchema = z.enum(Permission);
 
 export enum Protocol {
-  http = "http",
-  https = "https",
+  Http = "http",
+  Https = "https",
 }
 export const protocolSchema = z.enum(Protocol);
 
 export enum QuoteFields {
-  ALWAYS = "ALWAYS",
-  ASNEEDED = "ASNEEDED",
+  Always = "ALWAYS",
+  Asneeded = "ASNEEDED",
 }
 export const quoteFieldsSchema = z.enum(QuoteFields);
 
@@ -470,11 +470,11 @@ export enum ReplicationRuleStatus {
 export const replicationRuleStatusSchema = z.enum(ReplicationRuleStatus);
 
 export enum ReplicationStatus {
-  COMPLETE = "COMPLETE",
-  PENDING = "PENDING",
-  FAILED = "FAILED",
-  REPLICA = "REPLICA",
-  COMPLETED = "COMPLETED",
+  Complete = "COMPLETE",
+  Pending = "PENDING",
+  Failed = "FAILED",
+  Replica = "REPLICA",
+  Completed = "COMPLETED",
 }
 export const replicationStatusSchema = z.enum(ReplicationStatus);
 
@@ -495,7 +495,7 @@ export const replicationTimeStatusSchema = z.enum(ReplicationTimeStatus);
  * ```
  */
 export enum RequestCharged {
-  requester = "requester",
+  Requester = "requester",
 }
 export const requestChargedSchema = z.enum(RequestCharged);
 
@@ -512,26 +512,26 @@ export const requestChargedSchema = z.enum(RequestCharged);
  * ```
  */
 export enum RequestPayer {
-  requester = "requester",
+  Requester = "requester",
 }
 export const requestPayerSchema = z.enum(RequestPayer);
 
 export enum RestoreRequestType {
-  SELECT = "SELECT",
+  Select = "SELECT",
 }
 export const restoreRequestTypeSchema = z.enum(RestoreRequestType);
 
 export enum S3TablesBucketType {
-  aws = "aws",
-  customer = "customer",
+  Aws = "aws",
+  Customer = "customer",
 }
 export const s3TablesBucketTypeSchema = z.enum(S3TablesBucketType);
 
 export enum ServerSideEncryption {
-  AES256 = "AES256",
-  aws_fsx = "aws:fsx",
-  aws_kms = "aws:kms",
-  aws_kms_dsse = "aws:kms:dsse",
+  Aes256 = "AES256",
+  AwsFsx = "aws:fsx",
+  AwsKms = "aws:kms",
+  AwsKmsDsse = "aws:kms:dsse",
 }
 export const serverSideEncryptionSchema = z.enum(ServerSideEncryption);
 
@@ -548,36 +548,36 @@ export enum SseKmsEncryptedObjectsStatus {
 export const sseKmsEncryptedObjectsStatusSchema = z.enum(SseKmsEncryptedObjectsStatus);
 
 export enum StorageClass {
-  STANDARD = "STANDARD",
-  REDUCED_REDUNDANCY = "REDUCED_REDUNDANCY",
-  STANDARD_IA = "STANDARD_IA",
-  ONEZONE_IA = "ONEZONE_IA",
-  INTELLIGENT_TIERING = "INTELLIGENT_TIERING",
-  GLACIER = "GLACIER",
-  DEEP_ARCHIVE = "DEEP_ARCHIVE",
-  OUTPOSTS = "OUTPOSTS",
-  GLACIER_IR = "GLACIER_IR",
-  SNOW = "SNOW",
-  EXPRESS_ONEZONE = "EXPRESS_ONEZONE",
-  FSX_OPENZFS = "FSX_OPENZFS",
-  FSX_ONTAP = "FSX_ONTAP",
+  Standard = "STANDARD",
+  ReducedRedundancy = "REDUCED_REDUNDANCY",
+  StandardIa = "STANDARD_IA",
+  OnezoneIa = "ONEZONE_IA",
+  IntelligentTiering = "INTELLIGENT_TIERING",
+  Glacier = "GLACIER",
+  DeepArchive = "DEEP_ARCHIVE",
+  Outposts = "OUTPOSTS",
+  GlacierIr = "GLACIER_IR",
+  Snow = "SNOW",
+  ExpressOnezone = "EXPRESS_ONEZONE",
+  FsxOpenzfs = "FSX_OPENZFS",
+  FsxOntap = "FSX_ONTAP",
 }
 export const storageClassSchema = z.enum(StorageClass);
 
 export enum StorageClassAnalysisSchemaVersion {
-  V_1 = "V_1",
+  V1 = "V_1",
 }
 export const storageClassAnalysisSchemaVersionSchema = z.enum(StorageClassAnalysisSchemaVersion);
 
 export enum TableSseAlgorithm {
-  aws_kms = "aws:kms",
-  AES256 = "AES256",
+  AwsKms = "aws:kms",
+  Aes256 = "AES256",
 }
 export const tableSseAlgorithmSchema = z.enum(TableSseAlgorithm);
 
 export enum TaggingDirective {
-  COPY = "COPY",
-  REPLACE = "REPLACE",
+  Copy = "COPY",
+  Replace = "REPLACE",
 }
 export const taggingDirectiveSchema = z.enum(TaggingDirective);
 
@@ -589,18 +589,18 @@ export enum Tier {
 export const tierSchema = z.enum(Tier);
 
 export enum TransitionDefaultMinimumObjectSize {
-  varies_by_storage_class = "varies_by_storage_class",
-  all_storage_classes_128K = "all_storage_classes_128K",
+  VariesByStorageClass = "varies_by_storage_class",
+  AllStorageClasses128K = "all_storage_classes_128K",
 }
 export const transitionDefaultMinimumObjectSizeSchema = z.enum(TransitionDefaultMinimumObjectSize);
 
 export enum TransitionStorageClass {
-  GLACIER = "GLACIER",
-  STANDARD_IA = "STANDARD_IA",
-  ONEZONE_IA = "ONEZONE_IA",
-  INTELLIGENT_TIERING = "INTELLIGENT_TIERING",
-  DEEP_ARCHIVE = "DEEP_ARCHIVE",
-  GLACIER_IR = "GLACIER_IR",
+  Glacier = "GLACIER",
+  StandardIa = "STANDARD_IA",
+  OnezoneIa = "ONEZONE_IA",
+  IntelligentTiering = "INTELLIGENT_TIERING",
+  DeepArchive = "DEEP_ARCHIVE",
+  GlacierIr = "GLACIER_IR",
 }
 export const transitionStorageClassSchema = z.enum(TransitionStorageClass);
 

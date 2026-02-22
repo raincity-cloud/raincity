@@ -7,30 +7,30 @@ export enum ChecksumAlgorithm {
    * CRC64NVME
    * ```
    */
-  CRC64NVME = "CRC64NVME",
+  Crc64Nvme = "CRC64NVME",
   /**
    * ```xml
    * CRC32C
    * ```
    */
-  CRC32C = "CRC32C",
+  Crc32C = "CRC32C",
   /**
    * ```xml
    * CRC32
    * ```
    */
-  CRC32 = "CRC32",
+  Crc32 = "CRC32",
   /**
    * ```xml
    * SHA1
    * ```
    */
-  SHA1 = "SHA1",
+  Sha1 = "SHA1",
   /**
    * ```xml
    * SHA256
    * ```
    */
-  SHA256 = "SHA256",
+  Sha256 = "SHA256",
 }
 export const checksumAlgorithmSchema = z.enum(ChecksumAlgorithm);

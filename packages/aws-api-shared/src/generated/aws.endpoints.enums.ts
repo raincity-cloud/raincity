@@ -2,8 +2,8 @@
 import { z } from "zod/v4";
 
 export enum PartitionEndpointPattern {
-  SERVICE_DNSSUFFIX = "service_dnsSuffix",
-  SERVICE_REGION_DNSSUFFIX = "service_region_dnsSuffix",
-  AWS_RECOMMENDED = "aws_recommended",
+  ServiceDnssuffix = "service_dnsSuffix",
+  ServiceRegionDnssuffix = "service_region_dnsSuffix",
+  AwsRecommended = "aws_recommended",
 }
 export const partitionEndpointPatternSchema = z.enum(PartitionEndpointPattern);
