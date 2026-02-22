@@ -23,20 +23,232 @@ export enum ShapeType {
   BOOLEAN = "boolean",
 }
 export const shapeTypeSchema = z.enum(ShapeType);
-// TODO: list member target smithy.rules#Condition is not generated yet.
-export const conditionsSchema = z.array(z.unknown());
+/** A client context parameter definition. */
+export const clientContextParamDefinitionSchema = z.object({
+  /** The Smithy shape type that should be used to generate a client configurable for the rule-set parameter. */
+  type: shapeTypeSchema,
+  /** Documentation string to be generated with the client parameter. */
+  // TODO: structure member target smithy.api#String for ClientContextParamDefinition.documentation is not generated yet.
+  documentation: z.unknown().optional(),
+});
+export const conditionSchema = z.object({
+  /** The name of the function to be executed. */
+  // TODO: structure member target smithy.api#String for Condition.fn is not generated yet.
+  fn: z.unknown(),
+  /**
+   * The arguments for the function.
+   * An array of one or more of the following types: string, bool, array, Reference object, or Function object
+   */
+  // TODO: structure member target smithy.rules#DocumentList for Condition.argv is not generated yet.
+  argv: z.unknown(),
+  /** The optional destination variable to assign the functions result to. */
+  // TODO: structure member target smithy.api#String for Condition.assign is not generated yet.
+  assign: z.unknown().optional(),
+});
+/** A description of an expected endpoint to be resolved for an endpoint rule-set test case. */
+export const endpointExpectationSchema = z.object({
+  /** The expected endpoint URL to be resolved for this test case. */
+  // TODO: structure member target smithy.api#String for EndpointExpectation.url is not generated yet.
+  url: z.unknown().optional(),
+  /** The transport headers to be set for this test case. */
+  // TODO: structure member target smithy.rules#EndpointHeaders for EndpointExpectation.headers is not generated yet.
+  headers: z.unknown().optional(),
+  /** The properties for the endpoint for this test case. */
+  // TODO: structure member target smithy.rules#Properties for EndpointExpectation.properties is not generated yet.
+  properties: z.unknown().optional(),
+});
+export const endpointObjectSchema = z.object({
+  /**
+   * The endpoint url. This MUST specify a scheme and hostname and MAY contain port and base path components.
+   * A string value MAY be a Template string. Any value for this property MUST resolve to a string.
+   */
+  // TODO: structure member target smithy.api#Document for EndpointObject.url is not generated yet.
+  url: z.unknown(),
+  /**
+   * A map containing zero or more key value property pairs. Endpoint properties MAY be arbitrarily deep and
+   * contain other maps and arrays.
+   */
+  // TODO: structure member target smithy.rules#EndpointProperties for EndpointObject.properties is not generated yet.
+  properties: z.unknown().optional(),
+  /**
+   * A map of transport header names to their respective values. A string value in an array MAY be a
+   * template string.
+   */
+  // TODO: structure member target smithy.rules#EndpointObjectHeaders for EndpointObject.headers is not generated yet.
+  headers: z.unknown().optional(),
+});
+/** Describes an endpoint test case for validation of an endpoint rule-set. */
+export const endpointTestSchema = z.object({
+  /** Documentation describing the test case. */
+  // TODO: structure member target smithy.api#String for EndpointTest.documentation is not generated yet.
+  documentation: z.unknown().optional(),
+  /** Defines rule-set parameters and values to use for testing rules-engine. */
+  // TODO: structure member target smithy.api#Document for EndpointTest.params is not generated yet.
+  params: z.unknown().optional(),
+  /** Defines a set of service operation configurations used for testing the rules-engine. */
+  // TODO: structure member target smithy.rules#OperationInputs for EndpointTest.operationInputs is not generated yet.
+  operationInputs: z.unknown().optional(),
+  /** The expected outcome of the test case. */
+  // TODO: structure member target smithy.rules#EndpointTestExpectation for EndpointTest.expect is not generated yet.
+  expect: z.unknown(),
+});
+/** An operation context parameter definition. */
+export const operationContextParamDefinitionSchema = z.object({
+  /** a JMESPath expression to select element(s) from the operation input to bind to. */
+  // TODO: structure member target smithy.api#String for OperationContextParamDefinition.path is not generated yet.
+  path: z.unknown(),
+});
+/** A description of a service operation and input used to verify an endpoint rule-set test case. */
+export const operationInputSchema = z.object({
+  /** The name of the service operation targeted by the test. */
+  // TODO: structure member target smithy.api#String for OperationInput.operationName is not generated yet.
+  operationName: z.unknown(),
+  /**
+   * Defines the input parameters used to generate the operation request.
+   * These parameters MUST be compatible with the input of the operation.
+   */
+  // TODO: structure member target smithy.api#Document for OperationInput.operationParams is not generated yet.
+  operationParams: z.unknown().optional(),
+  /** Defines the set of rule-set built-ins and their corresponding values to be set. */
+  // TODO: structure member target smithy.api#Document for OperationInput.builtInParams is not generated yet.
+  builtInParams: z.unknown().optional(),
+  /** Defines the set of client configuration parameters to be set. */
+  // TODO: structure member target smithy.api#Document for OperationInput.clientParams is not generated yet.
+  clientParams: z.unknown().optional(),
+});
+/** A rules input parameter. */
+export const parameterSchema = z.object({
+  /** The parameter type. */
+  type: parameterTypeSchema,
+  /** True if the parameter is deprecated. */
+  // TODO: structure member target smithy.api#Boolean for Parameter.deprecated is not generated yet.
+  deprecated: z.unknown().optional(),
+  /** Documentation about the parameter. */
+  // TODO: structure member target smithy.api#String for Parameter.documentation is not generated yet.
+  documentation: z.unknown().optional(),
+  /**
+   * Specifies the default value for the parameter if not set.
+   * Parameters with defaults MUST also be marked as required. The type of the provided default MUST match type.
+   */
+  // TODO: structure member target smithy.api#Document for Parameter.default is not generated yet.
+  default: z.unknown().optional(),
+  /** Specifies a named built-in value that is sourced and provided to the endpoint provider by a caller. */
+  // TODO: structure member target smithy.api#String for Parameter.builtIn is not generated yet.
+  builtIn: z.unknown().optional(),
+  /** Specifies that the parameter is required to be provided to the endpoint provider. */
+  // TODO: structure member target smithy.api#Boolean for Parameter.required is not generated yet.
+  required: z.unknown().optional(),
+});
+export const resultSchema = z.object({
+  /** Result type. */
+  type: resultTypeSchema,
+  /** An optional description of the result. */
+  // TODO: structure member target smithy.api#String for Result.documentation is not generated yet.
+  documentation: z.unknown().optional(),
+  /** Provided if type is "error". */
+  // TODO: structure member target smithy.api#Document for Result.error is not generated yet.
+  error: z.unknown().optional(),
+  /** Provided if type is "endpoint". */
+  endpoint: endpointObjectSchema.optional(),
+  /** Conditions for the result (only used with decision tree rules). */
+  // TODO: structure member target smithy.rules#Conditions for Result.conditions is not generated yet.
+  conditions: z.unknown().optional(),
+});
+/** A static context parameter definition. */
+export const staticContextParamDefinitionSchema = z.object({
+  /** The value to set the associated rule-set parameter to. */
+  // TODO: structure member target smithy.api#Document for StaticContextParamDefinition.value is not generated yet.
+  value: z.unknown(),
+});
+/**
+ * Binds the targeted member of an operation's input structure to the named rule-set parameter.
+ * The type of the shape targeted by the trait MUST match the parameter type defined in the rule-set.
+ */
+// TODO: smithy.api#trait ({"selector":"operation -[input]-> structure > member"}) on structure contextParam is not mapped to zod.
+export const contextParamSchema = z.object({
+  /** The rule-set parameter name. */
+  // TODO: structure member target smithy.api#String for contextParam.name is not generated yet.
+  name: z.unknown(),
+});
+/** Defines an endpoint rule-set using a binary decision diagram (BDD). */
+// TODO: smithy.api#trait ({"selector":"service"}) on structure endpointBdd is not mapped to zod.
+export const endpointBddSchema = z.object({
+  /** The rules engine version. Must be set to 1.1 or higher. */
+  // TODO: structure member target smithy.api#String for endpointBdd.version is not generated yet.
+  version: z.unknown(),
+  /** A map of zero or more endpoint parameter names to their parameter configuration. */
+  // TODO: structure member target smithy.rules#Parameters for endpointBdd.parameters is not generated yet.
+  parameters: z.unknown(),
+  /** An ordered list of unique conditions used throughout the BDD. */
+  // TODO: structure member target smithy.rules#Conditions for endpointBdd.conditions is not generated yet.
+  conditions: z.unknown(),
+  /** An ordered list of results referenced by BDD nodes. The first result is always the terminal node. */
+  // TODO: structure member target smithy.rules#Results for endpointBdd.results is not generated yet.
+  results: z.unknown(),
+  /** The root node of where to start evaluating the BDD. */
+  // TODO: structure member target smithy.api#Integer for endpointBdd.root is not generated yet.
+  root: z.unknown(),
+  /** The number of nodes contained in the BDD. */
+  // TODO: structure member target smithy.api#Integer for endpointBdd.nodeCount is not generated yet.
+  nodeCount: z.unknown(),
+  /**
+   * Base64-encoded array of BDD nodes representing the decision graph structure.
+   *
+   * All integers are encoded in big-endian.
+   *
+   * The first node (index 0) is always the terminal node `[-1, 1, -1]` and is included in the nodeCount.
+   * User-defined nodes start at index 1.
+   *
+   * Each node is written one after the other and consists of three integers written sequentially:
+   * 1. variable index
+   * 2. high reference (when condition is true)
+   * 3. low reference (when condition is false)
+   *
+   * Node Structure [variable, high, low]:
+   * - variable: The index of the condition being tested (0 to conditionCount-1)
+   * - high: Reference to follow when the condition evaluates to true
+   * - low: Reference to follow when the condition evaluates to false
+   *
+   * Reference Encoding:
+   * - 0: Invalid/unused reference (never appears in valid BDDs)
+   * - 1: TRUE terminal (treated as "no match" in endpoint resolution)
+   * - -1: FALSE terminal (treated as "no match" in endpoint resolution)
+   * - 2, 3, 4, ...: Node references pointing to nodes[ref-1]
+   * - -2, -3, -4, ...: Complement node references (logical NOT of nodes[abs(ref)-1])
+   * - 100000000+: Result terminals (100000000 + resultIndex)
+   *
+   * Complement edges:
+   * A negative reference represents the logical NOT of the referenced node's entire subgraph. So `-5` means the
+   * complement of node 5 (located in the array at index 4, since `index = |ref| - 1`). In this case, evaluate the
+   * condition referenced by node 4, and if it is TRUE, use the low reference, and if it's FALSE, use the high
+   * reference. This optimization significantly reduces BDD size by allowing a single subgraph to represent both a
+   * boolean function and its complement; instead of creating separate nodes for `condition AND other` and
+   * `NOT(condition AND other)`, we can reuse the same nodes with complement edges. Complement edges cannot be
+   * used on result terminals.
+   */
+  // TODO: structure member target smithy.api#String for endpointBdd.nodes is not generated yet.
+  nodes: z.unknown(),
+});
+/** Defines endpoint test-cases for validating a client's endpoint rule-set. */
+// TODO: smithy.api#trait ({"selector":"service :is([trait|smithy.rules#endpointRuleSet], [trait|smithy.rules#endpointBdd])"}) on structure endpointTests is not mapped to zod.
+export const endpointTestsSchema = z.object({
+  /** The endpoint tests schema version. */
+  // TODO: structure member target smithy.api#String for endpointTests.version is not generated yet.
+  version: z.unknown(),
+  /** List of endpoint test cases. */
+  // TODO: structure member target smithy.rules#EndpointTestList for endpointTests.testCases is not generated yet.
+  testCases: z.unknown().optional(),
+});
+export const conditionsSchema = z.array(conditionSchema);
 // TODO: list member target smithy.api#Document is not generated yet.
 export const documentListSchema = z.array(z.unknown());
 /** A transport header value. */
 // TODO: list member target smithy.api#String is not generated yet.
 /** A list of transport header values. */
 export const endpointHeaderValueSchema = z.array(z.unknown());
-// TODO: list member target smithy.rules#EndpointTest is not generated yet.
 /** A list of endpoint rule-set tests. */
-export const endpointTestListSchema = z.array(z.unknown());
+export const endpointTestListSchema = z.array(endpointTestSchema);
 /** The service operation configuration to be used for testing the rules-engine. */
-// TODO: list member target smithy.rules#OperationInput is not generated yet.
 /** A list of operation input descriptions for an endpoint rule-set test case. */
-export const operationInputsSchema = z.array(z.unknown());
-// TODO: list member target smithy.rules#Result is not generated yet.
-export const resultsSchema = z.array(z.unknown());
+export const operationInputsSchema = z.array(operationInputSchema);
+export const resultsSchema = z.array(resultSchema);

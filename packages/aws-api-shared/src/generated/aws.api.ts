@@ -49,3 +49,255 @@ export const cloudFormationNameSchema = z.string().regex(new RegExp("^[A-Z][A-Za
 export const cloudWatchMetricNamespaceSchema = z.string().min(1).max(255).regex(new RegExp("^[^:].*$"));
 /** Points to an operation designated for a tagging APi */
 export const tagOperationReferenceSchema = z.string();
+/** Structure representing the configuration of resource specific tagging APIs */
+export const taggableApiConfigSchema = z.object({
+  /**
+   * The `tagApi` property is a string value that references a non-instance
+   * or create operation that creates or updates tags on the resource.
+   */
+  tagApi: tagOperationReferenceSchema,
+  /**
+   * The `untagApi` property is a string value that references a non-instance
+   * operation that removes tags on the resource.
+   */
+  untagApi: tagOperationReferenceSchema,
+  /**
+   * The `listTagsApi` property is a string value that references a non-
+   * instance operation which gets the current tags on the resource.
+   */
+  listTagsApi: tagOperationReferenceSchema,
+});
+/** Specifies an ARN template for the resource. */
+// TODO: smithy.api#externalDocumentation ({"Reference":"https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html"}) on structure arn is not mapped to zod.
+// TODO: smithy.api#trait ({"selector":"resource"}) on structure arn is not mapped to zod.
+export const arnSchema = z.object({
+  /**
+   * Defines the ARN template. The provided string contains URI-template
+   * style label placeholders that contain the name of one of the identifiers
+   * defined in the `identifiers` property of the resource. These labels can
+   * be substituted at runtime with the actual identifiers of the resource.
+   * Every identifier name of the resource MUST have corresponding label of
+   * the same name. Note that percent-encoding **is not** performed on these
+   * placeholder values; they are to be replaced literally. For relative ARN
+   * templates that have not set `absolute` to `true`, the template string
+   * contains only the resource part of the ARN (for example,
+   * `foo/{MyResourceId}`). Relative ARNs MUST NOT start with "/".
+   */
+  // TODO: structure member target smithy.api#String for arn.template is not generated yet.
+  template: z.unknown(),
+  /**
+   * Set to true to indicate that the ARN template contains a fully-formed
+   * ARN that does not need to be merged with the service. This type of ARN
+   * MUST be used when the identifier of a resource is an ARN or is based on
+   * the ARN identifier of a parent resource.
+   */
+  // TODO: structure member target smithy.api#Boolean for arn.absolute is not generated yet.
+  absolute: z.unknown().optional(),
+  /**
+   * Set to true to specify that the ARN does not contain a region. If not
+   * set, or if set to false, the resolved ARN will contain a placeholder
+   * for the region. This can only be set to true if `absolute` is not set
+   * or is false.
+   */
+  // TODO: structure member target smithy.api#Boolean for arn.noRegion is not generated yet.
+  noRegion: z.unknown().optional(),
+  /**
+   * Set to true to specify that the ARN does not contain an account ID. If
+   * not set, or if set to false, the resolved ARN will contain a placeholder
+   * for the customer account ID. This can only be set to true if absolute
+   * is not set or is false.
+   */
+  // TODO: structure member target smithy.api#Boolean for arn.noAccount is not generated yet.
+  noAccount: z.unknown().optional(),
+  /**
+   * Defines which character is used to delimit sections of the resource
+   * segment of an ARN. This can only be set if absolute is set to true.
+   */
+  resourceDelimiter: resourceDelimiterSchema.optional(),
+  /**
+   * Set to true to indicate that an ARN may be reused for different
+   * instances of a resource.
+   */
+  // TODO: structure member target smithy.api#Boolean for arn.reusable is not generated yet.
+  reusable: z.unknown().optional(),
+});
+/** Marks a string as containing an ARN. */
+// TODO: smithy.api#trait ({"selector":"string"}) on structure arnReference is not mapped to zod.
+export const arnReferenceSchema = z.object({
+  /** The AWS CloudFormation resource type contained in the ARN. */
+  // TODO: structure member target smithy.api#String for arnReference.type is not generated yet.
+  type: z.unknown().optional(),
+  /**
+   * An absolute shape ID that references the Smithy resource type contained
+   * in the ARN (e.g., `com.foo#SomeResource`). The targeted resource is not
+   * required to be found in the model, allowing for external shapes to be
+   * referenced without needing to take on an additional dependency. If the
+   * shape is found in the model, it MUST target a resource shape, and the
+   * resource MUST be found within the closure of the referenced service
+   * shape.
+   */
+  // TODO: structure member target smithy.api#String for arnReference.resource is not generated yet.
+  resource: z.unknown().optional(),
+  /**
+   * The Smithy service absolute shape ID that is referenced by the ARN. The
+   * targeted service is not required to be found in the model, allowing for
+   * external shapes to be referenced without needing to take on an
+   * additional dependency.
+   */
+  // TODO: structure member target smithy.api#String for arnReference.service is not generated yet.
+  service: z.unknown().optional(),
+});
+/**
+ * Indicates that the target operation should use the client's endpoint
+ * discovery logic.
+ */
+// TODO: smithy.api#trait ({"selector":"operation"}) on structure clientDiscoveredEndpoint is not mapped to zod.
+export const clientDiscoveredEndpointSchema = z.object({
+  /**
+   * This field denotes whether or not this operation requires the use of a
+   * specific endpoint. If this field is false, the standard regional
+   * endpoint for a service can handle this request. The client will start
+   * sending requests to the standard regional endpoint while working to
+   * discover a more specific endpoint.
+   */
+  // TODO: structure member target smithy.api#Boolean for clientDiscoveredEndpoint.required is not generated yet.
+  required: z.unknown(),
+});
+/** Configures endpoint discovery for the service. */
+// TODO: smithy.api#trait ({"selector":"service"}) on structure clientEndpointDiscovery is not mapped to zod.
+export const clientEndpointDiscoverySchema = z.object({
+  /**
+   * Indicates the operation that clients should use to discover endpoints
+   * for the service.
+   */
+  // TODO: smithy.api#idRef ({"failWhenMissing":true,"selector":"operation"}) on structure member clientEndpointDiscovery.operation is not mapped to zod.
+  // TODO: structure member target smithy.api#String for clientEndpointDiscovery.operation is not generated yet.
+  operation: z.unknown(),
+  /**
+   * Indicates the error that tells clients that the endpoint they are using
+   * is no longer valid. This error MUST be bound to any operation bound to
+   * the service which is marked with the aws.api#clientDiscoveredEndpoint
+   * trait.
+   */
+  // TODO: smithy.api#idRef ({"failWhenMissing":true,"selector":"structure[trait|error]"}) on structure member clientEndpointDiscovery.error is not mapped to zod.
+  // TODO: structure member target smithy.api#String for clientEndpointDiscovery.error is not generated yet.
+  error: z.unknown().optional(),
+});
+/**
+ * Indicates members of the operation input which should be use to discover
+ * endpoints.
+ */
+// TODO: smithy.api#trait ({"selector":"operation[trait|aws.api#clientDiscoveredEndpoint] -[input]->\nstructure > :test(member[trait|required] > string)"}) on structure clientEndpointDiscoveryId is not mapped to zod.
+export const clientEndpointDiscoveryIdSchema = z.object({});
+/** Defines a service, resource, or operation as operating on the control plane. */
+// TODO: smithy.api#trait ({"selector":":test(service, resource, operation)","conflicts":["aws.api#dataPlane"]}) on structure controlPlane is not mapped to zod.
+export const controlPlaneSchema = z.object({});
+/** Defines a service, resource, or operation as operating on the data plane. */
+// TODO: smithy.api#trait ({"selector":":test(service, resource, operation)","conflicts":["aws.api#controlPlane"]}) on structure dataPlane is not mapped to zod.
+export const dataPlaneSchema = z.object({});
+/**
+ * An AWS service is defined using the `aws.api#service` trait. This trait
+ * provides information about the service like the name used to generate AWS
+ * SDK client classes and the namespace used in ARNs.
+ */
+// TODO: smithy.api#trait ({"selector":"service"}) on structure service is not mapped to zod.
+export const serviceSchema = z.object({
+  /**
+   * The `sdkId` property is a required string value that specifies the AWS
+   * SDK service ID (e.g., "API Gateway"). This value is used for generating
+   * client names in SDKs and for linking between services.
+   */
+  // TODO: structure member target smithy.api#String for service.sdkId is not generated yet.
+  sdkId: z.unknown(),
+  /**
+   * The `arnNamespace` property is a string value that defines the ARN service
+   * namespace of the service (e.g., "apigateway"). This value is used in
+   * ARNs assigned to resources in the service. If not set, this value
+   * defaults to the lowercase name of the service shape.
+   */
+  arnNamespace: arnNamespaceSchema.optional(),
+  /**
+   * The `cloudFormationName` property is a string value that specifies the
+   * AWS CloudFormation service name (e.g., `ApiGateway`). When not set,
+   * this value defaults to the name of the service shape. This value is
+   * part of the CloudFormation resource type name that is automatically
+   * assigned to resources in the service (e.g., `AWS::<NAME>::resourceName`).
+   */
+  cloudFormationName: cloudFormationNameSchema.optional(),
+  /**
+   * The `cloudTrailEventSource` property is a string value that defines the
+   * AWS customer-facing eventSource property contained in CloudTrail event
+   * records emitted by the service. If not specified, this value defaults
+   * to the `arnNamespace` plus `.amazonaws.com`.
+   */
+  // TODO: structure member target smithy.api#String for service.cloudTrailEventSource is not generated yet.
+  cloudTrailEventSource: z.unknown().optional(),
+  /**
+   * The `docId` property is a string value that defines the identifier
+   * used to implemention linking between service and SDK documentation for
+   * AWS services. If not specified, this value defaults to the `sdkId` in
+   * lower case plus the service `version` property, separated by dashes.
+   */
+  // TODO: structure member target smithy.api#String for service.docId is not generated yet.
+  docId: z.unknown().optional(),
+  /**
+   * The `endpointPrefix` property is a string value that identifies which
+   * endpoint in a given region should be used to connect to the service.
+   * For example, most services in the AWS standard partition have endpoints
+   * which follow the format: `{endpointPrefix}.{region}.amazonaws.com`. A
+   * service with the endpoint prefix example in the region us-west-2 might
+   * have the endpoint example.us-west-2.amazonaws.com.
+   *
+   * This value is not unique across services and is subject to change.
+   * Therefore, it MUST NOT be used for client naming or for any other
+   * purpose that requires a static, unique identifier. sdkId should be used
+   * for those purposes. Additionally, this value can be used to attempt to
+   * resolve endpoints.
+   */
+  // TODO: structure member target smithy.api#String for service.endpointPrefix is not generated yet.
+  endpointPrefix: z.unknown().optional(),
+  /**
+   * The `cloudWatchNamespace` property is a string value that defines the
+   * AWS customer-facing namespace of most metrics emitted by the service.
+   */
+  cloudWatchNamespace: cloudWatchMetricNamespaceSchema.optional(),
+});
+/**
+ * Annotates a service as having tagging on 1 or more resources and associated
+ * APIs to perform CRUD operations on those tags
+ */
+// TODO: smithy.api#trait ({"selector":"service"}) on structure tagEnabled is not mapped to zod.
+export const tagEnabledSchema = z.object({
+  /**
+   * The `disableDefaultOperations` property is a boolean value that specifies
+   * if the service does not have the standard tag operations supporting all
+   * resources on the service. Default value is `false`
+   */
+  // TODO: structure member target smithy.api#Boolean for tagEnabled.disableDefaultOperations is not generated yet.
+  disableDefaultOperations: z.unknown().optional(),
+});
+/**
+ * Indicates a resource supports CRUD operations for tags. Either through
+ * resource lifecycle or instance operations or tagging operations on the
+ * service.
+ */
+// TODO: smithy.api#trait ({"selector":"resource"}) on structure taggable is not mapped to zod.
+export const taggableSchema = z.object({
+  /**
+   * The `property` property is a string value that identifies which
+   * resource property represents tags for the resource.
+   */
+  // TODO: structure member target smithy.api#String for taggable.property is not generated yet.
+  property: z.unknown().optional(),
+  /**
+   * Specifies configuration for resource specific tagging APIs if the
+   * resource has them.
+   */
+  apiConfig: taggableApiConfigSchema.optional(),
+  /**
+   * Flag indicating if the resource is not able to carry AWS system level.
+   * Used by service principals. Default value is `false`
+   */
+  // TODO: structure member target smithy.api#Boolean for taggable.disableSystemTags is not generated yet.
+  disableSystemTags: z.unknown().optional(),
+});
