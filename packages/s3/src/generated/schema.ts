@@ -15071,3 +15071,4 @@ export const topicConfigurationListSchema = z.array(topicConfigurationSchema);
 export const transitionListSchema = z.array(transitionSchema);
 // TODO: smithy.api#xmlName ("MetadataEntry") on list member is not mapped to zod.
 export const userMetadataSchema = z.array(metadataEntrySchema);
+export const metadataSchema = z.record(metadataKeySchema, metadataValueSchema);

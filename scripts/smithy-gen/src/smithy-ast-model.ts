@@ -19,7 +19,7 @@ export const smithyAstModelSchema = withoutObjectKeys(
   ["metadata", "smithy"] as const,
   {
     shapes: withoutRecordKeyPrefixes(
-      ["smithy.test#", "smithy.waiters#"],
+      ["smithy.rules#", "smithy.test#", "smithy.waiters#"],
       z.discriminatedUnion("type", [
         blobShapeSchema,
         booleanShapeSchema,
