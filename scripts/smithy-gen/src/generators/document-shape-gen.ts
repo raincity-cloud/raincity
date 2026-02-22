@@ -29,6 +29,6 @@ export const ${def(schemaName)} = ${zImp}.unknown();`
       : code`export const ${def(schemaName)} = ${zImp}.unknown();`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@./${fileKey}`));
+    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

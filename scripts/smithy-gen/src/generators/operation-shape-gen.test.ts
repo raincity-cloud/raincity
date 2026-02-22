@@ -141,7 +141,7 @@ describe("CodeGenContext operation shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
     expect(output).not.toContain("export function getObject(");
   });

@@ -15,7 +15,7 @@ describe("CodeGenContext boolean shape generation", () => {
       }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
       "export const bucketVersioningEnabledSchema = z.boolean();",
     );
   });
@@ -26,8 +26,8 @@ describe("CodeGenContext boolean shape generation", () => {
     );
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("s3-schemas")).toBe(true);
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(false);
+    expect(files.has("s3-schemas:schema")).toBe(true);
+    expect(files.has("common-schemas:com.amazonaws.shared:schema")).toBe(false);
   });
 
   it("routes non-S3 shapes to the common-schemas:com.amazonaws.shared file", () => {
@@ -36,8 +36,8 @@ describe("CodeGenContext boolean shape generation", () => {
     );
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
-    expect(files.has("s3-schemas")).toBe(false);
+    expect(files.has("common-schemas:com.amazonaws.shared:schema")).toBe(true);
+    expect(files.has("s3-schemas:schema")).toBe(false);
   });
 
   it("emits multiple boolean shapes from the same namespace into one file", () => {
@@ -48,7 +48,7 @@ describe("CodeGenContext boolean shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("flagASchema");
     expect(output).toContain("flagBSchema");
   });
@@ -58,7 +58,7 @@ describe("CodeGenContext boolean shape generation", () => {
       makeModel({ "com.amazonaws.s3#MyBooleanFlag": { type: "boolean" } }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
       "myBooleanFlagSchema",
     );
   });

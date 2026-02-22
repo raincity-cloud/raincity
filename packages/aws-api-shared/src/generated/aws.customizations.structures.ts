@@ -2,9 +2,11 @@
 import { z } from "zod/v4";
 
 /**
+ * ```xml
  * Indicates the response body from S3 is not wrapped in the
  * aws-restxml-protocol operation-level XML node. Intended to only be used by
  * AWS S3.
+ * ```
  */
 // TODO: smithy.api#trait ({"selector":"operation"}) on structure s3UnwrappedXmlOutput is not mapped to zod.
 export const s3UnwrappedXmlOutputSchema = z.object({});

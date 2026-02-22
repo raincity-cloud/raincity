@@ -58,7 +58,7 @@ describe("CodeGenContext list shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain(
       "export const tagKeysSchema = z.array(tagKeySchema);",
     );
@@ -80,8 +80,8 @@ describe("CodeGenContext list shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("/** Unique tag keys. */");
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
+    expect(output).toContain("* Unique tag keys.\n * ```");
     expect(output).toContain(".array(tagKeySchema).min(1).max(10)");
     expect(output).toContain("Duplicate items are not allowed.");
   });
@@ -96,7 +96,7 @@ describe("CodeGenContext list shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain(
       "// TODO: list member target com.amazonaws.s3#ObjectRecord is not generated yet.",
     );
@@ -122,8 +122,8 @@ describe("CodeGenContext list shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("/** A single tag key. */");
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
+    expect(output).toContain("* A single tag key.\n * ```");
     expect(output).toContain(
       '// TODO: smithy.api#xmlName ("Tag") on list member is not mapped to zod.',
     );
@@ -140,7 +140,7 @@ describe("CodeGenContext list shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(
       output.indexOf("export const tagKeySchema = z.string();"),
     ).toBeLessThan(

@@ -78,7 +78,7 @@ describe("CodeGenContext timestamp shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("export const createdAtSchema = z.string()");
     expect(output).toContain("Invalid RFC3339 date-time timestamp");
     expect(output).toContain("toISOString()");
@@ -94,7 +94,7 @@ describe("CodeGenContext timestamp shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("export const lastModifiedSchema = z.string()");
     expect(output).toContain("Invalid IMF-fixdate timestamp");
     expect(output).toContain("GMT");
@@ -110,7 +110,7 @@ describe("CodeGenContext timestamp shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("export const missingFormatSchema = z.string()");
     expect(output).toContain("Invalid RFC3339 date-time timestamp");
     expect(output).toContain("toISOString()");
@@ -128,7 +128,7 @@ describe("CodeGenContext timestamp shape generation", () => {
     );
     ctx.generate();
     const output =
-      ctx.renderFiles().get("common-schemas:com.amazonaws.shared") ?? "";
+      ctx.renderFiles().get("common-schemas:com.amazonaws.shared:schema") ?? "";
     expect(output).toContain(
       "export const sharedMissingFormatSchema = z.string()",
     );
@@ -148,7 +148,7 @@ describe("CodeGenContext timestamp shape generation", () => {
     );
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
-    expect(files.has("s3-schemas")).toBe(false);
+    expect(files.has("common-schemas:com.amazonaws.shared:schema")).toBe(true);
+    expect(files.has("s3-schemas:schema")).toBe(false);
   });
 });

@@ -15,7 +15,7 @@ describe("CodeGenContext document shape generation", () => {
       }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
       "export const rulesDocumentSchema = z.unknown();",
     );
   });
@@ -32,12 +32,12 @@ describe("CodeGenContext document shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("/** Endpoint resolution rules document */");
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
+    expect(output).toContain("* Endpoint resolution rules document\n * ```");
     expect(output).toContain("export const rulesDocumentSchema = z.unknown();");
   });
 
-  it("escapes */ in documentation comments", () => {
+  it("preserves */ as-is inside the fenced XML block", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#RulesDocument": {
@@ -49,8 +49,8 @@ describe("CodeGenContext document shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("*\\/");
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
+    expect(output).toContain("Comment end token: */");
     expect(output).toContain("export const rulesDocumentSchema = z.unknown();");
   });
 
@@ -60,8 +60,8 @@ describe("CodeGenContext document shape generation", () => {
     );
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("s3-schemas")).toBe(true);
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(false);
+    expect(files.has("s3-schemas:schema")).toBe(true);
+    expect(files.has("common-schemas:com.amazonaws.shared:schema")).toBe(false);
   });
 
   it("routes non-S3 shapes to the common-schemas:com.amazonaws.shared file", () => {
@@ -72,8 +72,8 @@ describe("CodeGenContext document shape generation", () => {
     );
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
-    expect(files.has("s3-schemas")).toBe(false);
+    expect(files.has("common-schemas:com.amazonaws.shared:schema")).toBe(true);
+    expect(files.has("s3-schemas:schema")).toBe(false);
   });
 
   it("emits multiple document shapes from the same namespace into one file", () => {
@@ -84,7 +84,7 @@ describe("CodeGenContext document shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("ruleSetASchema");
     expect(output).toContain("ruleSetBSchema");
   });
@@ -96,7 +96,7 @@ describe("CodeGenContext document shape generation", () => {
       }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
       "myDocumentTypeSchema",
     );
   });

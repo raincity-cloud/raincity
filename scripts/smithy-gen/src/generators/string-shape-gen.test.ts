@@ -65,7 +65,7 @@ describe("CodeGenContext string shape generation", () => {
       makeModel({ "com.amazonaws.s3#BucketName": { type: "string" } }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
       "export const bucketNameSchema = z.string();",
     );
   });
@@ -80,8 +80,8 @@ describe("CodeGenContext string shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("/** The name of the bucket */");
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
+    expect(output).toContain("* The name of the bucket\n * ```");
     expect(output).toContain("export const bucketNameSchema = z.string();");
   });
 
@@ -95,7 +95,9 @@ describe("CodeGenContext string shape generation", () => {
       }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain("z.string().min(1)");
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
+      "z.string().min(1)",
+    );
   });
 
   it("generates a schema with a max length constraint", () => {
@@ -108,7 +110,7 @@ describe("CodeGenContext string shape generation", () => {
       }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
       "z.string().max(1024)",
     );
   });
@@ -123,7 +125,7 @@ describe("CodeGenContext string shape generation", () => {
       }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
       "z.string().min(1).max(255)",
     );
   });
@@ -138,7 +140,7 @@ describe("CodeGenContext string shape generation", () => {
       }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain(
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
       '.regex(new RegExp("^[a-z0-9]+$"))',
     );
   });
@@ -157,8 +159,8 @@ describe("CodeGenContext string shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-    expect(output).toContain("/** A filter key */");
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
+    expect(output).toContain("* A filter key\n * ```");
     expect(output).toContain(
       '.min(1).max(1024).regex(new RegExp("^[a-zA-Z0-9]+$"))',
     );
@@ -170,8 +172,8 @@ describe("CodeGenContext string shape generation", () => {
     );
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("s3-schemas")).toBe(true);
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(false);
+    expect(files.has("s3-schemas:schema")).toBe(true);
+    expect(files.has("common-schemas:com.amazonaws.shared:schema")).toBe(false);
   });
 
   it("routes non-S3 shapes to the common-schemas:com.amazonaws.shared file", () => {
@@ -180,8 +182,8 @@ describe("CodeGenContext string shape generation", () => {
     );
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
-    expect(files.has("s3-schemas")).toBe(false);
+    expect(files.has("common-schemas:com.amazonaws.shared:schema")).toBe(true);
+    expect(files.has("s3-schemas:schema")).toBe(false);
   });
 
   it("emits multiple shapes from the same namespace into one file", () => {
@@ -192,7 +194,7 @@ describe("CodeGenContext string shape generation", () => {
       }),
     );
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("alphaSchema");
     expect(output).toContain("betaSchema");
   });
@@ -202,6 +204,8 @@ describe("CodeGenContext string shape generation", () => {
       makeModel({ "com.amazonaws.s3#MyShapeName": { type: "string" } }),
     );
     ctx.generate();
-    expect(ctx.renderFiles().get("s3-schemas")).toContain("myShapeNameSchema");
+    expect(ctx.renderFiles().get("s3-schemas:schema")).toContain(
+      "myShapeNameSchema",
+    );
   });
 });

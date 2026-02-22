@@ -28,7 +28,7 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain("export enum StorageClass {");
     expect(output).toContain('STANDARD = "STANDARD",');
     expect(output).toContain('GLACIER = "GLACIER",');
@@ -56,12 +56,12 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain(
-      "/** The possible delimiters. */\nexport enum Delimiter {",
+      "/**\n * ```xml\n * The possible delimiters.\n * ```\n */\nexport enum Delimiter {",
     );
     expect(output).not.toContain(
-      "/** The possible delimiters. */\nexport const delimiterSchema",
+      "/**\n * ```xml\n * The possible delimiters.\n * ```\n */\nexport const delimiterSchema",
     );
   });
 
@@ -91,11 +91,11 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain(
-      '/** The `/` character. */\n  FORWARD_SLASH = "/",',
+      '* The `/` character.\n * ```\n */\n  FORWARD_SLASH = "/",',
     );
-    expect(output).toContain("Comment end token: *\\/");
+    expect(output).toContain("Comment end token: */");
     expect(output).toContain('COLON = ":",');
   });
 
@@ -115,7 +115,7 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain('Enabled = "Enabled",');
   });
 
@@ -136,8 +136,8 @@ describe("CodeGenContext enum shape generation", () => {
 
     ctx.generate();
     const files = ctx.renderFiles();
-    expect(files.has("common-schemas:com.amazonaws.shared")).toBe(true);
-    expect(files.has("s3-schemas")).toBe(false);
+    expect(files.has("common-schemas:com.amazonaws.shared:enums")).toBe(true);
+    expect(files.has("s3-schemas:enums")).toBe(false);
   });
 
   it("emits multiple enum shapes from the same namespace into one file", () => {
@@ -165,7 +165,7 @@ describe("CodeGenContext enum shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:enums") ?? "";
     expect(output).toContain("export enum FirstEnum {");
     expect(output).toContain("export enum SecondEnum {");
     expect(output).toContain("firstEnumSchema");

@@ -35,7 +35,7 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
     expect(output).toContain("export interface AmazonS3Service {");
     expect(output).toContain(
@@ -83,7 +83,7 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
     expect(output).toContain("* Retrieves an object from S3.");
     expect(output).toContain(
@@ -118,10 +118,10 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
     expect(output).toContain(
-      'import { sharedInputSchema, sharedOutputSchema } from "./common-schemas:com.amazonaws.shared";',
+      'import { sharedInputSchema, sharedOutputSchema } from "./com.amazonaws.shared.structures.js";',
     );
     expect(output).toContain(
       "crossNamespaceOperation(input: z.infer<typeof sharedInputSchema>): z.infer<typeof sharedOutputSchema>;",
@@ -140,7 +140,7 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
     expect(output).toContain(
       "// TODO: operation target com.amazonaws.s3#MissingOperation is not generated.",
@@ -190,12 +190,15 @@ describe("CodeGenContext service shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const serviceOutput = ctx.renderFiles().get("s3-schemas:service") ?? "";
+    const structuresOutput =
+      ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
-    expect(
-      output.indexOf("export const getObjectInputSchema = z.object({});"),
-    ).toBeLessThan(output.indexOf("export interface AmazonS3Service {"));
-    expect(output).toContain("getObject(input:");
-    expect(output).not.toContain("deleteObject(input:");
+    expect(structuresOutput).toContain(
+      "export const getObjectInputSchema = z.object({});",
+    );
+    expect(serviceOutput).toContain("export interface AmazonS3Service {");
+    expect(serviceOutput).toContain("getObject(input:");
+    expect(serviceOutput).not.toContain("deleteObject(input:");
   });
 });

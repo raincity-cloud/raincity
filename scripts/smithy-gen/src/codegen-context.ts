@@ -138,10 +138,34 @@ export class CodeGenContext {
 
   getOutputFile(shapeKey: string): string {
     const { namespace } = this.parseShapeKey(shapeKey);
+    const shapeType = this.getShapeType(shapeKey);
+    const suffix =
+      shapeType === "service"
+        ? "service"
+        : shapeType === "enum"
+          ? "enums"
+          : shapeType === "structure"
+            ? "structures"
+            : "schema";
     if (namespace === "com.amazonaws.s3") {
-      return "s3-schemas";
+      return `s3-schemas:${suffix}`;
     }
-    return `common-schemas:${namespace}`;
+    return `common-schemas:${namespace}:${suffix}`;
+  }
+
+  getImportPath(fileKey: string): string {
+    if (fileKey.startsWith("s3-schemas:")) {
+      return `./${fileKey.slice("s3-schemas:".length)}.js`;
+    }
+    if (fileKey.startsWith("common-schemas:")) {
+      const rest = fileKey.slice("common-schemas:".length);
+      const lastColon = rest.lastIndexOf(":");
+      if (lastColon !== -1) {
+        return `./${rest.slice(0, lastColon)}.${rest.slice(lastColon + 1)}.js`;
+      }
+      return `./${rest}.js`;
+    }
+    return `./${fileKey}.js`;
   }
 
   registerShape(shapeKey: string, symbol: Import): void {

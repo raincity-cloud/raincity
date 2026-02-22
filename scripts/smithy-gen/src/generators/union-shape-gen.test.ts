@@ -24,7 +24,7 @@ describe("CodeGenContext union shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
       "export const tagUnionSchema = z.union([tagKeySchema, tagValueSchema]);",
@@ -46,7 +46,7 @@ describe("CodeGenContext union shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
       "export const builtinUnionSchema = z.union([z.string(), z.boolean()]);",
@@ -68,7 +68,7 @@ describe("CodeGenContext union shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
       "// TODO: union member target com.amazonaws.s3#MissingShape for UnknownMemberUnion.Missing is not generated yet.",
@@ -94,7 +94,7 @@ describe("CodeGenContext union shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
       "export const crossNamespaceUnionSchema = z.union([sharedValueSchema, z.string()]);",
@@ -122,7 +122,7 @@ describe("CodeGenContext union shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(
       output.indexOf(
@@ -150,7 +150,7 @@ describe("CodeGenContext union shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
       "// TODO: union member target com.amazonaws.s3#MissingA for UnknownMembersUnion.MissingA is not generated yet.",

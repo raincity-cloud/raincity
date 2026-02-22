@@ -115,10 +115,10 @@ describe("CodeGenContext structure shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
-    expect(output).toContain("/** A tag structure */");
-    expect(output).toContain("/** Tag key */");
+    expect(output).toContain("* A tag structure\n * ```");
+    expect(output).toContain("   * Tag key\n   * ```");
     expect(output).toContain("Key: tagKeySchema,");
     expect(output).toContain('Value: tagKeySchema.optional().default("none"),');
   });
@@ -143,7 +143,7 @@ describe("CodeGenContext structure shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
     expect(output).toContain(
       "Body: streamingBlobSchema.optional().default(new Uint8Array([]))",
@@ -173,7 +173,7 @@ describe("CodeGenContext structure shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
     expect(output).toContain(
       '// TODO: smithy.api#xmlName ("Tag") on structure Tag is not mapped to zod.',
@@ -199,7 +199,7 @@ describe("CodeGenContext structure shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
     expect(output).toContain(
       "// TODO: structure member target com.amazonaws.s3#MissingShape for Tag.Key is not generated yet.",
@@ -230,13 +230,13 @@ describe("CodeGenContext structure shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const schemaOutput = ctx.renderFiles().get("s3-schemas:schema") ?? "";
+    const structuresOutput =
+      ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
-    expect(output).toContain(
+    expect(schemaOutput).toContain(
       "export const tagListSchema = z.array(tagSchema);",
     );
-    expect(output.indexOf("export const tagSchema = z.object({")).toBeLessThan(
-      output.indexOf("export const tagListSchema = z.array(tagSchema);"),
-    );
+    expect(structuresOutput).toContain("export const tagSchema = z.object({");
   });
 });

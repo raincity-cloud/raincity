@@ -55,7 +55,7 @@ function resolveRegisteredShapeExpr(
   const targetFileKey = ctx.getOutputFile(shapeTarget);
   return targetFileKey === fileKey
     ? targetSchemaName
-    : imp(`${targetSchemaName}@./${targetFileKey}`);
+    : imp(`${targetSchemaName}@${ctx.getImportPath(targetFileKey)}`);
 }
 
 function resolveMapKeySchemaExpr(
@@ -131,6 +131,6 @@ export function generateMapShapes(
     const schemaCode = code`${commentPrefix}export const ${def(schemaName)} = ${zImp}.record(${keySchemaExpr}, ${valueSchemaExpr});`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@./${fileKey}`));
+    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

@@ -270,7 +270,9 @@ export function generateStructureShapes(
         memberSchemaExpr =
           memberTargetFileKey === fileKey
             ? memberTargetSchemaName
-            : imp(`${memberTargetSchemaName}@./${memberTargetFileKey}`);
+            : imp(
+                `${memberTargetSchemaName}@${ctx.getImportPath(memberTargetFileKey)}`,
+              );
       } else {
         memberComments.push(
           `  // TODO: structure member target ${memberTarget} for ${name}.${memberName} is not generated yet.`,
@@ -299,6 +301,6 @@ ${joinCode(memberEntries, { on: "\n" })}
         : code`${shapeCommentPrefix}export const ${def(schemaName)} = ${zImp}.object({});`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@./${fileKey}`));
+    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

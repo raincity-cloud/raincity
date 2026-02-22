@@ -43,9 +43,10 @@ function resolveRegisteredShapeExpr(
   const { name: targetName } = ctx.parseShapeKey(shapeTarget);
   const targetSchemaName = `${camelCase(targetName)}Schema`;
   const targetFileKey = ctx.getOutputFile(shapeTarget);
+  const importPath = ctx.getImportPath(targetFileKey);
   return targetFileKey === fileKey
     ? code`${targetSchemaName}`
-    : code`${imp(`${targetSchemaName}@./${targetFileKey}`)}`;
+    : code`${imp(`${targetSchemaName}@${importPath}`)}`;
 }
 
 export function generateUnionShapes(
@@ -88,6 +89,6 @@ export function generateUnionShapes(
     const schemaCode = code`${commentPrefix}export const ${def(schemaName)} = ${zImp}.union([${unionMembersCode}]);`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@./${fileKey}`));
+    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

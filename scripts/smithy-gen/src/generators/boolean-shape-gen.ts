@@ -22,6 +22,6 @@ export function generateBooleanShapes(
     const schemaCode = code`export const ${def(schemaName)} = ${zImp}.boolean();`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@./${fileKey}`));
+    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

@@ -6,6 +6,7 @@ import type {
 } from "../codegen-context.js";
 import type { OperationShape } from "../shapes/operation-shape.js";
 import type { SmithyAstModel } from "../smithy-ast-model.js";
+import { buildSchemaDocumentationComment } from "./schema-documentation-comment.js";
 
 const zImp = imp("z@zod/v4");
 
@@ -46,7 +47,7 @@ function resolveTypeReference(
   const schemaRef =
     targetFileKey === fileKey
       ? targetSchemaName
-      : imp(`${targetSchemaName}@./${targetFileKey}`);
+      : imp(`${targetSchemaName}@${ctx.getImportPath(targetFileKey)}`);
 
   return {
     typeExpr: code`${zImp}.infer<typeof ${schemaRef}>`,
@@ -112,35 +113,28 @@ function buildOperationTsDoc(
   documentation: string | undefined,
   throwsEntries: ThrowsEntry[],
 ): string | undefined {
-  const lines: string[] = [];
-
-  if (documentation) {
-    const safeDocumentation = documentation.trim().replaceAll("*/", "*\\/");
-    lines.push(...safeDocumentation.split(/\r?\n/u));
+  if (throwsEntries.length === 0) {
+    return buildSchemaDocumentationComment(documentation);
   }
 
-  if (throwsEntries.length > 0) {
-    if (lines.length > 0) {
-      lines.push("");
-    }
+  const throwsLines = throwsEntries.map(
+    (entry) =>
+      ` * @throws {${entry.typeName}} ${entry.description.replaceAll("*/", "*\\/")}`,
+  );
 
-    for (const entry of throwsEntries) {
-      const safeDescription = entry.description.replaceAll("*/", "*\\/");
-      lines.push(`@throws {${entry.typeName}} ${safeDescription}`);
-    }
+  const trimmed = documentation?.trim();
+  if (!trimmed) {
+    return ["/**", ...throwsLines, " */"].join("\n");
   }
 
-  if (lines.length === 0) {
-    return undefined;
-  }
-
-  if (lines.length === 1) {
-    return `/** ${lines[0]} */`;
-  }
-
+  const docLines = trimmed.split(/\r?\n/);
   return [
     "/**",
-    ...lines.map((line) => (line ? ` * ${line}` : " *")),
+    " * ```xml",
+    ...docLines.map((line) => (line ? ` * ${line}` : " *")),
+    " * ```",
+    " *",
+    ...throwsLines,
     " */",
   ].join("\n");
 }

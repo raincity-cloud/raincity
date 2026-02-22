@@ -16,7 +16,7 @@ const smithyAstModelPath = join(
   "aws-model.json",
 );
 
-const s3OutputPath = join(
+const s3GeneratedDir = join(
   __dirname,
   "..",
   "..",
@@ -25,7 +25,6 @@ const s3OutputPath = join(
   "s3",
   "src",
   "generated",
-  "schema.ts",
 );
 const sharedOutputDirectory = join(
   __dirname,
@@ -44,14 +43,22 @@ const smithyAstModel = smithyAstModelSchema.parse(JSON.parse(fileContent));
 const ctx = new CodeGenContext(smithyAstModel);
 ctx.generate();
 const outputPaths: Record<string, string> = {
-  "s3-schemas": s3OutputPath,
+  "s3-schemas:service": join(s3GeneratedDir, "service.ts"),
+  "s3-schemas:enums": join(s3GeneratedDir, "enums.ts"),
+  "s3-schemas:structures": join(s3GeneratedDir, "structures.ts"),
+  "s3-schemas:schema": join(s3GeneratedDir, "schema.ts"),
 };
 for (const fileKey of ctx.renderFiles().keys()) {
   if (!fileKey.startsWith("common-schemas:")) {
     continue;
   }
-  const namespace = fileKey.slice("common-schemas:".length);
-  outputPaths[fileKey] = join(sharedOutputDirectory, `${namespace}.ts`);
+  const rest = fileKey.slice("common-schemas:".length);
+  const lastColon = rest.lastIndexOf(":");
+  const filename =
+    lastColon !== -1
+      ? `${rest.slice(0, lastColon)}.${rest.slice(lastColon + 1)}.ts`
+      : `${rest}.ts`;
+  outputPaths[fileKey] = join(sharedOutputDirectory, filename);
 }
 await ctx.writeFiles(outputPaths);
 

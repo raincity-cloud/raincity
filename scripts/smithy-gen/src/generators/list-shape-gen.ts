@@ -76,7 +76,9 @@ export function generateListShapes(
       memberSchemaExpr =
         memberTargetFileKey === fileKey
           ? memberTargetSchemaName
-          : imp(`${memberTargetSchemaName}@./${memberTargetFileKey}`);
+          : imp(
+              `${memberTargetSchemaName}@${ctx.getImportPath(memberTargetFileKey)}`,
+            );
     } else {
       unresolvedTargetComment = `// TODO: list member target ${memberTarget} is not generated yet.`;
     }
@@ -103,6 +105,6 @@ export function generateListShapes(
     const schemaCode = code`${memberComments}${shapeDocPrefix}export const ${def(schemaName)} = ${zImp}.array(${memberSchemaExpr})${listConstraints};`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@./${fileKey}`));
+    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

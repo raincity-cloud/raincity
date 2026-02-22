@@ -14,32 +14,32 @@ describe("buildSchemaDocumentationComment", () => {
     expect(buildSchemaDocumentationComment("   ")).toBeUndefined();
   });
 
-  it("returns a single-line JSDoc for a one-line text", () => {
+  it("returns a fenced XML JSDoc block for a one-line text", () => {
     expect(buildSchemaDocumentationComment("The bucket name")).toBe(
-      "/** The bucket name */",
+      "/**\n * ```xml\n * The bucket name\n * ```\n */",
     );
   });
 
-  it("returns a multi-line JSDoc block for multi-line text", () => {
+  it("returns a fenced XML JSDoc block for multi-line text", () => {
     expect(buildSchemaDocumentationComment("First line\nSecond line")).toBe(
-      "/**\n * First line\n * Second line\n */",
+      "/**\n * ```xml\n * First line\n * Second line\n * ```\n */",
     );
   });
 
   it("renders empty lines as bare ' *' spacers in multi-line JSDoc", () => {
     expect(buildSchemaDocumentationComment("First\n\nThird")).toBe(
-      "/**\n * First\n *\n * Third\n */",
+      "/**\n * ```xml\n * First\n *\n * Third\n * ```\n */",
     );
   });
 
-  it("escapes */ sequences to prevent premature comment close", () => {
+  it("preserves */ sequences as-is inside the fenced block", () => {
     const result = buildSchemaDocumentationComment("End: */");
-    expect(result).toContain("*\\/");
+    expect(result).toContain("End: */");
   });
 
   it("handles \\r\\n line endings", () => {
     expect(buildSchemaDocumentationComment("Line one\r\nLine two")).toBe(
-      "/**\n * Line one\n * Line two\n */",
+      "/**\n * ```xml\n * Line one\n * Line two\n * ```\n */",
     );
   });
 });

@@ -21,7 +21,7 @@ describe("CodeGenContext map shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
       "export const tagMapSchema = z.record(tagKeySchema, tagValueSchema);",
@@ -40,7 +40,7 @@ describe("CodeGenContext map shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
       "export const builtinMapSchema = z.record(z.string(), z.boolean());",
@@ -59,7 +59,7 @@ describe("CodeGenContext map shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
       "// TODO: map value target com.amazonaws.s3#MissingValue is not generated yet.",
@@ -118,7 +118,7 @@ describe("CodeGenContext map shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(
       output.indexOf("export const tagKeysSchema = z.array(tagKeySchema);"),
@@ -142,7 +142,7 @@ describe("CodeGenContext map shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
       "export const crossNamespaceMapSchema = z.record(z.string(), sharedValueSchema);",
