@@ -15072,3 +15072,13 @@ export const transitionListSchema = z.array(transitionSchema);
 // TODO: smithy.api#xmlName ("MetadataEntry") on list member is not mapped to zod.
 export const userMetadataSchema = z.array(metadataEntrySchema);
 export const metadataSchema = z.record(metadataKeySchema, metadataValueSchema);
+export const analyticsFilterSchema = z.union([prefixSchema, tagSchema, analyticsAndOperatorSchema]);
+export const metricsFilterSchema = z.union([prefixSchema, tagSchema, accessPointArnSchema, metricsAndOperatorSchema]);
+export const objectEncryptionSchema = z.union([ssekmsEncryptionSchema]);
+export const selectObjectContentEventStreamSchema = z.union([
+  recordsEventSchema,
+  statsEventSchema,
+  progressEventSchema,
+  continuationEventSchema,
+  endEventSchema,
+]);

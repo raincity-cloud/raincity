@@ -14,6 +14,7 @@ import { generateMapShapes } from "./generators/map-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
 import { generateStructureShapes } from "./generators/structure-shape-gen.js";
 import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
+import { generateUnionShapes } from "./generators/union-shape-gen.js";
 import type { BlobShape } from "./shapes/blob-shape.js";
 import type { BooleanShape } from "./shapes/boolean-shape.js";
 import type { DocumentShape } from "./shapes/document-shape.js";
@@ -28,6 +29,7 @@ import type { TimestampShape } from "./shapes/timestamp-shape.js";
 import type { SmithyAstModel } from "./smithy-ast-model.js";
 
 type Shape = SmithyAstModel["shapes"][string];
+type UnionShape = Extract<Shape, { type: "union" }>;
 
 interface ShapeEntry<S extends Shape = Shape> {
   key: string;
@@ -84,6 +86,10 @@ function isTimestampShape(
   entry: ShapeEntry,
 ): entry is ShapeEntry<TimestampShape> {
   return entry.shape.type === "timestamp";
+}
+
+function isUnionShape(entry: ShapeEntry): entry is ShapeEntry<UnionShape> {
+  return entry.shape.type === "union";
 }
 
 export class CodeGenContext {
@@ -179,6 +185,9 @@ export class CodeGenContext {
 
     const mapShapes = (grouped["map"] ?? []).filter(isMapShape);
     generateMapShapes(this, mapShapes);
+
+    const unionShapes = (grouped["union"] ?? []).filter(isUnionShape);
+    generateUnionShapes(this, unionShapes);
   }
 
   renderFiles(): Map<string, string> {

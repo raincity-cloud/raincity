@@ -6,16 +6,20 @@ export function withoutRecordKeyPrefixes<V extends z.ZodTypeAny>(
   ignoredPrefixes: ReadonlyArray<string>,
   valueSchema: V,
 ) {
-  return z
-    .record(z.string(), z.unknown())
-    .transform((raw) =>
-      Object.fromEntries(
-        Object.entries(raw).filter(
+  return z.preprocess(
+    (input) => {
+      if (input === null || typeof input !== "object" || Array.isArray(input)) {
+        return input;
+      }
+
+      return Object.fromEntries(
+        Object.entries(input).filter(
           ([key]) => !ignoredPrefixes.some((p) => key.startsWith(p)),
         ),
-      ),
-    )
-    .pipe(z.record(z.string(), valueSchema));
+      );
+    },
+    z.record(z.string(), valueSchema),
+  );
 }
 
 export function withoutObjectKeys<
