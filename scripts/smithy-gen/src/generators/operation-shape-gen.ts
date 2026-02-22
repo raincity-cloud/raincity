@@ -63,7 +63,12 @@ function resolveTypeReference(
   }
 
   if (targetShapeType === "enum") {
-    return resolveNamedTypeReference(ctx, target, fileKey, pascalCase(targetName));
+    return resolveNamedTypeReference(
+      ctx,
+      target,
+      fileKey,
+      pascalCase(targetName),
+    );
   }
 
   if (targetShapeType === "string" || targetShapeType === "timestamp") {
@@ -129,8 +134,9 @@ function resolveTypeReference(
     if (unionShape?.type !== "union") {
       return { typeExpr: "unknown", typeName: targetName };
     }
-    const memberTypes = Object.values(unionShape.members).map((member) =>
-      resolveTypeReference(ctx, member.target, fileKey, stack).typeExpr,
+    const memberTypes = Object.values(unionShape.members).map(
+      (member) =>
+        resolveTypeReference(ctx, member.target, fileKey, stack).typeExpr,
     );
     if (memberTypes.length === 0) {
       return { typeExpr: "unknown", typeName: targetName };
@@ -162,8 +168,9 @@ function resolveBuiltinTypeReference(
     case "smithy.api#Blob":
       return { typeExpr: "Uint8Array", typeName: "Uint8Array" };
     case "smithy.api#Document":
-    case "smithy.api#Unit":
       return { typeExpr: "unknown", typeName: "unknown" };
+    case "smithy.api#Unit":
+      return { typeExpr: "void", typeName: "void" };
     default:
       return undefined;
   }

@@ -117,6 +117,28 @@ describe("CodeGenContext operation shape generation", () => {
     );
   });
 
+  it("uses void for built-in smithy.api#Unit outputs", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#GetObjectInput": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#GetObject": {
+          type: "operation",
+          input: { target: "com.amazonaws.s3#GetObjectInput" },
+          output: { target: "smithy.api#Unit" },
+        },
+      }),
+    );
+
+    ctx.generate();
+    const method = ctx.getOperationMethod("com.amazonaws.s3#GetObject");
+
+    expect(method?.outputTypeExpr).toBe("void");
+  });
+
   it("does not emit operation functions directly", () => {
     const ctx = new CodeGenContext(
       makeModel({

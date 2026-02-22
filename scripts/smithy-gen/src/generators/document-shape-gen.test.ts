@@ -26,7 +26,9 @@ describe("CodeGenContext document shape generation", () => {
 
   it("does not emit standalone document schemas for non-S3 namespaces", () => {
     const ctx = new CodeGenContext(
-      makeModel({ "com.amazonaws.shared#EndpointRuleSet": { type: "document" } }),
+      makeModel({
+        "com.amazonaws.shared#EndpointRuleSet": { type: "document" },
+      }),
     );
 
     ctx.generate();

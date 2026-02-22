@@ -905,7 +905,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  createBucketMetadataConfiguration(input: CreateBucketMetadataConfigurationRequest): unknown;
+  createBucketMetadataConfiguration(input: CreateBucketMetadataConfigurationRequest): void;
 
   /**
    * ```xml
@@ -984,7 +984,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  createBucketMetadataTableConfiguration(input: CreateBucketMetadataTableConfigurationRequest): unknown;
+  createBucketMetadataTableConfiguration(input: CreateBucketMetadataTableConfigurationRequest): void;
 
   /**
    * ```xml
@@ -1420,7 +1420,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucket(input: DeleteBucketRequest): unknown;
+  deleteBucket(input: DeleteBucketRequest): void;
 
   /**
    * ```xml
@@ -1458,7 +1458,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketAnalyticsConfiguration(input: DeleteBucketAnalyticsConfigurationRequest): unknown;
+  deleteBucketAnalyticsConfiguration(input: DeleteBucketAnalyticsConfigurationRequest): void;
 
   /**
    * ```xml
@@ -1490,7 +1490,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketCors(input: DeleteBucketCorsRequest): unknown;
+  deleteBucketCors(input: DeleteBucketCorsRequest): void;
 
   /**
    * ```xml
@@ -1558,7 +1558,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketEncryption(input: DeleteBucketEncryptionRequest): unknown;
+  deleteBucketEncryption(input: DeleteBucketEncryptionRequest): void;
 
   /**
    * ```xml
@@ -1592,7 +1592,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketIntelligentTieringConfiguration(input: DeleteBucketIntelligentTieringConfigurationRequest): unknown;
+  deleteBucketIntelligentTieringConfiguration(input: DeleteBucketIntelligentTieringConfigurationRequest): void;
 
   /**
    * ```xml
@@ -1628,7 +1628,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketInventoryConfiguration(input: DeleteBucketInventoryConfigurationRequest): unknown;
+  deleteBucketInventoryConfiguration(input: DeleteBucketInventoryConfigurationRequest): void;
 
   /**
    * ```xml
@@ -1702,7 +1702,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketLifecycle(input: DeleteBucketLifecycleRequest): unknown;
+  deleteBucketLifecycle(input: DeleteBucketLifecycleRequest): void;
 
   /**
    * ```xml
@@ -1755,7 +1755,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketMetadataConfiguration(input: DeleteBucketMetadataConfigurationRequest): unknown;
+  deleteBucketMetadataConfiguration(input: DeleteBucketMetadataConfigurationRequest): void;
 
   /**
    * ```xml
@@ -1808,7 +1808,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketMetadataTableConfiguration(input: DeleteBucketMetadataTableConfigurationRequest): unknown;
+  deleteBucketMetadataTableConfiguration(input: DeleteBucketMetadataTableConfigurationRequest): void;
 
   /**
    * ```xml
@@ -1851,7 +1851,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketMetricsConfiguration(input: DeleteBucketMetricsConfigurationRequest): unknown;
+  deleteBucketMetricsConfiguration(input: DeleteBucketMetricsConfigurationRequest): void;
 
   /**
    * ```xml
@@ -1881,7 +1881,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketOwnershipControls(input: DeleteBucketOwnershipControlsRequest): unknown;
+  deleteBucketOwnershipControls(input: DeleteBucketOwnershipControlsRequest): void;
 
   /**
    * ```xml
@@ -1954,7 +1954,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketPolicy(input: DeleteBucketPolicyRequest): unknown;
+  deleteBucketPolicy(input: DeleteBucketPolicyRequest): void;
 
   /**
    * ```xml
@@ -1989,7 +1989,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketReplication(input: DeleteBucketReplicationRequest): unknown;
+  deleteBucketReplication(input: DeleteBucketReplicationRequest): void;
 
   /**
    * ```xml
@@ -2018,7 +2018,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketTagging(input: DeleteBucketTaggingRequest): unknown;
+  deleteBucketTagging(input: DeleteBucketTaggingRequest): void;
 
   /**
    * ```xml
@@ -2053,7 +2053,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deleteBucketWebsite(input: DeleteBucketWebsiteRequest): unknown;
+  deleteBucketWebsite(input: DeleteBucketWebsiteRequest): void;
 
   /**
    * ```xml
@@ -2402,7 +2402,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  deletePublicAccessBlock(input: DeletePublicAccessBlockRequest): unknown;
+  deletePublicAccessBlock(input: DeletePublicAccessBlockRequest): void;
 
   /**
    * ```xml
@@ -4944,7 +4944,7 @@ export interface AmazonS3Service {
    * <p>Sets the attribute-based access control (ABAC) property of the general purpose bucket. You must have <code>s3:PutBucketABAC</code> permission to perform this action. When you enable ABAC, you can use tags for access control on your buckets. Additionally, when ABAC is enabled, you must use the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_TagResource.html">TagResource</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_UntagResource.html">UntagResource</a> actions to manage tags on your buckets. You can nolonger use the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html">PutBucketTagging</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html">DeleteBucketTagging</a> actions to tag your bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/buckets-tagging-enable-abac.html">Enabling ABAC in general purpose buckets</a>. </p>
    * ```
    */
-  putBucketAbac(input: PutBucketAbacRequest): unknown;
+  putBucketAbac(input: PutBucketAbacRequest): void;
 
   /**
    * ```xml
@@ -4991,7 +4991,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketAccelerateConfiguration(input: PutBucketAccelerateConfigurationRequest): unknown;
+  putBucketAccelerateConfiguration(input: PutBucketAccelerateConfigurationRequest): void;
 
   /**
    * ```xml
@@ -5198,7 +5198,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketAcl(input: PutBucketAclRequest): unknown;
+  putBucketAcl(input: PutBucketAclRequest): void;
 
   /**
    * ```xml
@@ -5311,7 +5311,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketAnalyticsConfiguration(input: PutBucketAnalyticsConfigurationRequest): unknown;
+  putBucketAnalyticsConfiguration(input: PutBucketAnalyticsConfigurationRequest): void;
 
   /**
    * ```xml
@@ -5373,7 +5373,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketCors(input: PutBucketCorsRequest): unknown;
+  putBucketCors(input: PutBucketCorsRequest): void;
 
   /**
    * ```xml
@@ -5501,7 +5501,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketEncryption(input: PutBucketEncryptionRequest): unknown;
+  putBucketEncryption(input: PutBucketEncryptionRequest): void;
 
   /**
    * ```xml
@@ -5567,7 +5567,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketIntelligentTieringConfiguration(input: PutBucketIntelligentTieringConfigurationRequest): unknown;
+  putBucketIntelligentTieringConfiguration(input: PutBucketIntelligentTieringConfigurationRequest): void;
 
   /**
    * ```xml
@@ -5659,7 +5659,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketInventoryConfiguration(input: PutBucketInventoryConfigurationRequest): unknown;
+  putBucketInventoryConfiguration(input: PutBucketInventoryConfigurationRequest): void;
 
   /**
    * ```xml
@@ -5891,7 +5891,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketLogging(input: PutBucketLoggingRequest): unknown;
+  putBucketLogging(input: PutBucketLoggingRequest): void;
 
   /**
    * ```xml
@@ -5948,7 +5948,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketMetricsConfiguration(input: PutBucketMetricsConfigurationRequest): unknown;
+  putBucketMetricsConfiguration(input: PutBucketMetricsConfigurationRequest): void;
 
   /**
    * ```xml
@@ -6006,7 +6006,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketNotificationConfiguration(input: PutBucketNotificationConfigurationRequest): unknown;
+  putBucketNotificationConfiguration(input: PutBucketNotificationConfigurationRequest): void;
 
   /**
    * ```xml
@@ -6035,7 +6035,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketOwnershipControls(input: PutBucketOwnershipControlsRequest): unknown;
+  putBucketOwnershipControls(input: PutBucketOwnershipControlsRequest): void;
 
   /**
    * ```xml
@@ -6116,7 +6116,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketPolicy(input: PutBucketPolicyRequest): unknown;
+  putBucketPolicy(input: PutBucketPolicyRequest): void;
 
   /**
    * ```xml
@@ -6191,7 +6191,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketReplication(input: PutBucketReplicationRequest): unknown;
+  putBucketReplication(input: PutBucketReplicationRequest): void;
 
   /**
    * ```xml
@@ -6220,7 +6220,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketRequestPayment(input: PutBucketRequestPaymentRequest): unknown;
+  putBucketRequestPayment(input: PutBucketRequestPaymentRequest): void;
 
   /**
    * ```xml
@@ -6284,7 +6284,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketTagging(input: PutBucketTaggingRequest): unknown;
+  putBucketTagging(input: PutBucketTaggingRequest): void;
 
   /**
    * ```xml
@@ -6342,7 +6342,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketVersioning(input: PutBucketVersioningRequest): unknown;
+  putBucketVersioning(input: PutBucketVersioningRequest): void;
 
   /**
    * ```xml
@@ -6478,7 +6478,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putBucketWebsite(input: PutBucketWebsiteRequest): unknown;
+  putBucketWebsite(input: PutBucketWebsiteRequest): void;
 
   /**
  * ```xml
@@ -7044,7 +7044,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  putPublicAccessBlock(input: PutPublicAccessBlockRequest): unknown;
+  putPublicAccessBlock(input: PutPublicAccessBlockRequest): void;
 
   /**
  * ```xml
@@ -7529,9 +7529,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  updateBucketMetadataInventoryTableConfiguration(
-    input: UpdateBucketMetadataInventoryTableConfigurationRequest,
-  ): unknown;
+  updateBucketMetadataInventoryTableConfiguration(input: UpdateBucketMetadataInventoryTableConfigurationRequest): void;
 
   /**
    * ```xml
@@ -7575,7 +7573,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  updateBucketMetadataJournalTableConfiguration(input: UpdateBucketMetadataJournalTableConfigurationRequest): unknown;
+  updateBucketMetadataJournalTableConfiguration(input: UpdateBucketMetadataJournalTableConfigurationRequest): void;
 
   /**
  * ```xml
@@ -8206,5 +8204,5 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  writeGetObjectResponse(input: WriteGetObjectResponseRequest): unknown;
+  writeGetObjectResponse(input: WriteGetObjectResponseRequest): void;
 }
