@@ -119,8 +119,8 @@ describe("CodeGenContext structure shape generation", () => {
 
     expect(output).toContain("* A tag structure\n * ```");
     expect(output).toContain("   * Tag key\n   * ```");
-    expect(output).toContain("Key: tagKeySchema,");
-    expect(output).toContain('Value: tagKeySchema.optional().default("none"),');
+    expect(output).toContain("Key: z.string(),");
+    expect(output).toContain('Value: z.string().optional().default("none"),');
     expect(output).toContain("export type Tag = z.infer<typeof tagSchema>;");
   });
 
@@ -147,7 +147,7 @@ describe("CodeGenContext structure shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
     expect(output).toContain(
-      "Body: streamingBlobSchema.optional().default(new Uint8Array([]))",
+      "Body: z.instanceof(Uint8Array).optional().default(new Uint8Array([]))",
     );
     expect(output).toContain(
       "export type GetObjectOutput = z.infer<typeof getObjectOutputSchema>;",

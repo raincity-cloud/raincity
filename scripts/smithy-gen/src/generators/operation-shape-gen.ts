@@ -57,7 +57,9 @@ function resolveTypeReference(
     };
   }
 
-  const schemaRef = ctx.resolveSchemaReference(target, fileKey).expr;
+  const schemaRef = ctx.resolveSchemaReference(target, fileKey, {
+    inline: false,
+  }).expr;
 
   return {
     typeExpr: code`${zImp}.infer<typeof ${schemaRef}>`,

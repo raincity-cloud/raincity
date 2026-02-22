@@ -12,11 +12,8 @@ export const partitionSpecialCaseListSchema = z.array(partitionSpecialCaseSchema
 
 export const regionSpecialCaseListSchema = z.array(regionSpecialCaseSchema);
 
-export const partitionEndpointSpecialCaseMapSchema = z.record(
-  z.string(),
-  z.lazy(() => partitionEndpointSpecialCaseListSchema),
-);
+export const partitionEndpointSpecialCaseMapSchema = z.record(z.string(), z.array(partitionEndpointSpecialCaseSchema));
 
-export const partitionSpecialCaseMapSchema = z.record(z.string(), z.lazy(() => partitionSpecialCaseListSchema));
+export const partitionSpecialCaseMapSchema = z.record(z.string(), z.array(partitionSpecialCaseSchema));
 
-export const regionSpecialCaseMapSchema = z.record(z.string(), z.lazy(() => regionSpecialCaseListSchema));
+export const regionSpecialCaseMapSchema = z.record(z.string(), z.array(regionSpecialCaseSchema));

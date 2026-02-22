@@ -2,12 +2,12 @@
 import { imfFixdateTimestampSchema, rfc3339DateTimeTimestampSchema } from "@raincity/aws-api-shared";
 import { z } from "zod/v4";
 import {
-  checksumAlgorithmSchema,
-  encryptionTypeSchema,
-  eventSchema,
-  inventoryOptionalFieldSchema,
-  objectAttributesSchema,
-  optionalObjectAttributesSchema,
+  ChecksumAlgorithm,
+  EncryptionType,
+  Event,
+  InventoryOptionalField,
+  ObjectAttributes,
+  OptionalObjectAttributes,
 } from "./enums.js";
 import {
   analyticsAndOperatorSchema,
@@ -481,11 +481,11 @@ export const restoreExpiryDateSchema = rfc3339DateTimeTimestampSchema;
 
 export const sessionExpirationSchema = rfc3339DateTimeTimestampSchema;
 
-export const allowedHeadersSchema = z.array(z.lazy(() => allowedHeaderSchema));
+export const allowedHeadersSchema = z.array(z.string());
 
-export const allowedMethodsSchema = z.array(z.lazy(() => allowedMethodSchema));
+export const allowedMethodsSchema = z.array(z.string());
 
-export const allowedOriginsSchema = z.array(z.lazy(() => allowedOriginSchema));
+export const allowedOriginsSchema = z.array(z.string());
 
 export const analyticsConfigurationListSchema = z.array(analyticsConfigurationSchema);
 
@@ -493,7 +493,7 @@ export const bucketsSchema = z.array(bucketSchema);
 
 export const corsRulesSchema = z.array(corsRuleSchema);
 
-export const checksumAlgorithmListSchema = z.array(checksumAlgorithmSchema);
+export const checksumAlgorithmListSchema = z.array(z.enum(ChecksumAlgorithm));
 
 export const commonPrefixListSchema = z.array(commonPrefixSchema);
 
@@ -503,13 +503,13 @@ export const deleteMarkersSchema = z.array(deleteMarkerEntrySchema);
 
 export const deletedObjectsSchema = z.array(deletedObjectSchema);
 
-export const encryptionTypeListSchema = z.array(encryptionTypeSchema);
+export const encryptionTypeListSchema = z.array(z.enum(EncryptionType));
 
 export const errorsSchema = z.array(errorSchema);
 
-export const eventListSchema = z.array(eventSchema);
+export const eventListSchema = z.array(z.enum(Event));
 
-export const exposeHeadersSchema = z.array(z.lazy(() => exposeHeaderSchema));
+export const exposeHeadersSchema = z.array(z.string());
 
 /**
  * ```xml
@@ -524,7 +524,7 @@ export const intelligentTieringConfigurationListSchema = z.array(intelligentTier
 
 export const inventoryConfigurationListSchema = z.array(inventoryConfigurationSchema);
 
-export const inventoryOptionalFieldsSchema = z.array(inventoryOptionalFieldSchema);
+export const inventoryOptionalFieldsSchema = z.array(z.enum(InventoryOptionalField));
 
 export const lambdaFunctionConfigurationListSchema = z.array(lambdaFunctionConfigurationSchema);
 
@@ -536,7 +536,7 @@ export const multipartUploadListSchema = z.array(multipartUploadSchema);
 
 export const noncurrentVersionTransitionListSchema = z.array(noncurrentVersionTransitionSchema);
 
-export const objectAttributesListSchema = z.array(objectAttributesSchema);
+export const objectAttributesListSchema = z.array(z.enum(ObjectAttributes));
 
 export const objectIdentifierListSchema = z.array(objectIdentifierSchema);
 
@@ -544,7 +544,7 @@ export const objectListSchema = z.array(objectSchema);
 
 export const objectVersionListSchema = z.array(objectVersionSchema);
 
-export const optionalObjectAttributesListSchema = z.array(optionalObjectAttributesSchema);
+export const optionalObjectAttributesListSchema = z.array(z.enum(OptionalObjectAttributes));
 
 export const ownershipControlsRulesSchema = z.array(ownershipControlsRuleSchema);
 
@@ -572,16 +572,11 @@ export const transitionListSchema = z.array(transitionSchema);
 
 export const userMetadataSchema = z.array(metadataEntrySchema);
 
-export const metadataSchema = z.record(z.lazy(() => metadataKeySchema), z.lazy(() => metadataValueSchema));
+export const metadataSchema = z.record(z.string(), z.string());
 
-export const analyticsFilterSchema = z.union([z.lazy(() => prefixSchema), tagSchema, analyticsAndOperatorSchema]);
+export const analyticsFilterSchema = z.union([z.string(), tagSchema, analyticsAndOperatorSchema]);
 
-export const metricsFilterSchema = z.union([
-  z.lazy(() => prefixSchema),
-  tagSchema,
-  z.lazy(() => accessPointArnSchema),
-  metricsAndOperatorSchema,
-]);
+export const metricsFilterSchema = z.union([z.string(), tagSchema, z.string(), metricsAndOperatorSchema]);
 
 export const objectEncryptionSchema = z.union([ssekmsEncryptionSchema]);
 

@@ -60,7 +60,7 @@ describe("CodeGenContext list shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain(
-      "export const tagKeysSchema = z.array(z.lazy(() => tagKeySchema));",
+      "export const tagKeysSchema = z.array(z.string());",
     );
   });
 
@@ -83,7 +83,7 @@ describe("CodeGenContext list shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("* Unique tag keys.\n * ```");
     expect(output).toContain(
-      ".array(z.lazy(() => tagKeySchema)).min(1).max(10)",
+      ".array(z.string()).min(1).max(10)",
     );
     expect(output).toContain("Duplicate items are not allowed.");
   });
@@ -141,7 +141,7 @@ describe("CodeGenContext list shape generation", () => {
       output.indexOf("export const tagKeySchema = z.string();"),
     ).toBeLessThan(
       output.indexOf(
-        "export const tagKeysSchema = z.array(z.lazy(() => tagKeySchema));",
+        "export const tagKeysSchema = z.array(z.string());",
       ),
     );
   });

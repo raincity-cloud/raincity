@@ -27,7 +27,7 @@ describe("CodeGenContext union shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
-      "export const tagUnionSchema = z.union([z.lazy(() => tagKeySchema), z.lazy(() => tagValueSchema)]);",
+      "export const tagUnionSchema = z.union([z.string(), z.string()]);",
     );
   });
 
@@ -93,7 +93,7 @@ describe("CodeGenContext union shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
-      "export const crossNamespaceUnionSchema = z.union([sharedValueSchema, z.string()]);",
+      "export const crossNamespaceUnionSchema = z.union([z.string(), z.string()]);",
     );
   });
 
@@ -122,11 +122,11 @@ describe("CodeGenContext union shape generation", () => {
 
     expect(
       output.indexOf(
-        "export const tagMapSchema = z.record(z.lazy(() => tagKeySchema), z.lazy(() => tagKeySchema));",
+        "export const tagMapSchema = z.record(z.string(), z.string());",
       ),
     ).toBeLessThan(
       output.indexOf(
-        "export const tagUnionSchema = z.union([z.lazy(() => tagMapSchema), z.lazy(() => tagKeySchema)]);",
+        "export const tagUnionSchema = z.union([z.record(z.string(), z.string()), z.string()]);",
       ),
     );
   });
@@ -176,7 +176,7 @@ describe("CodeGenContext union shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
-      "export const outerUnionSchema = z.union([z.lazy(() => innerUnionSchema)]);",
+      "export const outerUnionSchema = z.union([z.union([z.string()])]);",
     );
   });
 });

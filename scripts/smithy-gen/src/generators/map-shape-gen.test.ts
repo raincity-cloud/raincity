@@ -24,7 +24,7 @@ describe("CodeGenContext map shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
-      "export const tagMapSchema = z.record(z.lazy(() => tagKeySchema), z.lazy(() => tagValueSchema));",
+      "export const tagMapSchema = z.record(z.string(), z.string());",
     );
   });
 
@@ -121,11 +121,11 @@ describe("CodeGenContext map shape generation", () => {
 
     expect(
       output.indexOf(
-        "export const tagKeysSchema = z.array(z.lazy(() => tagKeySchema));",
+        "export const tagKeysSchema = z.array(z.string());",
       ),
     ).toBeLessThan(
       output.indexOf(
-        "export const tagMapSchema = z.record(z.lazy(() => tagKeySchema), z.lazy(() => tagKeySchema));",
+        "export const tagMapSchema = z.record(z.string(), z.string());",
       ),
     );
   });
@@ -146,7 +146,7 @@ describe("CodeGenContext map shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
-      "export const crossNamespaceMapSchema = z.record(z.string(), sharedValueSchema);",
+      "export const crossNamespaceMapSchema = z.record(z.string(), z.string());",
     );
   });
 });

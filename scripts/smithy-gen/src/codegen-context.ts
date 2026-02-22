@@ -1,18 +1,21 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import { camelCase, groupBy } from "lodash-es";
+import { camelCase, groupBy, upperFirst } from "lodash-es";
 import type { Code, Import } from "ts-poet";
 import { code, imp, joinCode } from "ts-poet";
 import { generateBlobShapes } from "./generators/blob-shape-gen.js";
 import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
 import { generateDocumentShapes } from "./generators/document-shape-gen.js";
 import { generateEnumShapes } from "./generators/enum-shape-gen.js";
+import { buildConstraintChain as buildIntegerConstraintChain } from "./generators/integer-shape-gen.js";
 import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
+import { buildConstraintChain as buildListConstraintChain } from "./generators/list-shape-gen.js";
 import { generateListShapes } from "./generators/list-shape-gen.js";
 import { generateLongShapes } from "./generators/long-shape-gen.js";
 import { generateMapShapes } from "./generators/map-shape-gen.js";
 import { generateOperationShapes } from "./generators/operation-shape-gen.js";
 import { generateServiceShapes } from "./generators/service-shape-gen.js";
+import { buildConstraintChain as buildStringConstraintChain } from "./generators/string-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
 import { generateStructureShapes } from "./generators/structure-shape-gen.js";
 import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
@@ -69,7 +72,18 @@ interface RegisteredShapeSymbol {
   fileKey: string;
 }
 
+interface ResolveSchemaReferenceOptions {
+  currentShapeKey?: string;
+  lazyForSameFile?: boolean;
+  inline?: boolean;
+  inlineStack?: Set<string>;
+}
+
 const zImp = imp("z@zod/v4");
+
+function isStringCompatibleBuiltinTarget(target: string): boolean {
+  return target === "smithy.api#String";
+}
 
 function isBlobShape(entry: ShapeEntry): entry is ShapeEntry<BlobShape> {
   return entry.shape.type === "blob";
@@ -220,12 +234,32 @@ export class CodeGenContext {
   resolveSchemaReference(
     targetShapeKey: string,
     fromFileKey: string,
-    options?: { currentShapeKey?: string; lazyForSameFile?: boolean },
+    options?: ResolveSchemaReferenceOptions,
   ): { expr: TypeExpr; resolved: boolean; shapeType?: ShapeType } {
     if (options?.currentShapeKey === targetShapeKey) {
       return { expr: code`${zImp}.unknown()`, resolved: false };
     }
 
+    const shouldInline = options?.inline ?? true;
+    if (shouldInline) {
+      const inlineResolution = this.resolveInlineShapeExpr(
+        targetShapeKey,
+        fromFileKey,
+        options?.inlineStack ?? new Set<string>(),
+      );
+      if (inlineResolution) {
+        return inlineResolution;
+      }
+    }
+
+    return this.resolveSchemaSymbolReference(targetShapeKey, fromFileKey, options);
+  }
+
+  private resolveSchemaSymbolReference(
+    targetShapeKey: string,
+    fromFileKey: string,
+    options?: ResolveSchemaReferenceOptions,
+  ): { expr: TypeExpr; resolved: boolean; shapeType?: ShapeType } {
     const registered = this.shapeRegistry.get(targetShapeKey);
     if (registered) {
       const shapeType = this.getShapeType(targetShapeKey);
@@ -249,6 +283,177 @@ export class CodeGenContext {
     }
 
     return { expr: code`${zImp}.unknown()`, resolved: false };
+  }
+
+  private resolveInlineShapeExpr(
+    targetShapeKey: string,
+    fromFileKey: string,
+    inlineStack: Set<string>,
+  ): { expr: TypeExpr; resolved: boolean; shapeType?: ShapeType } | undefined {
+    const builtin = this.resolveBuiltinShapeExpr(targetShapeKey);
+    if (builtin) {
+      return builtin;
+    }
+
+    const shape = this.model.shapes[targetShapeKey];
+    if (!shape || inlineStack.has(targetShapeKey)) {
+      return undefined;
+    }
+
+    inlineStack.add(targetShapeKey);
+
+    const resolveNested = (
+      nestedTargetShapeKey: string,
+      currentShapeKey: string,
+    ): { expr: TypeExpr; resolved: boolean; shapeType?: ShapeType } =>
+      this.resolveSchemaReference(nestedTargetShapeKey, fromFileKey, {
+        currentShapeKey,
+        lazyForSameFile: true,
+        inline: true,
+        inlineStack,
+      });
+
+    try {
+      switch (shape.type) {
+        case "blob":
+          return {
+            expr: code`${zImp}.instanceof(Uint8Array)`,
+            resolved: true,
+            shapeType: "blob",
+          };
+        case "boolean":
+          return {
+            expr: code`${zImp}.boolean()`,
+            resolved: true,
+            shapeType: "boolean",
+          };
+        case "document":
+          return {
+            expr: code`${zImp}.unknown()`,
+            resolved: true,
+            shapeType: "document",
+          };
+        case "integer":
+          return {
+            expr: code`${zImp}.number()${buildIntegerConstraintChain(shape.traits)}`,
+            resolved: true,
+            shapeType: "integer",
+          };
+        case "long":
+          return {
+            expr: code`${zImp}.bigint()`,
+            resolved: true,
+            shapeType: "long",
+          };
+        case "string":
+          return {
+            expr: code`${zImp}.string()${buildStringConstraintChain(shape.traits)}`,
+            resolved: true,
+            shapeType: "string",
+          };
+        case "timestamp": {
+          const timestampFormat = this.resolveTimestampFormatForFile(
+            shape.traits?.["smithy.api#timestampFormat"],
+            fromFileKey,
+          );
+          const schemaName =
+            timestampFormat === "date-time"
+              ? "rfc3339DateTimeTimestampSchema"
+              : "imfFixdateTimestampSchema";
+          const helperPath = fromFileKey.startsWith("common-schemas:")
+            ? "../timestamp-schema-helpers.js"
+            : "@raincity/aws-api-shared";
+          return {
+            expr: imp(`${schemaName}@${helperPath}`),
+            resolved: true,
+            shapeType: "timestamp",
+          };
+        }
+        case "enum": {
+          const { name } = this.parseShapeKey(targetShapeKey);
+          const enumName = upperFirst(camelCase(name));
+          const enumFileKey = this.getOutputFile(targetShapeKey);
+          const enumExpr =
+            enumFileKey === fromFileKey
+              ? enumName
+              : imp(`${enumName}@${this.getImportPath(enumFileKey)}`);
+          return {
+            expr: code`${zImp}.enum(${enumExpr})`,
+            resolved: true,
+            shapeType: "enum",
+          };
+        }
+        case "list": {
+          const memberResolution = resolveNested(
+            shape.member.target,
+            targetShapeKey,
+          );
+          const constraints = buildListConstraintChain(shape.traits);
+          return {
+            expr: code`${zImp}.array(${memberResolution.expr})${constraints}`,
+            resolved: true,
+            shapeType: "list",
+          };
+        }
+        case "map": {
+          const keyResolution = resolveNested(shape.key.target, targetShapeKey);
+          const valueResolution = resolveNested(
+            shape.value.target,
+            targetShapeKey,
+          );
+          const keyExpr = !keyResolution.resolved
+            ? code`${zImp}.string()`
+            : keyResolution.shapeType !== undefined
+              ? keyResolution.shapeType === "string" ||
+                keyResolution.shapeType === "enum"
+                ? keyResolution.expr
+                : undefined
+              : isStringCompatibleBuiltinTarget(shape.key.target)
+                ? keyResolution.expr
+                : undefined;
+          if (!keyExpr) {
+            return undefined;
+          }
+          return {
+            expr: code`${zImp}.record(${keyExpr}, ${valueResolution.expr})`,
+            resolved: true,
+            shapeType: "map",
+          };
+        }
+        case "union": {
+          const unionMembers = Object.values(shape.members).map((member) =>
+            code`${resolveNested(member.target, targetShapeKey).expr}`,
+          );
+          return {
+            expr: code`${zImp}.union([${joinCode(unionMembers, { on: ", " })}])`,
+            resolved: true,
+            shapeType: "union",
+          };
+        }
+        default:
+          return undefined;
+      }
+    } finally {
+      inlineStack.delete(targetShapeKey);
+    }
+  }
+
+  private resolveTimestampFormatForFile(
+    format: "date-time" | "http-date" | undefined,
+    fileKey: string,
+  ): "date-time" | "http-date" {
+    if (format) {
+      return format;
+    }
+
+    if (
+      fileKey.startsWith("s3-schemas:") ||
+      fileKey.startsWith("common-schemas:")
+    ) {
+      return "date-time";
+    }
+
+    return "http-date";
   }
 
   getShapeType(
