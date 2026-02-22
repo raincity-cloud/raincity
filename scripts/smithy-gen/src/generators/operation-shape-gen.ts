@@ -8,8 +8,6 @@ import type { OperationShape } from "../shapes/operation-shape.js";
 import type { SmithyAstModel } from "../smithy-ast-model.js";
 import { buildSchemaDocumentationComment } from "./schema-documentation-comment.js";
 
-const zImp = imp("z@zod/v4");
-
 interface OperationShapeEntry {
   key: string;
   shape: OperationShape;
@@ -35,7 +33,13 @@ function resolveTypeReference(
   ctx: CodeGenContext,
   target: string,
   fileKey: string,
+  stack = new Set<string>(),
 ): TypeResolution {
+  const builtinType = resolveBuiltinTypeReference(target);
+  if (builtinType) {
+    return builtinType;
+  }
+
   if (!ctx.hasRegisteredShape(target)) {
     return {
       typeExpr: "unknown",
@@ -43,27 +47,141 @@ function resolveTypeReference(
     };
   }
 
-  const { name: targetName } = ctx.parseShapeKey(target);
-  if (ctx.getShapeType(target) === "structure") {
-    const typeName = pascalCase(targetName);
-    const targetFileKey = ctx.getOutputFile(target);
-
+  if (stack.has(target)) {
     return {
-      typeExpr:
-        targetFileKey === fileKey
-          ? typeName
-          : imp(`t:${typeName}@${ctx.getImportPath(targetFileKey)}`),
-      typeName,
+      typeExpr: "unknown",
+      typeName: "unknown",
+    };
+  }
+  stack.add(target);
+
+  const { name: targetName } = ctx.parseShapeKey(target);
+  const targetShapeType = ctx.getShapeType(target);
+  if (targetShapeType === "structure") {
+    const typeName = pascalCase(targetName);
+    return resolveNamedTypeReference(ctx, target, fileKey, typeName);
+  }
+
+  if (targetShapeType === "enum") {
+    return resolveNamedTypeReference(ctx, target, fileKey, pascalCase(targetName));
+  }
+
+  if (targetShapeType === "string" || targetShapeType === "timestamp") {
+    return { typeExpr: "string", typeName: targetName };
+  }
+
+  if (targetShapeType === "boolean") {
+    return { typeExpr: "boolean", typeName: targetName };
+  }
+
+  if (targetShapeType === "integer") {
+    return { typeExpr: "number", typeName: targetName };
+  }
+
+  if (targetShapeType === "long") {
+    return { typeExpr: "bigint", typeName: targetName };
+  }
+
+  if (targetShapeType === "blob") {
+    return { typeExpr: "Uint8Array", typeName: targetName };
+  }
+
+  if (targetShapeType === "document") {
+    return { typeExpr: "unknown", typeName: targetName };
+  }
+
+  if (targetShapeType === "list") {
+    const listShape = ctx.getShape(target);
+    if (listShape?.type !== "list") {
+      return { typeExpr: "unknown", typeName: targetName };
+    }
+    const memberType = resolveTypeReference(
+      ctx,
+      listShape.member.target,
+      fileKey,
+      stack,
+    );
+    return {
+      typeExpr: code`Array<${memberType.typeExpr}>`,
+      typeName: targetName,
     };
   }
 
-  const schemaRef = ctx.resolveSchemaReference(target, fileKey, {
-    inline: false,
-  }).expr;
+  if (targetShapeType === "map") {
+    const mapShape = ctx.getShape(target);
+    if (mapShape?.type !== "map") {
+      return { typeExpr: "unknown", typeName: targetName };
+    }
+    const valueType = resolveTypeReference(
+      ctx,
+      mapShape.value.target,
+      fileKey,
+      stack,
+    );
+    return {
+      typeExpr: code`Record<string, ${valueType.typeExpr}>`,
+      typeName: targetName,
+    };
+  }
 
+  if (targetShapeType === "union") {
+    const unionShape = ctx.getShape(target);
+    if (unionShape?.type !== "union") {
+      return { typeExpr: "unknown", typeName: targetName };
+    }
+    const memberTypes = Object.values(unionShape.members).map((member) =>
+      resolveTypeReference(ctx, member.target, fileKey, stack).typeExpr,
+    );
+    if (memberTypes.length === 0) {
+      return { typeExpr: "unknown", typeName: targetName };
+    }
+    return {
+      typeExpr: code`${memberTypes[0]}${memberTypes
+        .slice(1)
+        .map((memberType) => code` | ${memberType}`)}`,
+      typeName: targetName,
+    };
+  }
+
+  return { typeExpr: "unknown", typeName: targetName };
+}
+
+function resolveBuiltinTypeReference(
+  target: string,
+): TypeResolution | undefined {
+  switch (target) {
+    case "smithy.api#String":
+    case "smithy.api#Timestamp":
+      return { typeExpr: "string", typeName: "string" };
+    case "smithy.api#Boolean":
+      return { typeExpr: "boolean", typeName: "boolean" };
+    case "smithy.api#Integer":
+      return { typeExpr: "number", typeName: "number" };
+    case "smithy.api#Long":
+      return { typeExpr: "bigint", typeName: "bigint" };
+    case "smithy.api#Blob":
+      return { typeExpr: "Uint8Array", typeName: "Uint8Array" };
+    case "smithy.api#Document":
+    case "smithy.api#Unit":
+      return { typeExpr: "unknown", typeName: "unknown" };
+    default:
+      return undefined;
+  }
+}
+
+function resolveNamedTypeReference(
+  ctx: CodeGenContext,
+  target: string,
+  fileKey: string,
+  typeName: string,
+): TypeResolution {
+  const targetFileKey = ctx.getOutputFile(target);
   return {
-    typeExpr: code`${zImp}.infer<typeof ${schemaRef}>`,
-    typeName: targetName,
+    typeExpr:
+      targetFileKey === fileKey
+        ? typeName
+        : imp(`t:${typeName}@${ctx.getImportPath(targetFileKey)}`),
+    typeName,
   };
 }
 

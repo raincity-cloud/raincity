@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, readdir, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { CodeGenContext } from "./codegen-context.js";
@@ -37,6 +37,32 @@ const sharedOutputDirectory = join(
   "generated",
 );
 
+async function cleanGeneratedDirectory(dir: string): Promise<void> {
+  let entries: Array<{ isFile: () => boolean; name: string }>;
+  try {
+    entries = await readdir(dir, { withFileTypes: true, encoding: "utf8" });
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "ENOENT"
+    ) {
+      return;
+    }
+    throw error;
+  }
+
+  for (const entry of entries) {
+    if (!entry.isFile() || !entry.name.endsWith(".ts")) {
+      continue;
+    }
+
+    // oxlint-disable-next-line no-await-in-loop
+    await rm(join(dir, entry.name));
+  }
+}
+
 const fileContent = await readFile(smithyAstModelPath, "utf-8");
 const smithyAstModel = smithyAstModelSchema.parse(JSON.parse(fileContent));
 
@@ -60,6 +86,8 @@ for (const fileKey of ctx.renderFiles().keys()) {
       : `${rest}.ts`;
   outputPaths[fileKey] = join(sharedOutputDirectory, filename);
 }
+await cleanGeneratedDirectory(s3GeneratedDir);
+await cleanGeneratedDirectory(sharedOutputDirectory);
 await ctx.writeFiles(outputPaths);
 
 console.log("Code generation complete.");

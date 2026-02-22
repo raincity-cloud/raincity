@@ -1,10 +1,5 @@
-import { camelCase } from "lodash-es";
-import { code, def, imp } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { ListShape } from "../shapes/list-shape.js";
-import { buildSchemaDocumentationComment } from "./schema-documentation-comment.js";
-
-const zImp = imp("z@zod/v4");
 
 interface ListShapeEntry {
   key: string;
@@ -50,37 +45,8 @@ export function buildConstraintChain(traits: ListShape["traits"]): string {
 }
 
 export function generateListShapes(
-  ctx: CodeGenContext,
-  shapes: ListShapeEntry[],
+  _ctx: CodeGenContext,
+  _shapes: ListShapeEntry[],
 ): void {
-  for (const { key, shape } of shapes) {
-    const { name } = ctx.parseShapeKey(key);
-    const fileKey = ctx.getOutputFile(key);
-    const schemaName = `${camelCase(name)}Schema`;
-    const memberTarget = shape.member.target;
-    const memberDocumentation = buildSchemaDocumentationComment(
-      shape.member.traits?.["smithy.api#documentation"],
-    );
-    const listConstraints = buildConstraintChain(shape.traits);
-    const { expr: memberSchemaExpr } = ctx.resolveSchemaReference(
-      memberTarget,
-      fileKey,
-      { currentShapeKey: key, lazyForSameFile: true },
-    );
-
-    const shapeDocumentation = buildSchemaDocumentationComment(
-      shape.traits?.["smithy.api#documentation"],
-    );
-    const memberCommentLines: string[] = [];
-    if (memberDocumentation) {
-      memberCommentLines.push(memberDocumentation);
-    }
-    const memberComments =
-      memberCommentLines.length > 0 ? `${memberCommentLines.join("\n")}\n` : "";
-    const shapeDocPrefix = shapeDocumentation ? `${shapeDocumentation}\n` : "";
-
-    const schemaCode = code`${memberComments}${shapeDocPrefix}export const ${def(schemaName)} = ${zImp}.array(${memberSchemaExpr})${listConstraints};`;
-
-    ctx.addCode(fileKey, schemaCode);
-  }
+  // List shapes are inlined at usage sites.
 }

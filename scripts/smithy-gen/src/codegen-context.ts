@@ -7,16 +7,22 @@ import { generateBlobShapes } from "./generators/blob-shape-gen.js";
 import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
 import { generateDocumentShapes } from "./generators/document-shape-gen.js";
 import { generateEnumShapes } from "./generators/enum-shape-gen.js";
-import { buildConstraintChain as buildIntegerConstraintChain } from "./generators/integer-shape-gen.js";
-import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
-import { buildConstraintChain as buildListConstraintChain } from "./generators/list-shape-gen.js";
-import { generateListShapes } from "./generators/list-shape-gen.js";
+import {
+  buildConstraintChain as buildIntegerConstraintChain,
+  generateIntegerShapes,
+} from "./generators/integer-shape-gen.js";
+import {
+  buildConstraintChain as buildListConstraintChain,
+  generateListShapes,
+} from "./generators/list-shape-gen.js";
 import { generateLongShapes } from "./generators/long-shape-gen.js";
 import { generateMapShapes } from "./generators/map-shape-gen.js";
 import { generateOperationShapes } from "./generators/operation-shape-gen.js";
 import { generateServiceShapes } from "./generators/service-shape-gen.js";
-import { buildConstraintChain as buildStringConstraintChain } from "./generators/string-shape-gen.js";
-import { generateStringShapes } from "./generators/string-shape-gen.js";
+import {
+  buildConstraintChain as buildStringConstraintChain,
+  generateStringShapes,
+} from "./generators/string-shape-gen.js";
 import { generateStructureShapes } from "./generators/structure-shape-gen.js";
 import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
 import { generateUnionShapes } from "./generators/union-shape-gen.js";
@@ -252,7 +258,11 @@ export class CodeGenContext {
       }
     }
 
-    return this.resolveSchemaSymbolReference(targetShapeKey, fromFileKey, options);
+    return this.resolveSchemaSymbolReference(
+      targetShapeKey,
+      fromFileKey,
+      options,
+    );
   }
 
   private resolveSchemaSymbolReference(
@@ -421,8 +431,9 @@ export class CodeGenContext {
           };
         }
         case "union": {
-          const unionMembers = Object.values(shape.members).map((member) =>
-            code`${resolveNested(member.target, targetShapeKey).expr}`,
+          const unionMembers = Object.values(shape.members).map(
+            (member) =>
+              code`${resolveNested(member.target, targetShapeKey).expr}`,
           );
           return {
             expr: code`${zImp}.union([${joinCode(unionMembers, { on: ", " })}])`,

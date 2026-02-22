@@ -1,10 +1,8 @@
 import { camelCase, upperFirst } from "lodash-es";
-import { code, def, imp } from "ts-poet";
+import { code } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { EnumShape } from "../shapes/enum-shape.js";
 import { buildSchemaDocumentationComment } from "./schema-documentation-comment.js";
-
-const zImp = imp("z@zod/v4");
 
 interface EnumShapeEntry {
   key: string;
@@ -30,7 +28,6 @@ export function generateEnumShapes(
     const { name } = ctx.parseShapeKey(key);
     const fileKey = ctx.getOutputFile(key);
     const enumName = pascalCase(name);
-    const schemaName = `${camelCase(name)}Schema`;
 
     const memberLines: string[] = [];
     for (const [memberName, member] of Object.entries(shape.members)) {
@@ -58,8 +55,7 @@ export function generateEnumShapes(
       ? `${enumDocumentation}\n${enumCodeBody}`
       : enumCodeBody;
 
-    const schemaCode = code`${enumCode}
-export const ${def(schemaName)} = ${zImp}.enum(${enumName});`;
+    const schemaCode = code`${enumCode}`;
 
     ctx.addCode(fileKey, schemaCode);
   }

@@ -1,10 +1,5 @@
-import { camelCase } from "lodash-es";
-import { code, def, imp } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { StringShape } from "../shapes/string-shape.js";
-import { buildSchemaDocumentationComment } from "./schema-documentation-comment.js";
-
-const zImp = imp("z@zod/v4");
 
 interface StringShapeEntry {
   key: string;
@@ -35,23 +30,8 @@ export function buildConstraintChain(traits: StringShape["traits"]): string {
 }
 
 export function generateStringShapes(
-  ctx: CodeGenContext,
-  shapes: StringShapeEntry[],
+  _ctx: CodeGenContext,
+  _shapes: StringShapeEntry[],
 ): void {
-  for (const { key, shape } of shapes) {
-    const { name } = ctx.parseShapeKey(key);
-    const fileKey = ctx.getOutputFile(key);
-    const schemaName = `${camelCase(name)}Schema`;
-
-    const constraints = buildConstraintChain(shape.traits);
-    const documentationComment = buildSchemaDocumentationComment(
-      shape.traits?.["smithy.api#documentation"],
-    );
-    const schemaCode = documentationComment
-      ? code`${documentationComment}
-export const ${def(schemaName)} = ${zImp}.string()${constraints};`
-      : code`export const ${def(schemaName)} = ${zImp}.string()${constraints};`;
-
-    ctx.addCode(fileKey, schemaCode);
-  }
+  // String shapes are inlined at usage sites.
 }

@@ -232,9 +232,7 @@ describe("CodeGenContext structure shape generation", () => {
     const structuresOutput =
       ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
-    expect(schemaOutput).toContain(
-      "export const tagListSchema = z.array(tagSchema);",
-    );
+    expect(schemaOutput).toBe("");
     expect(structuresOutput).toContain("export const tagSchema = z.object({");
     expect(structuresOutput).toContain(
       "export type Tag = z.infer<typeof tagSchema>;",
