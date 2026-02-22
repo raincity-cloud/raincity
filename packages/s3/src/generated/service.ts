@@ -272,7 +272,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {NoSuchUpload} <p>The specified multipart upload does not exist.</p>
+   * @throws {NoSuchUploadError} <p>The specified multipart upload does not exist.</p>
    */
   abortMultipartUpload(input: AbortMultipartUploadRequest): AbortMultipartUploadOutput;
 
@@ -649,7 +649,7 @@ export interface AmazonS3Service {
  *          </important>
  * ```
  *
- * @throws {ObjectNotInActiveTierError} <p>The source object of the COPY action is not in the active tier and is only stored in Amazon S3
+ * @throws {ObjectNotInActiveTierErrorError} <p>The source object of the COPY action is not in the active tier and is only stored in Amazon S3
       Glacier.</p>
  */
   copyObject(input: CopyObjectRequest): CopyObjectOutput;
@@ -798,9 +798,9 @@ export interface AmazonS3Service {
  *          </important>
  * ```
  *
- * @throws {BucketAlreadyExists} <p>The requested bucket name is not available. The bucket namespace is shared by all users of the
+ * @throws {BucketAlreadyExistsError} <p>The requested bucket name is not available. The bucket namespace is shared by all users of the
       system. Select a different name and try again.</p>
- * @throws {BucketAlreadyOwnedByYou} <p>The bucket you tried to create already exists, and you own it. Amazon S3 returns this error in all Amazon Web Services
+ * @throws {BucketAlreadyOwnedByYouError} <p>The bucket you tried to create already exists, and you own it. Amazon S3 returns this error in all Amazon Web Services
       Regions except in the North Virginia Region. For legacy compatibility, if you re-create an existing
       bucket that you already own in the North Virginia Region, Amazon S3 returns 200 OK and resets the bucket
       access control lists (ACLs).</p>
@@ -1353,7 +1353,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {NoSuchBucket} <p>The specified bucket does not exist.</p>
+   * @throws {NoSuchBucketError} <p>The specified bucket does not exist.</p>
    */
   createSession(input: CreateSessionRequest): CreateSessionOutput;
 
@@ -3559,14 +3559,14 @@ export interface AmazonS3Service {
  *          </important>
  * ```
  *
- * @throws {InvalidObjectState} <p>Object is archived and inaccessible until restored.</p>
+ * @throws {InvalidObjectStateError} <p>Object is archived and inaccessible until restored.</p>
          <p>If the object you are retrieving is stored in the S3 Glacier Flexible Retrieval storage class, the
       S3 Glacier Deep Archive storage class, the S3 Intelligent-Tiering Archive Access tier, or the
       S3 Intelligent-Tiering Deep Archive Access tier, before you can retrieve the object you must first restore a copy
       using <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html">RestoreObject</a>. Otherwise, this operation returns an <code>InvalidObjectState</code> error. For
       information about restoring archived objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring Archived Objects</a> in the
         <i>Amazon S3 User Guide</i>.</p>
- * @throws {NoSuchKey} <p>The specified key does not exist.</p>
+ * @throws {NoSuchKeyError} <p>The specified key does not exist.</p>
  */
   getObject(input: GetObjectRequest): GetObjectOutput;
 
@@ -3617,7 +3617,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {NoSuchKey} <p>The specified key does not exist.</p>
+   * @throws {NoSuchKeyError} <p>The specified key does not exist.</p>
    */
   getObjectAcl(input: GetObjectAclRequest): GetObjectAclOutput;
 
@@ -3833,7 +3833,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {NoSuchKey} <p>The specified key does not exist.</p>
+   * @throws {NoSuchKeyError} <p>The specified key does not exist.</p>
    */
   getObjectAttributes(input: GetObjectAttributesRequest): GetObjectAttributesOutput;
 
@@ -4100,7 +4100,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {NotFound} <p>The specified content does not exist.</p>
+   * @throws {NotFoundError} <p>The specified content does not exist.</p>
    */
   headBucket(input: HeadBucketRequest): HeadBucketOutput;
 
@@ -4262,7 +4262,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {NotFound} <p>The specified content does not exist.</p>
+   * @throws {NotFoundError} <p>The specified content does not exist.</p>
    */
   headObject(input: HeadObjectRequest): HeadObjectOutput;
 
@@ -4684,7 +4684,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {NoSuchBucket} <p>The specified bucket does not exist.</p>
+   * @throws {NoSuchBucketError} <p>The specified bucket does not exist.</p>
    */
   listObjects(input: ListObjectsRequest): ListObjectsOutput;
 
@@ -4795,7 +4795,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {NoSuchBucket} <p>The specified bucket does not exist.</p>
+   * @throws {NoSuchBucketError} <p>The specified bucket does not exist.</p>
    */
   listObjectsV2(input: ListObjectsV2Request): ListObjectsV2Output;
 
@@ -6664,12 +6664,12 @@ export interface AmazonS3Service {
  *          </important>
  * ```
  *
- * @throws {EncryptionTypeMismatch} <p> The existing object was created with a different encryption type. Subsequent write requests must
+ * @throws {EncryptionTypeMismatchError} <p> The existing object was created with a different encryption type. Subsequent write requests must
       include the appropriate encryption parameters in the request or while creating the session. </p>
- * @throws {InvalidRequest} <p>A parameter or header in your request isn't valid. For details, see the description of this API
+ * @throws {InvalidRequestError} <p>A parameter or header in your request isn't valid. For details, see the description of this API
       operation.</p>
- * @throws {InvalidWriteOffset} <p> The write offset value that you specified does not match the current object size. </p>
- * @throws {TooManyParts} <p> You have attempted to add more parts than the maximum of 10000 that are allowed for this object.
+ * @throws {InvalidWriteOffsetError} <p> The write offset value that you specified does not match the current object size. </p>
+ * @throws {TooManyPartsError} <p> You have attempted to add more parts than the maximum of 10000 that are allowed for this object.
       You can use the CopyObject operation to copy this object to another and then add more data to the newly
       copied object. </p>
  */
@@ -6871,7 +6871,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {NoSuchKey} <p>The specified key does not exist.</p>
+   * @throws {NoSuchKeyError} <p>The specified key does not exist.</p>
    */
   putObjectAcl(input: PutObjectAclRequest): PutObjectAclOutput;
 
@@ -7102,7 +7102,7 @@ export interface AmazonS3Service {
  *          </important>
  * ```
  *
- * @throws {IdempotencyParameterMismatch} <p>Parameters on this idempotent request are inconsistent with parameters used in previous request(s). </p>
+ * @throws {IdempotencyParameterMismatchError} <p>Parameters on this idempotent request are inconsistent with parameters used in previous request(s). </p>
          <p>For a list of error codes and more information on Amazon S3 errors, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ErrorCodeList">Error codes</a>.</p>
          <note>
             <p>Idempotency ensures that an API request completes no more than one time. With an idempotent
@@ -7314,7 +7314,7 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    *
-   * @throws {ObjectAlreadyInActiveTierError} <p>This action is not allowed against this storage tier.</p>
+   * @throws {ObjectAlreadyInActiveTierErrorError} <p>This action is not allowed against this storage tier.</p>
    */
   restoreObject(input: RestoreObjectRequest): RestoreObjectOutput;
 
@@ -7741,12 +7741,12 @@ export interface AmazonS3Service {
  *          </dl>
  * ```
  *
- * @throws {AccessDenied} <p>
+ * @throws {AccessDeniedError} <p>
       You might receive this error for several reasons. For details, see the description of this API
       operation.</p>
- * @throws {InvalidRequest} <p>A parameter or header in your request isn't valid. For details, see the description of this API
+ * @throws {InvalidRequestError} <p>A parameter or header in your request isn't valid. For details, see the description of this API
       operation.</p>
- * @throws {NoSuchKey} <p>The specified key does not exist.</p>
+ * @throws {NoSuchKeyError} <p>The specified key does not exist.</p>
  */
   updateObjectEncryption(input: UpdateObjectEncryptionRequest): UpdateObjectEncryptionResponse;
 

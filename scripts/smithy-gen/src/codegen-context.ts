@@ -7,6 +7,7 @@ import { generateBlobShapes } from "./generators/blob-shape-gen.js";
 import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
 import { generateDocumentShapes } from "./generators/document-shape-gen.js";
 import { generateEnumShapes } from "./generators/enum-shape-gen.js";
+import { generateErrorShapes } from "./generators/error-shape-gen.js";
 import {
   buildConstraintChain as buildIntegerConstraintChain,
   generateIntegerShapes,
@@ -176,6 +177,14 @@ export class CodeGenContext {
     };
   }
 
+  isErrorShape(shapeKey: string): boolean {
+    const shape = this.model.shapes[shapeKey];
+    return (
+      shape?.type === "structure" &&
+      shape.traits?.["smithy.api#error"] !== undefined
+    );
+  }
+
   getOutputFile(shapeKey: string): string {
     const { namespace } = this.parseShapeKey(shapeKey);
     const shapeType = this.getShapeType(shapeKey);
@@ -185,7 +194,9 @@ export class CodeGenContext {
         : shapeType === "enum"
           ? "enums"
           : shapeType === "structure"
-            ? "structures"
+            ? this.isErrorShape(shapeKey)
+              ? "errors"
+              : "structures"
             : "schema";
     if (namespace === "com.amazonaws.s3") {
       return `s3-schemas:${suffix}`;
@@ -538,10 +549,17 @@ export class CodeGenContext {
     );
     generateTimestampShapes(this, timestampShapes);
 
-    const structureShapes = (grouped["structure"] ?? []).filter(
+    const allStructureShapes = (grouped["structure"] ?? []).filter(
       isStructureShape,
     );
+    const errorShapes = allStructureShapes.filter((entry) =>
+      this.isErrorShape(entry.key),
+    );
+    const structureShapes = allStructureShapes.filter(
+      (entry) => !this.isErrorShape(entry.key),
+    );
     generateStructureShapes(this, structureShapes);
+    generateErrorShapes(this, errorShapes);
 
     const listShapes = (grouped["list"] ?? []).filter(isListShape);
     generateListShapes(this, listShapes);

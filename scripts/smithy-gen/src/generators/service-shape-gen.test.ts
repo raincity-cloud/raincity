@@ -87,7 +87,7 @@ describe("CodeGenContext service shape generation", () => {
 
     expect(output).toContain("* Retrieves an object from S3.");
     expect(output).toContain(
-      "* @throws {NoSuchKey} The specified key does not exist.",
+      "* @throws {NoSuchKeyError} The specified key does not exist.",
     );
   });
 

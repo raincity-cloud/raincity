@@ -88,10 +88,10 @@ describe("CodeGenContext operation shape generation", () => {
 
     expect(method?.tsDoc).toContain("* Retrieves an object from S3.");
     expect(method?.tsDoc).toContain(
-      "* @throws {NoSuchKey} The specified key does not exist.",
+      "* @throws {NoSuchKeyError} The specified key does not exist.",
     );
     expect(method?.tsDoc).toContain(
-      "* @throws {InvalidState} This operation may throw InvalidState.",
+      "* @throws {InvalidStateError} This operation may throw InvalidStateError.",
     );
   });
 

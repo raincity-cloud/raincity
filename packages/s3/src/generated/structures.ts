@@ -225,16 +225,6 @@ export type AccessControlTranslation = z.infer<typeof accessControlTranslationSc
 
 /**
  * ```xml
- * <p>
- *       You might receive this error for several reasons. For details, see the description of this API
- *       operation.</p>
- * ```
- */
-export const accessDeniedSchema = z.object({});
-export type AccessDenied = z.infer<typeof accessDeniedSchema>;
-
-/**
- * ```xml
  * <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The
  *       operator must have at least two predicates in any combination, and an object must match all of the
  *       predicates for the filter to apply.</p>
@@ -423,26 +413,6 @@ export const bucketSchema = z.object({
   BucketArn: z.string().min(1).max(128).regex(new RegExp("^arn:[^:]+:(s3|s3express):")).optional(),
 });
 export type Bucket = z.infer<typeof bucketSchema>;
-
-/**
- * ```xml
- * <p>The requested bucket name is not available. The bucket namespace is shared by all users of the
- *       system. Select a different name and try again.</p>
- * ```
- */
-export const bucketAlreadyExistsSchema = z.object({});
-export type BucketAlreadyExists = z.infer<typeof bucketAlreadyExistsSchema>;
-
-/**
- * ```xml
- * <p>The bucket you tried to create already exists, and you own it. Amazon S3 returns this error in all Amazon Web Services
- *       Regions except in the North Virginia Region. For legacy compatibility, if you re-create an existing
- *       bucket that you already own in the North Virginia Region, Amazon S3 returns 200 OK and resets the bucket
- *       access control lists (ACLs).</p>
- * ```
- */
-export const bucketAlreadyOwnedByYouSchema = z.object({});
-export type BucketAlreadyOwnedByYou = z.infer<typeof bucketAlreadyOwnedByYouSchema>;
 
 /**
  * ```xml
@@ -4294,15 +4264,6 @@ export const encryptionConfigurationSchema = z.object({
   ReplicaKmsKeyID: z.string().optional(),
 });
 export type EncryptionConfiguration = z.infer<typeof encryptionConfigurationSchema>;
-
-/**
- * ```xml
- * <p> The existing object was created with a different encryption type. Subsequent write requests must
- *       include the appropriate encryption parameters in the request or while creating the session. </p>
- * ```
- */
-export const encryptionTypeMismatchSchema = z.object({});
-export type EncryptionTypeMismatch = z.infer<typeof encryptionTypeMismatchSchema>;
 
 /**
  * ```xml
@@ -9181,20 +9142,6 @@ export type HeadObjectRequest = z.infer<typeof headObjectRequestSchema>;
 
 /**
  * ```xml
- * <p>Parameters on this idempotent request are inconsistent with parameters used in previous request(s). </p>
- *          <p>For a list of error codes and more information on Amazon S3 errors, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html#ErrorCodeList">Error codes</a>.</p>
- *          <note>
- *             <p>Idempotency ensures that an API request completes no more than one time. With an idempotent
- *         request, if the original request completes successfully, any subsequent retries complete successfully
- *         without performing any further actions.</p>
- *          </note>
- * ```
- */
-export const idempotencyParameterMismatchSchema = z.object({});
-export type IdempotencyParameterMismatch = z.infer<typeof idempotencyParameterMismatchSchema>;
-
-/**
- * ```xml
  * <p>Container for the <code>Suffix</code> element.</p>
  * ```
  */
@@ -9369,40 +9316,6 @@ export const intelligentTieringFilterSchema = z.object({
   And: z.lazy(() => intelligentTieringAndOperatorSchema).optional(),
 });
 export type IntelligentTieringFilter = z.infer<typeof intelligentTieringFilterSchema>;
-
-/**
- * ```xml
- * <p>Object is archived and inaccessible until restored.</p>
- *          <p>If the object you are retrieving is stored in the S3 Glacier Flexible Retrieval storage class, the
- *       S3 Glacier Deep Archive storage class, the S3 Intelligent-Tiering Archive Access tier, or the
- *       S3 Intelligent-Tiering Deep Archive Access tier, before you can retrieve the object you must first restore a copy
- *       using <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_RestoreObject.html">RestoreObject</a>. Otherwise, this operation returns an <code>InvalidObjectState</code> error. For
- *       information about restoring archived objects, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/restoring-objects.html">Restoring Archived Objects</a> in the
- *         <i>Amazon S3 User Guide</i>.</p>
- * ```
- */
-export const invalidObjectStateSchema = z.object({
-  StorageClass: z.enum(StorageClass).optional(),
-  AccessTier: z.enum(IntelligentTieringAccessTier).optional(),
-});
-export type InvalidObjectState = z.infer<typeof invalidObjectStateSchema>;
-
-/**
- * ```xml
- * <p>A parameter or header in your request isn't valid. For details, see the description of this API
- *       operation.</p>
- * ```
- */
-export const invalidRequestSchema = z.object({});
-export type InvalidRequest = z.infer<typeof invalidRequestSchema>;
-
-/**
- * ```xml
- * <p> The write offset value that you specified does not match the current object size. </p>
- * ```
- */
-export const invalidWriteOffsetSchema = z.object({});
-export type InvalidWriteOffset = z.infer<typeof invalidWriteOffsetSchema>;
 
 /**
  * ```xml
@@ -11876,30 +11789,6 @@ export type MultipartUpload = z.infer<typeof multipartUploadSchema>;
 
 /**
  * ```xml
- * <p>The specified bucket does not exist.</p>
- * ```
- */
-export const noSuchBucketSchema = z.object({});
-export type NoSuchBucket = z.infer<typeof noSuchBucketSchema>;
-
-/**
- * ```xml
- * <p>The specified key does not exist.</p>
- * ```
- */
-export const noSuchKeySchema = z.object({});
-export type NoSuchKey = z.infer<typeof noSuchKeySchema>;
-
-/**
- * ```xml
- * <p>The specified multipart upload does not exist.</p>
- * ```
- */
-export const noSuchUploadSchema = z.object({});
-export type NoSuchUpload = z.infer<typeof noSuchUploadSchema>;
-
-/**
- * ```xml
  * <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the
  *       noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning
  *       enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in
@@ -11978,14 +11867,6 @@ export const noncurrentVersionTransitionSchema = z.object({
   NewerNoncurrentVersions: z.number().optional(),
 });
 export type NoncurrentVersionTransition = z.infer<typeof noncurrentVersionTransitionSchema>;
-
-/**
- * ```xml
- * <p>The specified content does not exist.</p>
- * ```
- */
-export const notFoundSchema = z.object({});
-export type NotFound = z.infer<typeof notFoundSchema>;
 
 /**
  * ```xml
@@ -12140,14 +12021,6 @@ export type Object = z.infer<typeof objectSchema>;
 
 /**
  * ```xml
- * <p>This action is not allowed against this storage tier.</p>
- * ```
- */
-export const objectAlreadyInActiveTierErrorSchema = z.object({});
-export type ObjectAlreadyInActiveTierError = z.infer<typeof objectAlreadyInActiveTierErrorSchema>;
-
-/**
- * ```xml
  * <p>Object Identifier is unique value to identify objects.</p>
  * ```
  */
@@ -12284,15 +12157,6 @@ export const objectLockRuleSchema = z.object({
   DefaultRetention: z.lazy(() => defaultRetentionSchema).optional(),
 });
 export type ObjectLockRule = z.infer<typeof objectLockRuleSchema>;
-
-/**
- * ```xml
- * <p>The source object of the COPY action is not in the active tier and is only stored in Amazon S3
- *       Glacier.</p>
- * ```
- */
-export const objectNotInActiveTierErrorSchema = z.object({});
-export type ObjectNotInActiveTierError = z.infer<typeof objectNotInActiveTierErrorSchema>;
 
 /**
  * ```xml
@@ -16417,16 +16281,6 @@ export const tieringSchema = z.object({
   AccessTier: z.enum(IntelligentTieringAccessTier),
 });
 export type Tiering = z.infer<typeof tieringSchema>;
-
-/**
- * ```xml
- * <p> You have attempted to add more parts than the maximum of 10000 that are allowed for this object.
- *       You can use the CopyObject operation to copy this object to another and then add more data to the newly
- *       copied object. </p>
- * ```
- */
-export const tooManyPartsSchema = z.object({});
-export type TooManyParts = z.infer<typeof tooManyPartsSchema>;
 
 /**
  * ```xml

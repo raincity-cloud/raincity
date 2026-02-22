@@ -58,7 +58,10 @@ function resolveTypeReference(
   const { name: targetName } = ctx.parseShapeKey(target);
   const targetShapeType = ctx.getShapeType(target);
   if (targetShapeType === "structure") {
-    const typeName = pascalCase(targetName);
+    const isError = ctx.isErrorShape(target);
+    const typeName = isError
+      ? `${pascalCase(targetName)}Error`
+      : pascalCase(targetName);
     return resolveNamedTypeReference(ctx, target, fileKey, typeName);
   }
 
