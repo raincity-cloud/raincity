@@ -26,5 +26,4 @@ export const checksumAlgorithmSetSchema = z.array(checksumAlgorithmSchema).min(1
   },
 );
 
-// TODO: list member target smithy.api#String is not generated yet.
-export const stringListSchema = z.array(z.unknown());
+export const stringListSchema = z.array(z.string());

@@ -22,6 +22,5 @@ export function generateLongShapes(
     const schemaCode = code`export const ${def(schemaName)} = ${zImp}.bigint();`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

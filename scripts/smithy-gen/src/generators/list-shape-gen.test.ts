@@ -60,7 +60,7 @@ describe("CodeGenContext list shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain(
-      "export const tagKeysSchema = z.array(tagKeySchema);",
+      "export const tagKeysSchema = z.array(z.lazy(() => tagKeySchema));",
     );
   });
 
@@ -82,11 +82,11 @@ describe("CodeGenContext list shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("* Unique tag keys.\n * ```");
-    expect(output).toContain(".array(tagKeySchema).min(1).max(10)");
+    expect(output).toContain(".array(z.lazy(() => tagKeySchema)).min(1).max(10)");
     expect(output).toContain("Duplicate items are not allowed.");
   });
 
-  it("falls back to z.unknown with a TODO when member target is not generated", () => {
+  it("falls back to z.unknown when member target is not generated", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#Objects": {
@@ -98,14 +98,11 @@ describe("CodeGenContext list shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain(
-      "// TODO: list member target com.amazonaws.s3#ObjectRecord is not generated yet.",
-    );
-    expect(output).toContain(
       "export const objectsSchema = z.array(z.unknown());",
     );
   });
 
-  it("uses the member documentation helper and emits a TODO for xmlName", () => {
+  it("uses the member documentation helper", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#TagKey": { type: "string" },
@@ -124,9 +121,6 @@ describe("CodeGenContext list shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("* A single tag key.\n * ```");
-    expect(output).toContain(
-      '// TODO: smithy.api#xmlName ("Tag") on list member is not mapped to zod.',
-    );
   });
 
   it("generates list shapes after existing generated scalar shapes", () => {
@@ -144,7 +138,9 @@ describe("CodeGenContext list shape generation", () => {
     expect(
       output.indexOf("export const tagKeySchema = z.string();"),
     ).toBeLessThan(
-      output.indexOf("export const tagKeysSchema = z.array(tagKeySchema);"),
+      output.indexOf(
+        "export const tagKeysSchema = z.array(z.lazy(() => tagKeySchema));",
+      ),
     );
   });
 });

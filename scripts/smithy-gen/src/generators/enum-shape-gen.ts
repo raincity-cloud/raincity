@@ -62,6 +62,5 @@ export function generateEnumShapes(
 export const ${def(schemaName)} = ${zImp}.enum(${enumName});`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

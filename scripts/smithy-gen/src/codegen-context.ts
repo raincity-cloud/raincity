@@ -1,8 +1,8 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import { groupBy } from "lodash-es";
+import { camelCase, groupBy } from "lodash-es";
 import type { Code, Import } from "ts-poet";
-import { joinCode } from "ts-poet";
+import { code, imp, joinCode } from "ts-poet";
 import { generateBlobShapes } from "./generators/blob-shape-gen.js";
 import { generateBooleanShapes } from "./generators/boolean-shape-gen.js";
 import { generateDocumentShapes } from "./generators/document-shape-gen.js";
@@ -34,6 +34,7 @@ import type { SmithyAstModel } from "./smithy-ast-model.js";
 
 type Shape = SmithyAstModel["shapes"][string];
 type UnionShape = Extract<Shape, { type: "union" }>;
+type ShapeType = SmithyAstModel["shapes"][string]["type"];
 type TypeExpr = string | Import | Code;
 
 export interface OperationMethodSignature {
@@ -41,7 +42,6 @@ export interface OperationMethodSignature {
   inputTypeExpr: TypeExpr;
   outputTypeExpr: TypeExpr;
   tsDoc?: string;
-  unresolvedComment?: string;
 }
 
 interface ShapeEntry<S extends Shape = Shape> {
@@ -50,6 +50,26 @@ interface ShapeEntry<S extends Shape = Shape> {
 }
 
 type OutputPaths = Record<string, string>;
+type SchemaShapeType =
+  | "blob"
+  | "boolean"
+  | "document"
+  | "enum"
+  | "integer"
+  | "list"
+  | "long"
+  | "map"
+  | "string"
+  | "structure"
+  | "timestamp"
+  | "union";
+
+interface RegisteredShapeSymbol {
+  schemaName: string;
+  fileKey: string;
+}
+
+const zImp = imp("z@zod/v4");
 
 function isBlobShape(entry: ShapeEntry): entry is ShapeEntry<BlobShape> {
   return entry.shape.type === "blob";
@@ -117,7 +137,7 @@ function isServiceShape(entry: ShapeEntry): entry is ShapeEntry<ServiceShape> {
 
 export class CodeGenContext {
   private model: SmithyAstModel;
-  private shapeRegistry = new Map<string, Import>();
+  private shapeRegistry = new Map<string, RegisteredShapeSymbol>();
   private fileCode = new Map<string, Code[]>();
   private operationMethodRegistry = new Map<string, OperationMethodSignature>();
 
@@ -168,12 +188,67 @@ export class CodeGenContext {
     return `./${fileKey}.js`;
   }
 
-  registerShape(shapeKey: string, symbol: Import): void {
-    this.shapeRegistry.set(shapeKey, symbol);
+  buildSchemaSymbol(shapeKey: string): RegisteredShapeSymbol {
+    const { name } = this.parseShapeKey(shapeKey);
+    return {
+      schemaName: `${camelCase(name)}Schema`,
+      fileKey: this.getOutputFile(shapeKey),
+    };
+  }
+
+  registerDiscoveredShape(shapeKey: string): void {
+    if (this.shapeRegistry.has(shapeKey)) {
+      return;
+    }
+    this.shapeRegistry.set(shapeKey, this.buildSchemaSymbol(shapeKey));
+  }
+
+  registerDiscoveredShapes(shapeKeys: string[]): void {
+    for (const shapeKey of shapeKeys) {
+      this.registerDiscoveredShape(shapeKey);
+    }
   }
 
   hasRegisteredShape(shapeKey: string): boolean {
     return this.shapeRegistry.has(shapeKey);
+  }
+
+  getRegisteredSchemaName(shapeKey: string): string | undefined {
+    return this.shapeRegistry.get(shapeKey)?.schemaName;
+  }
+
+  resolveSchemaReference(
+    targetShapeKey: string,
+    fromFileKey: string,
+    options?: { currentShapeKey?: string; lazyForSameFile?: boolean },
+  ): { expr: TypeExpr; resolved: boolean; shapeType?: ShapeType } {
+    if (options?.currentShapeKey === targetShapeKey) {
+      return { expr: code`${zImp}.unknown()`, resolved: false };
+    }
+
+    const registered = this.shapeRegistry.get(targetShapeKey);
+    if (registered) {
+      const shapeType = this.getShapeType(targetShapeKey);
+      const isSameFile = registered.fileKey === fromFileKey;
+      return {
+        expr: isSameFile
+          ? options?.lazyForSameFile
+            ? code`${zImp}.lazy(() => ${registered.schemaName})`
+            : registered.schemaName
+          : imp(
+              `${registered.schemaName}@${this.getImportPath(registered.fileKey)}`,
+            ),
+        resolved: true,
+        ...(shapeType ? { shapeType } : {}),
+      };
+    }
+
+    const builtin = this.resolveBuiltinShapeExpr(targetShapeKey);
+    if (builtin) {
+      return builtin;
+    }
+
+    return { expr: code`${zImp}.unknown()`, resolved: false };
   }
 
   getShapeType(
@@ -213,6 +288,13 @@ export class CodeGenContext {
       ([key, shape]) => ({ key, shape }),
     );
     const grouped = groupBy(entries, (e) => e.shape.type);
+
+    for (const entry of entries) {
+      if (!this.isSchemaShapeType(entry.shape.type)) {
+        continue;
+      }
+      this.registerDiscoveredShape(entry.key);
+    }
 
     const blobShapes = (grouped["blob"] ?? []).filter(isBlobShape);
     generateBlobShapes(this, blobShapes);
@@ -261,6 +343,78 @@ export class CodeGenContext {
 
     const serviceShapes = (grouped["service"] ?? []).filter(isServiceShape);
     generateServiceShapes(this, serviceShapes);
+  }
+
+  private isSchemaShapeType(
+    shapeType: ShapeType,
+  ): shapeType is SchemaShapeType {
+    return (
+      shapeType === "blob" ||
+      shapeType === "boolean" ||
+      shapeType === "document" ||
+      shapeType === "enum" ||
+      shapeType === "integer" ||
+      shapeType === "list" ||
+      shapeType === "long" ||
+      shapeType === "map" ||
+      shapeType === "string" ||
+      shapeType === "structure" ||
+      shapeType === "timestamp" ||
+      shapeType === "union"
+    );
+  }
+
+  private resolveBuiltinShapeExpr(
+    targetShapeKey: string,
+  ): { expr: TypeExpr; resolved: boolean; shapeType?: ShapeType } | undefined {
+    switch (targetShapeKey) {
+      case "smithy.api#String":
+        return {
+          expr: code`${zImp}.string()`,
+          resolved: true,
+          shapeType: "string",
+        };
+      case "smithy.api#Boolean":
+        return {
+          expr: code`${zImp}.boolean()`,
+          resolved: true,
+          shapeType: "boolean",
+        };
+      case "smithy.api#Integer":
+        return {
+          expr: code`${zImp}.number()`,
+          resolved: true,
+          shapeType: "integer",
+        };
+      case "smithy.api#Long":
+        return {
+          expr: code`${zImp}.bigint()`,
+          resolved: true,
+          shapeType: "long",
+        };
+      case "smithy.api#Blob":
+        return {
+          expr: code`${zImp}.instanceof(Uint8Array)`,
+          resolved: true,
+          shapeType: "blob",
+        };
+      case "smithy.api#Timestamp":
+        return {
+          expr: code`${zImp}.string()`,
+          resolved: true,
+          shapeType: "timestamp",
+        };
+      case "smithy.api#Document":
+        return {
+          expr: code`${zImp}.unknown()`,
+          resolved: true,
+          shapeType: "document",
+        };
+      case "smithy.api#Unit":
+        return { expr: code`${zImp}.unknown()`, resolved: true };
+      default:
+        return undefined;
+    }
   }
 
   renderFiles(): Map<string, string> {

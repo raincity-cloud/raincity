@@ -1,5 +1,5 @@
 import { camelCase } from "lodash-es";
-import { code, def, Import, imp } from "ts-poet";
+import { code, def, Import } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { TimestampShape } from "../shapes/timestamp-shape.js";
 
@@ -62,6 +62,5 @@ export function generateTimestampShapes(
     const schemaCode = code`export const ${def(schemaName)} = ${timestampSchema};`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

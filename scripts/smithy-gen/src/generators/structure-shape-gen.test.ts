@@ -150,40 +150,7 @@ describe("CodeGenContext structure shape generation", () => {
     );
   });
 
-  it("emits TODO comments for non-implemented structure and member traits", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.s3#TagKey": { type: "string" },
-        "com.amazonaws.s3#Tag": {
-          type: "structure",
-          traits: {
-            "smithy.api#xmlName": "Tag",
-          },
-          members: {
-            Key: {
-              target: "com.amazonaws.s3#TagKey",
-              traits: {
-                "smithy.api#httpHeader": "X-Tag-Key",
-              },
-            },
-          },
-          mixins: {},
-        },
-      }),
-    );
-
-    ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
-
-    expect(output).toContain(
-      '// TODO: smithy.api#xmlName ("Tag") on structure Tag is not mapped to zod.',
-    );
-    expect(output).toContain(
-      '// TODO: smithy.api#httpHeader ("X-Tag-Key") on structure member Tag.Key is not mapped to zod.',
-    );
-  });
-
-  it("falls back to z.unknown with a TODO when a structure member target is unresolved", () => {
+  it("falls back to z.unknown when a structure member target is unresolved", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#Tag": {
@@ -200,11 +167,31 @@ describe("CodeGenContext structure shape generation", () => {
 
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
+    expect(output).toContain("Key: z.unknown().optional()");
+  });
 
-    expect(output).toContain(
-      "// TODO: structure member target com.amazonaws.s3#MissingShape for Tag.Key is not generated yet.",
+  it("resolves forward references between structure shapes", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#Parent": {
+          type: "structure",
+          members: {
+            Child: { target: "com.amazonaws.s3#Child" },
+          },
+          mixins: {},
+        },
+        "com.amazonaws.s3#Child": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+      }),
     );
-    expect(output).toContain("Key: z.unknown().optional(),");
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
+
+    expect(output).toContain("Child: z.lazy(() => childSchema).optional()");
   });
 
   it("generates structure shapes before list shapes", () => {

@@ -36,17 +36,13 @@ export function generateServiceShapes(
 
       if (!operationMethod) {
         const methodName = buildFallbackMethodName(operationTarget);
-        return code`// TODO: operation target ${operationTarget} is not generated.
-${methodName}(input: unknown): unknown;`;
+        return code`${methodName}(input: unknown): unknown;`;
       }
 
       const tsDocPrefix = operationMethod.tsDoc
         ? `${operationMethod.tsDoc}\n`
         : "";
-      const commentPrefix = operationMethod.unresolvedComment
-        ? `${operationMethod.unresolvedComment}\n`
-        : "";
-      return code`${tsDocPrefix}${commentPrefix}${operationMethod.methodName}(input: ${operationMethod.inputTypeExpr}): ${operationMethod.outputTypeExpr};`;
+      return code`${tsDocPrefix}${operationMethod.methodName}(input: ${operationMethod.inputTypeExpr}): ${operationMethod.outputTypeExpr};`;
     });
 
     const interfaceCode =

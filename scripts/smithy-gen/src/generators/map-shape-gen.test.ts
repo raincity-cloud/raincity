@@ -24,7 +24,7 @@ describe("CodeGenContext map shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
-      "export const tagMapSchema = z.record(tagKeySchema, tagValueSchema);",
+      "export const tagMapSchema = z.record(z.lazy(() => tagKeySchema), z.lazy(() => tagValueSchema));",
     );
   });
 
@@ -47,7 +47,7 @@ describe("CodeGenContext map shape generation", () => {
     );
   });
 
-  it("falls back to z.unknown with a TODO when value target is unresolved", () => {
+  it("falls back to z.unknown when value target is unresolved", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#UnknownValueMap": {
@@ -60,16 +60,12 @@ describe("CodeGenContext map shape generation", () => {
 
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
-
-    expect(output).toContain(
-      "// TODO: map value target com.amazonaws.s3#MissingValue is not generated yet.",
-    );
     expect(output).toContain(
       "export const unknownValueMapSchema = z.record(z.string(), z.unknown());",
     );
   });
 
-  it("throws when key target is unresolved", () => {
+  it("falls back to z.string() when key target is unresolved", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#InvalidKeyMap": {
@@ -80,8 +76,11 @@ describe("CodeGenContext map shape generation", () => {
       }),
     );
 
-    expect(() => ctx.generate()).toThrow(
-      "Map InvalidKeyMap key target com.amazonaws.s3#MissingKey is not generated yet.",
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
+
+    expect(output).toContain(
+      "export const invalidKeyMapSchema = z.record(z.string(), z.string());",
     );
   });
 
@@ -121,10 +120,12 @@ describe("CodeGenContext map shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(
-      output.indexOf("export const tagKeysSchema = z.array(tagKeySchema);"),
+      output.indexOf(
+        "export const tagKeysSchema = z.array(z.lazy(() => tagKeySchema));",
+      ),
     ).toBeLessThan(
       output.indexOf(
-        "export const tagMapSchema = z.record(tagKeySchema, tagKeySchema);",
+        "export const tagMapSchema = z.record(z.lazy(() => tagKeySchema), z.lazy(() => tagKeySchema));",
       ),
     );
   });

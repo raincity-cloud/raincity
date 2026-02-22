@@ -93,7 +93,7 @@ describe("CodeGenContext operation shape generation", () => {
     );
   });
 
-  it("tracks unresolved input/output targets in operation method metadata", () => {
+  it("uses unknown types for unresolved input/output targets", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#GetObject": {
@@ -108,12 +108,8 @@ describe("CodeGenContext operation shape generation", () => {
     ctx.generate();
     const method = ctx.getOperationMethod("com.amazonaws.s3#GetObject");
 
-    expect(method?.unresolvedComment).toContain(
-      "com.amazonaws.s3#MissingInput",
-    );
-    expect(method?.unresolvedComment).toContain(
-      "com.amazonaws.s3#MissingOutput",
-    );
+    expect(method?.inputTypeExpr).toBe("unknown");
+    expect(method?.outputTypeExpr).toBe("unknown");
     expect(method?.tsDoc).toContain(
       "* @throws {unknown} This operation may throw an unknown error type (com.amazonaws.s3#MissingError).",
     );

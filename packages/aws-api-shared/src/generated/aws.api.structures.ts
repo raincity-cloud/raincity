@@ -42,8 +42,6 @@ export const taggableApiConfigSchema = z.object({
  * Specifies an ARN template for the resource.
  * ```
  */
-// TODO: smithy.api#externalDocumentation ({"Reference":"https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html"}) on structure arn is not mapped to zod.
-// TODO: smithy.api#trait ({"selector":"resource"}) on structure arn is not mapped to zod.
 export const arnSchema = z.object({
   /**
    * ```xml
@@ -59,8 +57,7 @@ export const arnSchema = z.object({
    * `foo/{MyResourceId}`). Relative ARNs MUST NOT start with "/".
    * ```
    */
-  // TODO: structure member target smithy.api#String for arn.template is not generated yet.
-  template: z.unknown(),
+  template: z.string(),
   /**
    * ```xml
    * Set to true to indicate that the ARN template contains a fully-formed
@@ -69,8 +66,7 @@ export const arnSchema = z.object({
    * the ARN identifier of a parent resource.
    * ```
    */
-  // TODO: structure member target smithy.api#Boolean for arn.absolute is not generated yet.
-  absolute: z.unknown().optional(),
+  absolute: z.boolean().optional(),
   /**
    * ```xml
    * Set to true to specify that the ARN does not contain a region. If not
@@ -79,8 +75,7 @@ export const arnSchema = z.object({
    * or is false.
    * ```
    */
-  // TODO: structure member target smithy.api#Boolean for arn.noRegion is not generated yet.
-  noRegion: z.unknown().optional(),
+  noRegion: z.boolean().optional(),
   /**
    * ```xml
    * Set to true to specify that the ARN does not contain an account ID. If
@@ -89,8 +84,7 @@ export const arnSchema = z.object({
    * is not set or is false.
    * ```
    */
-  // TODO: structure member target smithy.api#Boolean for arn.noAccount is not generated yet.
-  noAccount: z.unknown().optional(),
+  noAccount: z.boolean().optional(),
   /**
    * ```xml
    * Defines which character is used to delimit sections of the resource
@@ -104,8 +98,7 @@ export const arnSchema = z.object({
    * instances of a resource.
    * ```
    */
-  // TODO: structure member target smithy.api#Boolean for arn.reusable is not generated yet.
-  reusable: z.unknown().optional(),
+  reusable: z.boolean().optional(),
 });
 
 /**
@@ -113,15 +106,13 @@ export const arnSchema = z.object({
  * Marks a string as containing an ARN.
  * ```
  */
-// TODO: smithy.api#trait ({"selector":"string"}) on structure arnReference is not mapped to zod.
 export const arnReferenceSchema = z.object({
   /**
    * ```xml
    * The AWS CloudFormation resource type contained in the ARN.
    * ```
    */
-  // TODO: structure member target smithy.api#String for arnReference.type is not generated yet.
-  type: z.unknown().optional(),
+  type: z.string().optional(),
   /**
    * ```xml
    * An absolute shape ID that references the Smithy resource type contained
@@ -133,8 +124,7 @@ export const arnReferenceSchema = z.object({
    * shape.
    * ```
    */
-  // TODO: structure member target smithy.api#String for arnReference.resource is not generated yet.
-  resource: z.unknown().optional(),
+  resource: z.string().optional(),
   /**
    * ```xml
    * The Smithy service absolute shape ID that is referenced by the ARN. The
@@ -143,8 +133,7 @@ export const arnReferenceSchema = z.object({
    * additional dependency.
    * ```
    */
-  // TODO: structure member target smithy.api#String for arnReference.service is not generated yet.
-  service: z.unknown().optional(),
+  service: z.string().optional(),
 });
 
 /**
@@ -153,7 +142,6 @@ export const arnReferenceSchema = z.object({
  * discovery logic.
  * ```
  */
-// TODO: smithy.api#trait ({"selector":"operation"}) on structure clientDiscoveredEndpoint is not mapped to zod.
 export const clientDiscoveredEndpointSchema = z.object({
   /**
    * ```xml
@@ -164,8 +152,7 @@ export const clientDiscoveredEndpointSchema = z.object({
    * discover a more specific endpoint.
    * ```
    */
-  // TODO: structure member target smithy.api#Boolean for clientDiscoveredEndpoint.required is not generated yet.
-  required: z.unknown(),
+  required: z.boolean(),
 });
 
 /**
@@ -173,7 +160,6 @@ export const clientDiscoveredEndpointSchema = z.object({
  * Configures endpoint discovery for the service.
  * ```
  */
-// TODO: smithy.api#trait ({"selector":"service"}) on structure clientEndpointDiscovery is not mapped to zod.
 export const clientEndpointDiscoverySchema = z.object({
   /**
    * ```xml
@@ -181,9 +167,7 @@ export const clientEndpointDiscoverySchema = z.object({
    * for the service.
    * ```
    */
-  // TODO: smithy.api#idRef ({"failWhenMissing":true,"selector":"operation"}) on structure member clientEndpointDiscovery.operation is not mapped to zod.
-  // TODO: structure member target smithy.api#String for clientEndpointDiscovery.operation is not generated yet.
-  operation: z.unknown(),
+  operation: z.string(),
   /**
    * ```xml
    * Indicates the error that tells clients that the endpoint they are using
@@ -192,9 +176,7 @@ export const clientEndpointDiscoverySchema = z.object({
    * trait.
    * ```
    */
-  // TODO: smithy.api#idRef ({"failWhenMissing":true,"selector":"structure[trait|error]"}) on structure member clientEndpointDiscovery.error is not mapped to zod.
-  // TODO: structure member target smithy.api#String for clientEndpointDiscovery.error is not generated yet.
-  error: z.unknown().optional(),
+  error: z.string().optional(),
 });
 
 /**
@@ -203,7 +185,6 @@ export const clientEndpointDiscoverySchema = z.object({
  * endpoints.
  * ```
  */
-// TODO: smithy.api#trait ({"selector":"operation[trait|aws.api#clientDiscoveredEndpoint] -[input]->\nstructure > :test(member[trait|required] > string)"}) on structure clientEndpointDiscoveryId is not mapped to zod.
 export const clientEndpointDiscoveryIdSchema = z.object({});
 
 /**
@@ -211,7 +192,6 @@ export const clientEndpointDiscoveryIdSchema = z.object({});
  * Defines a service, resource, or operation as operating on the control plane.
  * ```
  */
-// TODO: smithy.api#trait ({"selector":":test(service, resource, operation)","conflicts":["aws.api#dataPlane"]}) on structure controlPlane is not mapped to zod.
 export const controlPlaneSchema = z.object({});
 
 /**
@@ -219,7 +199,6 @@ export const controlPlaneSchema = z.object({});
  * Defines a service, resource, or operation as operating on the data plane.
  * ```
  */
-// TODO: smithy.api#trait ({"selector":":test(service, resource, operation)","conflicts":["aws.api#controlPlane"]}) on structure dataPlane is not mapped to zod.
 export const dataPlaneSchema = z.object({});
 
 /**
@@ -229,7 +208,6 @@ export const dataPlaneSchema = z.object({});
  * SDK client classes and the namespace used in ARNs.
  * ```
  */
-// TODO: smithy.api#trait ({"selector":"service"}) on structure service is not mapped to zod.
 export const serviceSchema = z.object({
   /**
    * ```xml
@@ -238,8 +216,7 @@ export const serviceSchema = z.object({
    * client names in SDKs and for linking between services.
    * ```
    */
-  // TODO: structure member target smithy.api#String for service.sdkId is not generated yet.
-  sdkId: z.unknown(),
+  sdkId: z.string(),
   /**
    * ```xml
    * The `arnNamespace` property is a string value that defines the ARN service
@@ -267,8 +244,7 @@ export const serviceSchema = z.object({
    * to the `arnNamespace` plus `.amazonaws.com`.
    * ```
    */
-  // TODO: structure member target smithy.api#String for service.cloudTrailEventSource is not generated yet.
-  cloudTrailEventSource: z.unknown().optional(),
+  cloudTrailEventSource: z.string().optional(),
   /**
    * ```xml
    * The `docId` property is a string value that defines the identifier
@@ -277,8 +253,7 @@ export const serviceSchema = z.object({
    * lower case plus the service `version` property, separated by dashes.
    * ```
    */
-  // TODO: structure member target smithy.api#String for service.docId is not generated yet.
-  docId: z.unknown().optional(),
+  docId: z.string().optional(),
   /**
    * ```xml
    * The `endpointPrefix` property is a string value that identifies which
@@ -295,8 +270,7 @@ export const serviceSchema = z.object({
    * resolve endpoints.
    * ```
    */
-  // TODO: structure member target smithy.api#String for service.endpointPrefix is not generated yet.
-  endpointPrefix: z.unknown().optional(),
+  endpointPrefix: z.string().optional(),
   /**
    * ```xml
    * The `cloudWatchNamespace` property is a string value that defines the
@@ -312,7 +286,6 @@ export const serviceSchema = z.object({
  * APIs to perform CRUD operations on those tags
  * ```
  */
-// TODO: smithy.api#trait ({"selector":"service"}) on structure tagEnabled is not mapped to zod.
 export const tagEnabledSchema = z.object({
   /**
    * ```xml
@@ -321,8 +294,7 @@ export const tagEnabledSchema = z.object({
    * resources on the service. Default value is `false`
    * ```
    */
-  // TODO: structure member target smithy.api#Boolean for tagEnabled.disableDefaultOperations is not generated yet.
-  disableDefaultOperations: z.unknown().optional(),
+  disableDefaultOperations: z.boolean().optional(),
 });
 
 /**
@@ -332,7 +304,6 @@ export const tagEnabledSchema = z.object({
  * service.
  * ```
  */
-// TODO: smithy.api#trait ({"selector":"resource"}) on structure taggable is not mapped to zod.
 export const taggableSchema = z.object({
   /**
    * ```xml
@@ -340,21 +311,19 @@ export const taggableSchema = z.object({
    * resource property represents tags for the resource.
    * ```
    */
-  // TODO: structure member target smithy.api#String for taggable.property is not generated yet.
-  property: z.unknown().optional(),
+  property: z.string().optional(),
   /**
    * ```xml
    * Specifies configuration for resource specific tagging APIs if the
    * resource has them.
    * ```
    */
-  apiConfig: taggableApiConfigSchema.optional(),
+  apiConfig: z.lazy(() => taggableApiConfigSchema).optional(),
   /**
    * ```xml
    * Flag indicating if the resource is not able to carry AWS system level.
    * Used by service principals. Default value is `false`
    * ```
    */
-  // TODO: structure member target smithy.api#Boolean for taggable.disableSystemTags is not generated yet.
-  disableSystemTags: z.unknown().optional(),
+  disableSystemTags: z.boolean().optional(),
 });

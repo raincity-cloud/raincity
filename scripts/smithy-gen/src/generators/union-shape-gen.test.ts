@@ -27,7 +27,7 @@ describe("CodeGenContext union shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
 
     expect(output).toContain(
-      "export const tagUnionSchema = z.union([tagKeySchema, tagValueSchema]);",
+      "export const tagUnionSchema = z.union([z.lazy(() => tagKeySchema), z.lazy(() => tagValueSchema)]);",
     );
   });
 
@@ -53,7 +53,7 @@ describe("CodeGenContext union shape generation", () => {
     );
   });
 
-  it("falls back to z.unknown with TODO when member target is unresolved", () => {
+  it("falls back to z.unknown when member target is unresolved", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#UnknownMemberUnion": {
@@ -69,10 +69,6 @@ describe("CodeGenContext union shape generation", () => {
 
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
-
-    expect(output).toContain(
-      "// TODO: union member target com.amazonaws.s3#MissingShape for UnknownMemberUnion.Missing is not generated yet.",
-    );
     expect(output).toContain(
       "export const unknownMemberUnionSchema = z.union([z.unknown(), z.string()]);",
     );
@@ -126,16 +122,16 @@ describe("CodeGenContext union shape generation", () => {
 
     expect(
       output.indexOf(
-        "export const tagMapSchema = z.record(tagKeySchema, tagKeySchema);",
+        "export const tagMapSchema = z.record(z.lazy(() => tagKeySchema), z.lazy(() => tagKeySchema));",
       ),
     ).toBeLessThan(
       output.indexOf(
-        "export const tagUnionSchema = z.union([tagMapSchema, tagKeySchema]);",
+        "export const tagUnionSchema = z.union([z.lazy(() => tagMapSchema), z.lazy(() => tagKeySchema)]);",
       ),
     );
   });
 
-  it("adds TODO comments for each unresolved member target", () => {
+  it("uses z.unknown() for each unresolved member target", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#UnknownMembersUnion": {
@@ -151,15 +147,36 @@ describe("CodeGenContext union shape generation", () => {
 
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
-
-    expect(output).toContain(
-      "// TODO: union member target com.amazonaws.s3#MissingA for UnknownMembersUnion.MissingA is not generated yet.",
-    );
-    expect(output).toContain(
-      "// TODO: union member target com.amazonaws.s3#MissingB for UnknownMembersUnion.MissingB is not generated yet.",
-    );
     expect(output).toContain(
       "export const unknownMembersUnionSchema = z.union([z.unknown(), z.unknown()]);",
+    );
+  });
+
+  it("resolves forward references between union shapes", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#OuterUnion": {
+          type: "union",
+          traits: {},
+          members: {
+            Inner: { target: "com.amazonaws.s3#InnerUnion", traits: {} },
+          },
+        },
+        "com.amazonaws.s3#InnerUnion": {
+          type: "union",
+          traits: {},
+          members: {
+            Name: { target: "smithy.api#String", traits: {} },
+          },
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
+
+    expect(output).toContain(
+      "export const outerUnionSchema = z.union([z.lazy(() => innerUnionSchema)]);",
     );
   });
 });

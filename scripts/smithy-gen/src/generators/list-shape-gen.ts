@@ -61,27 +61,12 @@ export function generateListShapes(
     const memberDocumentation = buildSchemaDocumentationComment(
       shape.member.traits?.["smithy.api#documentation"],
     );
-    const memberXmlName = shape.member.traits?.["smithy.api#xmlName"];
     const listConstraints = buildConstraintChain(shape.traits);
-
-    let memberSchemaExpr:
-      | string
-      | ReturnType<typeof imp>
-      | ReturnType<typeof code> = code`${zImp}.unknown()`;
-    let unresolvedTargetComment: string | undefined;
-    if (ctx.hasRegisteredShape(memberTarget)) {
-      const { name: memberTargetName } = ctx.parseShapeKey(memberTarget);
-      const memberTargetSchemaName = `${camelCase(memberTargetName)}Schema`;
-      const memberTargetFileKey = ctx.getOutputFile(memberTarget);
-      memberSchemaExpr =
-        memberTargetFileKey === fileKey
-          ? memberTargetSchemaName
-          : imp(
-              `${memberTargetSchemaName}@${ctx.getImportPath(memberTargetFileKey)}`,
-            );
-    } else {
-      unresolvedTargetComment = `// TODO: list member target ${memberTarget} is not generated yet.`;
-    }
+    const { expr: memberSchemaExpr } = ctx.resolveSchemaReference(
+      memberTarget,
+      fileKey,
+      { currentShapeKey: key, lazyForSameFile: true },
+    );
 
     const shapeDocumentation = buildSchemaDocumentationComment(
       shape.traits?.["smithy.api#documentation"],
@@ -90,14 +75,6 @@ export function generateListShapes(
     if (memberDocumentation) {
       memberCommentLines.push(memberDocumentation);
     }
-    if (memberXmlName) {
-      memberCommentLines.push(
-        `// TODO: smithy.api#xmlName (${JSON.stringify(memberXmlName)}) on list member is not mapped to zod.`,
-      );
-    }
-    if (unresolvedTargetComment) {
-      memberCommentLines.push(unresolvedTargetComment);
-    }
     const memberComments =
       memberCommentLines.length > 0 ? `${memberCommentLines.join("\n")}\n` : "";
     const shapeDocPrefix = shapeDocumentation ? `${shapeDocumentation}\n` : "";
@@ -105,6 +82,5 @@ export function generateListShapes(
     const schemaCode = code`${memberComments}${shapeDocPrefix}export const ${def(schemaName)} = ${zImp}.array(${memberSchemaExpr})${listConstraints};`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

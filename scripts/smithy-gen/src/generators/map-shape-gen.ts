@@ -12,50 +12,8 @@ interface MapShapeEntry {
 
 type SchemaExpr = string | ReturnType<typeof imp> | ReturnType<typeof code>;
 
-interface BuiltinTargetResolution {
-  expr: SchemaExpr;
-  stringCompatible: boolean;
-}
-
-function resolveBuiltinTarget(
-  target: string,
-): BuiltinTargetResolution | undefined {
-  switch (target) {
-    case "smithy.api#String":
-      return { expr: code`${zImp}.string()`, stringCompatible: true };
-    case "smithy.api#Boolean":
-      return { expr: code`${zImp}.boolean()`, stringCompatible: false };
-    case "smithy.api#Integer":
-      return { expr: code`${zImp}.number()`, stringCompatible: false };
-    case "smithy.api#Long":
-      return { expr: code`${zImp}.bigint()`, stringCompatible: false };
-    case "smithy.api#Blob":
-      return {
-        expr: code`${zImp}.instanceof(Uint8Array)`,
-        stringCompatible: false,
-      };
-    case "smithy.api#Timestamp":
-      return { expr: code`${zImp}.string()`, stringCompatible: false };
-    case "smithy.api#Document":
-      return { expr: code`${zImp}.unknown()`, stringCompatible: false };
-    case "smithy.api#Unit":
-      return { expr: code`${zImp}.unknown()`, stringCompatible: false };
-    default:
-      return undefined;
-  }
-}
-
-function resolveRegisteredShapeExpr(
-  ctx: CodeGenContext,
-  shapeTarget: string,
-  fileKey: string,
-): SchemaExpr {
-  const { name: targetName } = ctx.parseShapeKey(shapeTarget);
-  const targetSchemaName = `${camelCase(targetName)}Schema`;
-  const targetFileKey = ctx.getOutputFile(shapeTarget);
-  return targetFileKey === fileKey
-    ? targetSchemaName
-    : imp(`${targetSchemaName}@${ctx.getImportPath(targetFileKey)}`);
+function isStringCompatibleBuiltinTarget(target: string): boolean {
+  return target === "smithy.api#String";
 }
 
 function resolveMapKeySchemaExpr(
@@ -63,50 +21,44 @@ function resolveMapKeySchemaExpr(
   shapeName: string,
   keyTarget: string,
   fileKey: string,
+  currentShapeKey: string,
 ): SchemaExpr {
-  if (ctx.hasRegisteredShape(keyTarget)) {
-    const keyTargetType = ctx.getShapeType(keyTarget);
-    if (keyTargetType !== "string" && keyTargetType !== "enum") {
-      throw new Error(
-        `Map ${shapeName} key target ${keyTarget} is not string-compatible.`,
-      );
-    }
-    return resolveRegisteredShapeExpr(ctx, keyTarget, fileKey);
+  const resolution = ctx.resolveSchemaReference(keyTarget, fileKey, {
+    currentShapeKey,
+    lazyForSameFile: true,
+  });
+  if (!resolution.resolved) {
+    return code`${zImp}.string()`;
   }
 
-  const builtin = resolveBuiltinTarget(keyTarget);
-  if (!builtin) {
-    throw new Error(
-      `Map ${shapeName} key target ${keyTarget} is not generated yet.`,
-    );
-  }
-  if (!builtin.stringCompatible) {
+  if (resolution.shapeType !== undefined) {
+    if (resolution.shapeType === "string" || resolution.shapeType === "enum") {
+      return resolution.expr;
+    }
     throw new Error(
       `Map ${shapeName} key target ${keyTarget} is not string-compatible.`,
     );
   }
 
-  return builtin.expr;
+  if (!isStringCompatibleBuiltinTarget(keyTarget)) {
+    throw new Error(
+      `Map ${shapeName} key target ${keyTarget} is not string-compatible.`,
+    );
+  }
+
+  return resolution.expr;
 }
 
 function resolveMapValueSchemaExpr(
   ctx: CodeGenContext,
   valueTarget: string,
   fileKey: string,
-): { expr: SchemaExpr; unresolvedComment?: string } {
-  if (ctx.hasRegisteredShape(valueTarget)) {
-    return { expr: resolveRegisteredShapeExpr(ctx, valueTarget, fileKey) };
-  }
-
-  const builtin = resolveBuiltinTarget(valueTarget);
-  if (builtin) {
-    return { expr: builtin.expr };
-  }
-
-  return {
-    expr: code`${zImp}.unknown()`,
-    unresolvedComment: `// TODO: map value target ${valueTarget} is not generated yet.`,
-  };
+  currentShapeKey: string,
+): SchemaExpr {
+  return ctx.resolveSchemaReference(valueTarget, fileKey, {
+    currentShapeKey,
+    lazyForSameFile: true,
+  }).expr as SchemaExpr;
 }
 
 export function generateMapShapes(
@@ -123,14 +75,17 @@ export function generateMapShapes(
       name,
       shape.key.target,
       fileKey,
+      key,
     );
-    const { expr: valueSchemaExpr, unresolvedComment } =
-      resolveMapValueSchemaExpr(ctx, shape.value.target, fileKey);
+    const valueSchemaExpr = resolveMapValueSchemaExpr(
+      ctx,
+      shape.value.target,
+      fileKey,
+      key,
+    );
 
-    const commentPrefix = unresolvedComment ? `${unresolvedComment}\n` : "";
-    const schemaCode = code`${commentPrefix}export const ${def(schemaName)} = ${zImp}.record(${keySchemaExpr}, ${valueSchemaExpr});`;
+    const schemaCode = code`export const ${def(schemaName)} = ${zImp}.record(${keySchemaExpr}, ${valueSchemaExpr});`;
 
     ctx.addCode(fileKey, schemaCode);
-    ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
   }
 }

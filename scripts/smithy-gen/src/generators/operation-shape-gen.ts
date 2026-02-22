@@ -20,7 +20,6 @@ type ShapeRef = string | ReturnType<typeof imp> | ReturnType<typeof code>;
 interface TypeResolution {
   typeExpr: ShapeRef;
   typeName: string;
-  unresolvedTarget?: string;
 }
 
 interface ThrowsEntry {
@@ -37,17 +36,11 @@ function resolveTypeReference(
     return {
       typeExpr: "unknown",
       typeName: "unknown",
-      unresolvedTarget: target,
     };
   }
 
   const { name: targetName } = ctx.parseShapeKey(target);
-  const targetSchemaName = `${camelCase(targetName)}Schema`;
-  const targetFileKey = ctx.getOutputFile(target);
-  const schemaRef =
-    targetFileKey === fileKey
-      ? targetSchemaName
-      : imp(`${targetSchemaName}@${ctx.getImportPath(targetFileKey)}`);
+  const schemaRef = ctx.resolveSchemaReference(target, fileKey).expr;
 
   return {
     typeExpr: code`${zImp}.infer<typeof ${schemaRef}>`,
@@ -92,7 +85,7 @@ function buildThrowsEntries(
 
   return shape.errors.map(({ target }) => {
     const resolved = resolveTypeReference(ctx, target, "");
-    if (resolved.unresolvedTarget) {
+    if (resolved.typeName === "unknown") {
       return {
         typeName: "unknown",
         description: `This operation may throw an unknown error type (${target}).`,
@@ -153,22 +146,12 @@ export function generateOperationShapes(
     const throwsEntries = buildThrowsEntries(ctx, shape);
     const documentation = shape.traits?.["smithy.api#documentation"];
     const tsDoc = buildOperationTsDoc(documentation, throwsEntries);
-    const unresolvedTargets = [
-      inputType.unresolvedTarget,
-      outputType.unresolvedTarget,
-    ].filter((target): target is string => target !== undefined);
-
-    const unresolvedComment =
-      unresolvedTargets.length > 0
-        ? `// TODO: operation ${name} references unresolved target(s): ${unresolvedTargets.join(", ")}.`
-        : undefined;
 
     const signature: OperationMethodSignature = {
       methodName: operationName,
       inputTypeExpr: inputType.typeExpr,
       outputTypeExpr: outputType.typeExpr,
       ...(tsDoc ? { tsDoc } : {}),
-      ...(unresolvedComment ? { unresolvedComment } : {}),
     };
     ctx.registerOperationMethod(key, signature);
   }

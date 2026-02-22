@@ -8,5 +8,4 @@ import { z } from "zod/v4";
  * AWS S3.
  * ```
  */
-// TODO: smithy.api#trait ({"selector":"operation"}) on structure s3UnwrappedXmlOutput is not mapped to zod.
 export const s3UnwrappedXmlOutputSchema = z.object({});

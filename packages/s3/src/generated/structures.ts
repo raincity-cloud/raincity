@@ -77,18 +77,25 @@ import {
   accessPointAliasSchema,
   accessPointArnSchema,
   accountIdSchema,
+  allowedHeadersSchema,
+  allowedMethodsSchema,
+  allowedOriginsSchema,
   allowQuotedRecordDelimiterSchema,
+  analyticsConfigurationListSchema,
+  analyticsFilterSchema,
   analyticsIdSchema,
   bodySchema,
   bucketKeyEnabledSchema,
   bucketLocationNameSchema,
   bucketNameSchema,
   bucketRegionSchema,
+  bucketsSchema,
   bypassGovernanceRetentionSchema,
   bytesProcessedSchema,
   bytesReturnedSchema,
   bytesScannedSchema,
   cacheControlSchema,
+  checksumAlgorithmListSchema,
   checksumCrc32CSchema,
   checksumCrc32Schema,
   checksumCrc64NvmeSchema,
@@ -97,6 +104,8 @@ import {
   clientTokenSchema,
   codeSchema,
   commentsSchema,
+  commonPrefixListSchema,
+  completedPartListSchema,
   confirmRemoveSelfBucketAccessSchema,
   contentDispositionSchema,
   contentEncodingSchema,
@@ -115,11 +124,14 @@ import {
   copySourceSseCustomerKeyMd5Schema,
   copySourceSseCustomerKeySchema,
   copySourceVersionIdSchema,
+  corsRulesSchema,
   creationDateSchema,
   dateSchema,
   daysAfterInitiationSchema,
   daysSchema,
+  deletedObjectsSchema,
   deleteMarkerSchema,
+  deleteMarkersSchema,
   deleteMarkerVersionIdSchema,
   delimiterSchema,
   descriptionSchema,
@@ -127,21 +139,27 @@ import {
   displayNameSchema,
   emailAddressSchema,
   enableRequestProgressSchema,
+  encryptionTypeListSchema,
   endSchema,
   errorCodeSchema,
   errorMessageSchema,
+  errorsSchema,
   eTagSchema,
+  eventListSchema,
   expirationSchema,
   expiredObjectDeleteMarkerSchema,
   expiresSchema,
+  exposeHeadersSchema,
   expressionSchema,
   fetchOwnerSchema,
   fieldDelimiterSchema,
+  filterRuleListSchema,
   filterRuleValueSchema,
   getObjectResponseStatusCodeSchema,
   grantFullControlSchema,
   grantReadAcpSchema,
   grantReadSchema,
+  grantsSchema,
   grantWriteAcpSchema,
   grantWriteSchema,
   hostNameSchema,
@@ -156,9 +174,12 @@ import {
   ifNoneMatchSchema,
   ifUnmodifiedSinceSchema,
   initiatedSchema,
+  intelligentTieringConfigurationListSchema,
   intelligentTieringDaysSchema,
   intelligentTieringIdSchema,
+  inventoryConfigurationListSchema,
   inventoryIdSchema,
+  inventoryOptionalFieldsSchema,
   isEnabledSchema,
   isLatestSchema,
   isPublicSchema,
@@ -170,8 +191,10 @@ import {
   kmsContextSchema,
   kmsKeyArnSchema,
   lambdaFunctionArnSchema,
+  lambdaFunctionConfigurationListSchema,
   lastModifiedSchema,
   lastModifiedTimeSchema,
+  lifecycleRulesSchema,
   locationNameAsStringSchema,
   locationPrefixSchema,
   locationSchema,
@@ -184,23 +207,32 @@ import {
   maxUploadsSchema,
   messageSchema,
   metadataKeySchema,
+  metadataSchema,
   metadataTableStatusSchema,
   metadataValueSchema,
+  metricsConfigurationListSchema,
+  metricsFilterSchema,
   metricsIdSchema,
   mfaSchema,
   minutesSchema,
   missingMetaSchema,
   mpuObjectSizeSchema,
   multipartUploadIdSchema,
+  multipartUploadListSchema,
   nextKeyMarkerSchema,
   nextMarkerSchema,
   nextPartNumberMarkerSchema,
   nextTokenSchema,
   nextUploadIdMarkerSchema,
   nextVersionIdMarkerSchema,
+  noncurrentVersionTransitionListSchema,
   nonEmptyKmsKeyArnStringSchema,
   notificationIdSchema,
+  objectAttributesListSchema,
+  objectEncryptionSchema,
+  objectIdentifierListSchema,
   objectKeySchema,
+  objectListSchema,
   objectLockEnabledForBucketSchema,
   objectLockRetainUntilDateSchema,
   objectLockTokenSchema,
@@ -208,13 +240,19 @@ import {
   objectSizeLessThanBytesSchema,
   objectSizeSchema,
   objectVersionIdSchema,
+  objectVersionListSchema,
+  optionalObjectAttributesListSchema,
+  ownershipControlsRulesSchema,
   partNumberMarkerSchema,
   partNumberSchema,
   partsCountSchema,
+  partsListSchema,
+  partsSchema,
   policySchema,
   prefixSchema,
   prioritySchema,
   queueArnSchema,
+  queueConfigurationListSchema,
   quietSchema,
   quoteCharacterSchema,
   quoteEscapeCharacterSchema,
@@ -230,6 +268,7 @@ import {
   replaceKeyPrefixWithSchema,
   replaceKeyWithSchema,
   replicaKmsKeyIdSchema,
+  replicationRulesSchema,
   requestRouteSchema,
   requestTokenSchema,
   responseCacheControlSchema,
@@ -242,11 +281,14 @@ import {
   restoreOutputPathSchema,
   restoreSchema,
   roleSchema,
+  routingRulesSchema,
   s3RegionalOrS3ExpressBucketArnStringSchema,
   s3TablesArnSchema,
   s3TablesBucketArnSchema,
   s3TablesNameSchema,
   s3TablesNamespaceSchema,
+  selectObjectContentEventStreamSchema,
+  serverSideEncryptionRulesSchema,
   sessionCredentialValueSchema,
   sessionExpirationSchema,
   settingSchema,
@@ -263,12 +305,18 @@ import {
   suffixSchema,
   tagCountSchema,
   taggingHeaderSchema,
+  tagSetSchema,
   targetBucketSchema,
+  targetGrantsSchema,
   targetPrefixSchema,
+  tieringListSchema,
   tokenSchema,
   topicArnSchema,
+  topicConfigurationListSchema,
+  transitionListSchema,
   uploadIdMarkerSchema,
   uriSchema,
+  userMetadataSchema,
   valueSchema,
   versionCountSchema,
   versionIdMarkerSchema,
@@ -308,13 +356,8 @@ export const abortIncompleteMultipartUploadSchema = z.object({
   DaysAfterInitiation: daysAfterInitiationSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure AbortMultipartUploadOutput is not mapped to zod.
-export const abortMultipartUploadOutputSchema = z.object({
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member AbortMultipartUploadOutput.RequestCharged is not mapped to zod.
-  RequestCharged: requestChargedSchema.optional(),
-});
+export const abortMultipartUploadOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
 
-// TODO: smithy.api#input ({}) on structure AbortMultipartUploadRequest is not mapped to zod.
 export const abortMultipartUploadRequestSchema = z.object({
   /**
    * ```xml
@@ -337,32 +380,25 @@ export const abortMultipartUploadRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member AbortMultipartUploadRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member AbortMultipartUploadRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Key of the object for which the multipart upload was initiated.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member AbortMultipartUploadRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member AbortMultipartUploadRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>Upload ID that identifies the multipart upload.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("uploadId") on structure member AbortMultipartUploadRequest.UploadId is not mapped to zod.
   UploadId: multipartUploadIdSchema,
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member AbortMultipartUploadRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member AbortMultipartUploadRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -376,7 +412,6 @@ export const abortMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-if-match-initiated-time") on structure member AbortMultipartUploadRequest.IfMatchInitiatedTime is not mapped to zod.
   IfMatchInitiatedTime: ifMatchInitiatedTimeSchema.optional(),
 });
 
@@ -406,16 +441,13 @@ export const accessControlPolicySchema = z.object({
    * <p>A list of grants.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("AccessControlList") on structure member AccessControlPolicy.Grants is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Grants for AccessControlPolicy.Grants is not generated yet.
-  Grants: z.unknown().optional(),
+  Grants: grantsSchema.optional(),
   /**
    * ```xml
    * <p>Container for the bucket owner's display name and ID.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Owner for AccessControlPolicy.Owner is not generated yet.
-  Owner: z.unknown().optional(),
+  Owner: z.lazy(() => ownerSchema).optional(),
 });
 
 /**
@@ -440,8 +472,6 @@ export const accessControlTranslationSchema = z.object({
  *       operation.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure AccessDenied is not mapped to zod.
-// TODO: smithy.api#httpError (403) on structure AccessDenied is not mapped to zod.
 export const accessDeniedSchema = z.object({});
 
 /**
@@ -464,10 +494,7 @@ export const analyticsAndOperatorSchema = z.object({
    * <p>The list of tags to use when evaluating an AND predicate.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member AnalyticsAndOperator.Tags is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Tag") on structure member AnalyticsAndOperator.Tags is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#TagSet for AnalyticsAndOperator.Tags is not generated yet.
-  Tags: z.unknown().optional(),
+  Tags: tagSetSchema.optional(),
 });
 
 /**
@@ -489,16 +516,14 @@ export const analyticsConfigurationSchema = z.object({
    *       considered in any analysis.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#AnalyticsFilter for AnalyticsConfiguration.Filter is not generated yet.
-  Filter: z.unknown().optional(),
+  Filter: analyticsFilterSchema.optional(),
   /**
    * ```xml
    * <p> Contains data related to access patterns to be collected and made available to analyze the
    *       tradeoffs between different storage classes. </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#StorageClassAnalysis for AnalyticsConfiguration.StorageClassAnalysis is not generated yet.
-  StorageClassAnalysis: z.unknown(),
+  StorageClassAnalysis: z.lazy(() => storageClassAnalysisSchema),
 });
 
 /**
@@ -512,8 +537,7 @@ export const analyticsExportDestinationSchema = z.object({
    * <p>A destination signifying output to an S3 bucket.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#AnalyticsS3BucketDestination for AnalyticsExportDestination.S3BucketDestination is not generated yet.
-  S3BucketDestination: z.unknown(),
+  S3BucketDestination: z.lazy(() => analyticsS3BucketDestinationSchema),
 });
 
 /**
@@ -592,9 +616,7 @@ export const blockedEncryptionTypesSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member BlockedEncryptionTypes.EncryptionType is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#EncryptionTypeList for BlockedEncryptionTypes.EncryptionType is not generated yet.
-  EncryptionType: z.unknown().optional(),
+  EncryptionType: encryptionTypeListSchema.optional(),
 });
 
 /**
@@ -643,8 +665,6 @@ export const bucketSchema = z.object({
  *       system. Select a different name and try again.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure BucketAlreadyExists is not mapped to zod.
-// TODO: smithy.api#httpError (409) on structure BucketAlreadyExists is not mapped to zod.
 export const bucketAlreadyExistsSchema = z.object({});
 
 /**
@@ -655,8 +675,6 @@ export const bucketAlreadyExistsSchema = z.object({});
  *       access control lists (ACLs).</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure BucketAlreadyOwnedByYou is not mapped to zod.
-// TODO: smithy.api#httpError (409) on structure BucketAlreadyOwnedByYou is not mapped to zod.
 export const bucketAlreadyOwnedByYouSchema = z.object({});
 
 /**
@@ -697,10 +715,7 @@ export const bucketLifecycleConfigurationSchema = z.object({
    * <p>A lifecycle rule for individual objects in an Amazon S3 bucket.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member BucketLifecycleConfiguration.Rules is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Rule") on structure member BucketLifecycleConfiguration.Rules is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#LifecycleRules for BucketLifecycleConfiguration.Rules is not generated yet.
-  Rules: z.unknown(),
+  Rules: lifecycleRulesSchema,
 });
 
 /**
@@ -708,10 +723,7 @@ export const bucketLifecycleConfigurationSchema = z.object({
  * <p>Container for logging status information.</p>
  * ```
  */
-export const bucketLoggingStatusSchema = z.object({
-  // TODO: structure member target com.amazonaws.s3#LoggingEnabled for BucketLoggingStatus.LoggingEnabled is not generated yet.
-  LoggingEnabled: z.unknown().optional(),
-});
+export const bucketLoggingStatusSchema = z.object({ LoggingEnabled: z.lazy(() => loggingEnabledSchema).optional() });
 
 /**
  * ```xml
@@ -727,10 +739,7 @@ export const corsConfigurationSchema = z.object({
    *       rules to the configuration.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member CORSConfiguration.CORSRules is not mapped to zod.
-  // TODO: smithy.api#xmlName ("CORSRule") on structure member CORSConfiguration.CORSRules is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#CORSRules for CORSConfiguration.CORSRules is not generated yet.
-  CORSRules: z.unknown(),
+  CORSRules: corsRulesSchema,
 });
 
 /**
@@ -752,39 +761,27 @@ export const corsRuleSchema = z.object({
    *       any requested headers that are allowed.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member CORSRule.AllowedHeaders is not mapped to zod.
-  // TODO: smithy.api#xmlName ("AllowedHeader") on structure member CORSRule.AllowedHeaders is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#AllowedHeaders for CORSRule.AllowedHeaders is not generated yet.
-  AllowedHeaders: z.unknown().optional(),
+  AllowedHeaders: allowedHeadersSchema.optional(),
   /**
    * ```xml
    * <p>An HTTP method that you allow the origin to execute. Valid values are <code>GET</code>,
    *         <code>PUT</code>, <code>HEAD</code>, <code>POST</code>, and <code>DELETE</code>.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member CORSRule.AllowedMethods is not mapped to zod.
-  // TODO: smithy.api#xmlName ("AllowedMethod") on structure member CORSRule.AllowedMethods is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#AllowedMethods for CORSRule.AllowedMethods is not generated yet.
-  AllowedMethods: z.unknown(),
+  AllowedMethods: allowedMethodsSchema,
   /**
    * ```xml
    * <p>One or more origins you want customers to be able to access the bucket from.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member CORSRule.AllowedOrigins is not mapped to zod.
-  // TODO: smithy.api#xmlName ("AllowedOrigin") on structure member CORSRule.AllowedOrigins is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#AllowedOrigins for CORSRule.AllowedOrigins is not generated yet.
-  AllowedOrigins: z.unknown(),
+  AllowedOrigins: allowedOriginsSchema,
   /**
    * ```xml
    * <p>One or more headers in the response that you want customers to be able to access from their
    *       applications (for example, from a JavaScript <code>XMLHttpRequest</code> object).</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member CORSRule.ExposeHeaders is not mapped to zod.
-  // TODO: smithy.api#xmlName ("ExposeHeader") on structure member CORSRule.ExposeHeaders is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ExposeHeaders for CORSRule.ExposeHeaders is not generated yet.
-  ExposeHeaders: z.unknown().optional(),
+  ExposeHeaders: exposeHeadersSchema.optional(),
   /**
    * ```xml
    * <p>The time in seconds that your browser is to cache the preflight response for the specified
@@ -1008,8 +1005,6 @@ export const commonPrefixSchema = z.object({
   Prefix: prefixSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure CompleteMultipartUploadOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("CompleteMultipartUploadResult") on structure CompleteMultipartUploadOutput is not mapped to zod.
 export const completeMultipartUploadOutputSchema = z.object({
   /**
    * ```xml
@@ -1043,7 +1038,6 @@ export const completeMultipartUploadOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expiration") on structure member CompleteMultipartUploadOutput.Expiration is not mapped to zod.
   Expiration: expirationSchema.optional(),
   /**
    * ```xml
@@ -1122,7 +1116,6 @@ export const completeMultipartUploadOutputSchema = z.object({
    *          <p></p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member CompleteMultipartUploadOutput.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -1132,14 +1125,12 @@ export const completeMultipartUploadOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member CompleteMultipartUploadOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
    * <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member CompleteMultipartUploadOutput.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -1147,13 +1138,10 @@ export const completeMultipartUploadOutputSchema = z.object({
    *       Key Management Service (KMS) keys (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member CompleteMultipartUploadOutput.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member CompleteMultipartUploadOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure CompleteMultipartUploadRequest is not mapped to zod.
 export const completeMultipartUploadRequestSchema = z.object({
   /**
    * ```xml
@@ -1176,32 +1164,24 @@ export const completeMultipartUploadRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CompleteMultipartUploadRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member CompleteMultipartUploadRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Object key for which the multipart upload was initiated.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CompleteMultipartUploadRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member CompleteMultipartUploadRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>The container for the multipart upload request information.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member CompleteMultipartUploadRequest.MultipartUpload is not mapped to zod.
-  // TODO: smithy.api#xmlName ("CompleteMultipartUpload") on structure member CompleteMultipartUploadRequest.MultipartUpload is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#CompletedMultipartUpload for CompleteMultipartUploadRequest.MultipartUpload is not generated yet.
-  MultipartUpload: z.unknown().optional(),
+  MultipartUpload: z.lazy(() => completedMultipartUploadSchema).optional(),
   /**
    * ```xml
    * <p>ID for the initiated multipart upload.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("uploadId") on structure member CompleteMultipartUploadRequest.UploadId is not mapped to zod.
   UploadId: multipartUploadIdSchema,
   /**
    * ```xml
@@ -1211,7 +1191,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32") on structure member CompleteMultipartUploadRequest.ChecksumCRC32 is not mapped to zod.
   ChecksumCRC32: checksumCrc32Schema.optional(),
   /**
    * ```xml
@@ -1221,7 +1200,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32c") on structure member CompleteMultipartUploadRequest.ChecksumCRC32C is not mapped to zod.
   ChecksumCRC32C: checksumCrc32CSchema.optional(),
   /**
    * ```xml
@@ -1232,7 +1210,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *         User Guide</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc64nvme") on structure member CompleteMultipartUploadRequest.ChecksumCRC64NVME is not mapped to zod.
   ChecksumCRC64NVME: checksumCrc64NvmeSchema.optional(),
   /**
    * ```xml
@@ -1242,7 +1219,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha1") on structure member CompleteMultipartUploadRequest.ChecksumSHA1 is not mapped to zod.
   ChecksumSHA1: checksumSha1Schema.optional(),
   /**
    * ```xml
@@ -1252,7 +1228,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha256") on structure member CompleteMultipartUploadRequest.ChecksumSHA256 is not mapped to zod.
   ChecksumSHA256: checksumSha256Schema.optional(),
   /**
    * ```xml
@@ -1264,7 +1239,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *       information, see Checking object integrity in the Amazon S3 User Guide. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-type") on structure member CompleteMultipartUploadRequest.ChecksumType is not mapped to zod.
   ChecksumType: checksumTypeSchema.optional(),
   /**
    * ```xml
@@ -1273,16 +1247,13 @@ export const completeMultipartUploadRequestSchema = z.object({
    *         InvalidRequest</code> error. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-mp-object-size") on structure member CompleteMultipartUploadRequest.MpuObjectSize is not mapped to zod.
   MpuObjectSize: mpuObjectSizeSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member CompleteMultipartUploadRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member CompleteMultipartUploadRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -1298,7 +1269,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *         <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Match") on structure member CompleteMultipartUploadRequest.IfMatch is not mapped to zod.
   IfMatch: ifMatchSchema.optional(),
   /**
    * ```xml
@@ -1312,7 +1282,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *         <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-None-Match") on structure member CompleteMultipartUploadRequest.IfNoneMatch is not mapped to zod.
   IfNoneMatch: ifNoneMatchSchema.optional(),
   /**
    * ```xml
@@ -1324,7 +1293,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member CompleteMultipartUploadRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -1337,7 +1305,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member CompleteMultipartUploadRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -1350,7 +1317,6 @@ export const completeMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member CompleteMultipartUploadRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
 });
 
@@ -1367,10 +1333,7 @@ export const completedMultipartUploadSchema = z.object({
    *       response.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member CompletedMultipartUpload.Parts is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Part") on structure member CompletedMultipartUpload.Parts is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#CompletedPartList for CompletedMultipartUpload.Parts is not generated yet.
-  Parts: z.unknown().optional(),
+  Parts: completedPartListSchema.optional(),
 });
 
 /**
@@ -1501,16 +1464,13 @@ export const conditionSchema = z.object({
  */
 export const continuationEventSchema = z.object({});
 
-// TODO: smithy.api#output ({}) on structure CopyObjectOutput is not mapped to zod.
 export const copyObjectOutputSchema = z.object({
   /**
    * ```xml
    * <p>Container for all response elements.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member CopyObjectOutput.CopyObjectResult is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#CopyObjectResult for CopyObjectOutput.CopyObjectResult is not generated yet.
-  CopyObjectResult: z.unknown().optional(),
+  CopyObjectResult: z.lazy(() => copyObjectResultSchema).optional(),
   /**
    * ```xml
    * <p>If the object expiration is configured, the response includes this header.</p>
@@ -1520,7 +1480,6 @@ export const copyObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expiration") on structure member CopyObjectOutput.Expiration is not mapped to zod.
   Expiration: expirationSchema.optional(),
   /**
    * ```xml
@@ -1530,7 +1489,6 @@ export const copyObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-version-id") on structure member CopyObjectOutput.CopySourceVersionId is not mapped to zod.
   CopySourceVersionId: copySourceVersionIdSchema.optional(),
   /**
    * ```xml
@@ -1540,7 +1498,6 @@ export const copyObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member CopyObjectOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
@@ -1551,7 +1508,6 @@ export const copyObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member CopyObjectOutput.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -1562,7 +1518,6 @@ export const copyObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member CopyObjectOutput.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -1574,14 +1529,12 @@ export const copyObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member CopyObjectOutput.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
    * <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member CopyObjectOutput.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -1590,7 +1543,6 @@ export const copyObjectOutputSchema = z.object({
    *       pairs.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-context") on structure member CopyObjectOutput.SSEKMSEncryptionContext is not mapped to zod.
   SSEKMSEncryptionContext: ssekmsEncryptionContextSchema.optional(),
   /**
    * ```xml
@@ -1598,13 +1550,10 @@ export const copyObjectOutputSchema = z.object({
    *       (KMS) keys (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member CopyObjectOutput.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member CopyObjectOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure CopyObjectRequest is not mapped to zod.
 export const copyObjectRequestSchema = z.object({
   /**
    * ```xml
@@ -1634,7 +1583,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-acl") on structure member CopyObjectRequest.ACL is not mapped to zod.
   ACL: objectCannedAclSchema.optional(),
   /**
    * ```xml
@@ -1670,15 +1618,12 @@ export const copyObjectRequestSchema = z.object({
    *       The hostname isn't required when you use the Amazon Web Services CLI or SDKs. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CopyObjectRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member CopyObjectRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Specifies the caching behavior along the request/reply chain.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Cache-Control") on structure member CopyObjectRequest.CacheControl is not mapped to zod.
   CacheControl: cacheControlSchema.optional(),
   /**
    * ```xml
@@ -1696,7 +1641,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-algorithm") on structure member CopyObjectRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -1705,7 +1649,6 @@ export const copyObjectRequestSchema = z.object({
    *       file.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Disposition") on structure member CopyObjectRequest.ContentDisposition is not mapped to zod.
   ContentDisposition: contentDispositionSchema.optional(),
   /**
    * ```xml
@@ -1716,21 +1659,18 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Encoding") on structure member CopyObjectRequest.ContentEncoding is not mapped to zod.
   ContentEncoding: contentEncodingSchema.optional(),
   /**
    * ```xml
    * <p>The language the content is in.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Language") on structure member CopyObjectRequest.ContentLanguage is not mapped to zod.
   ContentLanguage: contentLanguageSchema.optional(),
   /**
    * ```xml
    * <p>A standard MIME type that describes the format of the object data.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Type") on structure member CopyObjectRequest.ContentType is not mapped to zod.
   ContentType: contentTypeSchema.optional(),
   /**
    * ```xml
@@ -1783,8 +1723,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source") on structure member CopyObjectRequest.CopySource is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"CopySource"}) on structure member CopyObjectRequest.CopySource is not mapped to zod.
   CopySource: copySourceSchema,
   /**
    * ```xml
@@ -1804,7 +1742,6 @@ export const copyObjectRequestSchema = z.object({
    *          </ul>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-if-match") on structure member CopyObjectRequest.CopySourceIfMatch is not mapped to zod.
   CopySourceIfMatch: copySourceIfMatchSchema.optional(),
   /**
    * ```xml
@@ -1824,7 +1761,6 @@ export const copyObjectRequestSchema = z.object({
    *          </ul>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-if-modified-since") on structure member CopyObjectRequest.CopySourceIfModifiedSince is not mapped to zod.
   CopySourceIfModifiedSince: copySourceIfModifiedSinceSchema.optional(),
   /**
    * ```xml
@@ -1844,7 +1780,6 @@ export const copyObjectRequestSchema = z.object({
    *          </ul>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-if-none-match") on structure member CopyObjectRequest.CopySourceIfNoneMatch is not mapped to zod.
   CopySourceIfNoneMatch: copySourceIfNoneMatchSchema.optional(),
   /**
    * ```xml
@@ -1864,14 +1799,12 @@ export const copyObjectRequestSchema = z.object({
    *          </ul>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-if-unmodified-since") on structure member CopyObjectRequest.CopySourceIfUnmodifiedSince is not mapped to zod.
   CopySourceIfUnmodifiedSince: copySourceIfUnmodifiedSinceSchema.optional(),
   /**
    * ```xml
    * <p>The date and time at which the object is no longer cacheable.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Expires") on structure member CopyObjectRequest.Expires is not mapped to zod.
   Expires: expiresSchema.optional(),
   /**
    * ```xml
@@ -1888,7 +1821,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-full-control") on structure member CopyObjectRequest.GrantFullControl is not mapped to zod.
   GrantFullControl: grantFullControlSchema.optional(),
   /**
    * ```xml
@@ -1905,7 +1837,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read") on structure member CopyObjectRequest.GrantRead is not mapped to zod.
   GrantRead: grantReadSchema.optional(),
   /**
    * ```xml
@@ -1922,7 +1853,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read-acp") on structure member CopyObjectRequest.GrantReadACP is not mapped to zod.
   GrantReadACP: grantReadAcpSchema.optional(),
   /**
    * ```xml
@@ -1939,7 +1869,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-write-acp") on structure member CopyObjectRequest.GrantWriteACP is not mapped to zod.
   GrantWriteACP: grantWriteAcpSchema.optional(),
   /**
    * ```xml
@@ -1952,7 +1881,6 @@ export const copyObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Match") on structure member CopyObjectRequest.IfMatch is not mapped to zod.
   IfMatch: ifMatchSchema.optional(),
   /**
    * ```xml
@@ -1964,24 +1892,19 @@ export const copyObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-None-Match") on structure member CopyObjectRequest.IfNoneMatch is not mapped to zod.
   IfNoneMatch: ifNoneMatchSchema.optional(),
   /**
    * ```xml
    * <p>The key of the destination object.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CopyObjectRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member CopyObjectRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>A map of metadata to store with the object in S3.</p>
    * ```
    */
-  // TODO: smithy.api#httpPrefixHeaders ("x-amz-meta-") on structure member CopyObjectRequest.Metadata is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Metadata for CopyObjectRequest.Metadata is not generated yet.
-  Metadata: z.unknown().optional(),
+  Metadata: metadataSchema.optional(),
   /**
    * ```xml
    * <p>Specifies whether the metadata is copied from the source object or replaced with metadata that's
@@ -2000,7 +1923,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-metadata-directive") on structure member CopyObjectRequest.MetadataDirective is not mapped to zod.
   MetadataDirective: metadataDirectiveSchema.optional(),
   /**
    * ```xml
@@ -2040,7 +1962,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-tagging-directive") on structure member CopyObjectRequest.TaggingDirective is not mapped to zod.
   TaggingDirective: taggingDirectiveSchema.optional(),
   /**
    * ```xml
@@ -2110,7 +2031,6 @@ export const copyObjectRequestSchema = z.object({
    *          </ul>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member CopyObjectRequest.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -2154,7 +2074,6 @@ export const copyObjectRequestSchema = z.object({
    *         <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-storage-class") on structure member CopyObjectRequest.StorageClass is not mapped to zod.
   StorageClass: storageClassSchema.optional(),
   /**
    * ```xml
@@ -2168,7 +2087,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-website-redirect-location") on structure member CopyObjectRequest.WebsiteRedirectLocation is not mapped to zod.
   WebsiteRedirectLocation: websiteRedirectLocationSchema.optional(),
   /**
    * ```xml
@@ -2183,7 +2101,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member CopyObjectRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -2196,7 +2113,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member CopyObjectRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -2207,7 +2123,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member CopyObjectRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
@@ -2227,7 +2142,6 @@ export const copyObjectRequestSchema = z.object({
    *  Incorrect key specification results in an HTTP <code>400 Bad Request</code> error. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member CopyObjectRequest.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -2244,7 +2158,6 @@ export const copyObjectRequestSchema = z.object({
    *             <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-context") on structure member CopyObjectRequest.SSEKMSEncryptionContext is not mapped to zod.
   SSEKMSEncryptionContext: ssekmsEncryptionContextSchema.optional(),
   /**
    * ```xml
@@ -2264,7 +2177,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member CopyObjectRequest.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
   /**
    * ```xml
@@ -2277,7 +2189,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-server-side-encryption-customer-algorithm") on structure member CopyObjectRequest.CopySourceSSECustomerAlgorithm is not mapped to zod.
   CopySourceSSECustomerAlgorithm: copySourceSseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -2291,7 +2202,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-server-side-encryption-customer-key") on structure member CopyObjectRequest.CopySourceSSECustomerKey is not mapped to zod.
   CopySourceSSECustomerKey: copySourceSseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -2304,9 +2214,7 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-server-side-encryption-customer-key-MD5") on structure member CopyObjectRequest.CopySourceSSECustomerKeyMD5 is not mapped to zod.
   CopySourceSSECustomerKeyMD5: copySourceSseCustomerKeyMd5Schema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member CopyObjectRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -2350,7 +2258,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-tagging") on structure member CopyObjectRequest.Tagging is not mapped to zod.
   Tagging: taggingHeaderSchema.optional(),
   /**
    * ```xml
@@ -2360,7 +2267,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-mode") on structure member CopyObjectRequest.ObjectLockMode is not mapped to zod.
   ObjectLockMode: objectLockModeSchema.optional(),
   /**
    * ```xml
@@ -2370,7 +2276,6 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-retain-until-date") on structure member CopyObjectRequest.ObjectLockRetainUntilDate is not mapped to zod.
   ObjectLockRetainUntilDate: objectLockRetainUntilDateSchema.optional(),
   /**
    * ```xml
@@ -2380,21 +2285,18 @@ export const copyObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-legal-hold") on structure member CopyObjectRequest.ObjectLockLegalHoldStatus is not mapped to zod.
   ObjectLockLegalHoldStatus: objectLockLegalHoldStatusSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected destination bucket owner. If the account ID that you provide does not match the actual owner of the destination bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member CopyObjectRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected source bucket owner. If the account ID that you provide does not match the actual owner of the source bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-source-expected-bucket-owner") on structure member CopyObjectRequest.ExpectedSourceBucketOwner is not mapped to zod.
   ExpectedSourceBucketOwner: accountIdSchema.optional(),
 });
 
@@ -2570,8 +2472,7 @@ export const createBucketConfigurationSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#LocationInfo for CreateBucketConfiguration.Location is not generated yet.
-  Location: z.unknown().optional(),
+  Location: z.lazy(() => locationInfoSchema).optional(),
   /**
    * ```xml
    * <p>Specifies the information about the bucket that will be created.</p>
@@ -2580,7 +2481,7 @@ export const createBucketConfigurationSchema = z.object({
    *          </note>
    * ```
    */
-  Bucket: bucketInfoSchema.optional(),
+  Bucket: z.lazy(() => bucketInfoSchema).optional(),
   /**
    * ```xml
    * <p>An array of tags that you can apply to the bucket that you're creating. Tags are key-value pairs of metadata used to categorize and organize your buckets, track costs, and control access. </p>
@@ -2589,11 +2490,9 @@ export const createBucketConfigurationSchema = z.object({
    *          <p>When creating buckets with tags, note that tag-based conditions using <code>aws:ResourceTag</code> and <code>s3:BucketTag</code> condition keys are applicable only after ABAC is enabled on the bucket. To learn more, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/buckets-tagging-enable-abac.html">Enabling ABAC in general purpose buckets</a>.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#TagSet for CreateBucketConfiguration.Tags is not generated yet.
-  Tags: z.unknown().optional(),
+  Tags: tagSetSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure CreateBucketMetadataConfigurationRequest is not mapped to zod.
 export const createBucketMetadataConfigurationRequestSchema = z.object({
   /**
    * ```xml
@@ -2602,8 +2501,6 @@ export const createBucketMetadataConfigurationRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CreateBucketMetadataConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member CreateBucketMetadataConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -2612,7 +2509,6 @@ export const createBucketMetadataConfigurationRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member CreateBucketMetadataConfigurationRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -2621,7 +2517,6 @@ export const createBucketMetadataConfigurationRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member CreateBucketMetadataConfigurationRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -2630,10 +2525,7 @@ export const createBucketMetadataConfigurationRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member CreateBucketMetadataConfigurationRequest.MetadataConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("MetadataConfiguration") on structure member CreateBucketMetadataConfigurationRequest.MetadataConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#MetadataConfiguration for CreateBucketMetadataConfigurationRequest.MetadataConfiguration is not generated yet.
-  MetadataConfiguration: z.unknown(),
+  MetadataConfiguration: z.lazy(() => metadataConfigurationSchema),
   /**
    * ```xml
    * <p>
@@ -2641,61 +2533,49 @@ export const createBucketMetadataConfigurationRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member CreateBucketMetadataConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure CreateBucketMetadataTableConfigurationRequest is not mapped to zod.
 export const createBucketMetadataTableConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p> The general purpose bucket that you want to create the metadata table configuration for. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CreateBucketMetadataTableConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member CreateBucketMetadataTableConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p> The <code>Content-MD5</code> header for the metadata table configuration. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member CreateBucketMetadataTableConfigurationRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
    * <p> The checksum algorithm to use with your metadata table configuration. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member CreateBucketMetadataTableConfigurationRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p> The contents of your metadata table configuration. </p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member CreateBucketMetadataTableConfigurationRequest.MetadataTableConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("MetadataTableConfiguration") on structure member CreateBucketMetadataTableConfigurationRequest.MetadataTableConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#MetadataTableConfiguration for CreateBucketMetadataTableConfigurationRequest.MetadataTableConfiguration is not generated yet.
-  MetadataTableConfiguration: z.unknown(),
+  MetadataTableConfiguration: z.lazy(() => metadataTableConfigurationSchema),
   /**
    * ```xml
    * <p> The expected owner of the general purpose bucket that corresponds to your metadata table configuration.
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member CreateBucketMetadataTableConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure CreateBucketOutput is not mapped to zod.
 export const createBucketOutputSchema = z.object({
   /**
    * ```xml
    * <p>A forward slash followed by the name of the bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Location") on structure member CreateBucketOutput.Location is not mapped to zod.
   Location: locationSchema.optional(),
   /**
    * ```xml
@@ -2707,11 +2587,9 @@ export const createBucketOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bucket-arn") on structure member CreateBucketOutput.BucketArn is not mapped to zod.
   BucketArn: s3RegionalOrS3ExpressBucketArnStringSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure CreateBucketRequest is not mapped to zod.
 export const createBucketRequestSchema = z.object({
   /**
    * ```xml
@@ -2721,7 +2599,6 @@ export const createBucketRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-acl") on structure member CreateBucketRequest.ACL is not mapped to zod.
   ACL: bucketCannedAclSchema.optional(),
   /**
    * ```xml
@@ -2738,17 +2615,13 @@ export const createBucketRequestSchema = z.object({
    *          </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CreateBucketRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member CreateBucketRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The configuration information for the bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member CreateBucketRequest.CreateBucketConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("CreateBucketConfiguration") on structure member CreateBucketRequest.CreateBucketConfiguration is not mapped to zod.
-  CreateBucketConfiguration: createBucketConfigurationSchema.optional(),
+  CreateBucketConfiguration: z.lazy(() => createBucketConfigurationSchema).optional(),
   /**
    * ```xml
    * <p>Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.</p>
@@ -2757,7 +2630,6 @@ export const createBucketRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-full-control") on structure member CreateBucketRequest.GrantFullControl is not mapped to zod.
   GrantFullControl: grantFullControlSchema.optional(),
   /**
    * ```xml
@@ -2767,7 +2639,6 @@ export const createBucketRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read") on structure member CreateBucketRequest.GrantRead is not mapped to zod.
   GrantRead: grantReadSchema.optional(),
   /**
    * ```xml
@@ -2777,7 +2648,6 @@ export const createBucketRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read-acp") on structure member CreateBucketRequest.GrantReadACP is not mapped to zod.
   GrantReadACP: grantReadAcpSchema.optional(),
   /**
    * ```xml
@@ -2789,7 +2659,6 @@ export const createBucketRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-write") on structure member CreateBucketRequest.GrantWrite is not mapped to zod.
   GrantWrite: grantWriteSchema.optional(),
   /**
    * ```xml
@@ -2799,7 +2668,6 @@ export const createBucketRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-write-acp") on structure member CreateBucketRequest.GrantWriteACP is not mapped to zod.
   GrantWriteACP: grantWriteAcpSchema.optional(),
   /**
    * ```xml
@@ -2809,14 +2677,10 @@ export const createBucketRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bucket-object-lock-enabled") on structure member CreateBucketRequest.ObjectLockEnabledForBucket is not mapped to zod.
   ObjectLockEnabledForBucket: objectLockEnabledForBucketSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-object-ownership") on structure member CreateBucketRequest.ObjectOwnership is not mapped to zod.
   ObjectOwnership: objectOwnershipSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure CreateMultipartUploadOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("InitiateMultipartUploadResult") on structure CreateMultipartUploadOutput is not mapped to zod.
 export const createMultipartUploadOutputSchema = z.object({
   /**
    * ```xml
@@ -2833,7 +2697,6 @@ export const createMultipartUploadOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-abort-date") on structure member CreateMultipartUploadOutput.AbortDate is not mapped to zod.
   AbortDate: abortDateSchema.optional(),
   /**
    * ```xml
@@ -2845,7 +2708,6 @@ export const createMultipartUploadOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-abort-rule-id") on structure member CreateMultipartUploadOutput.AbortRuleId is not mapped to zod.
   AbortRuleId: abortRuleIdSchema.optional(),
   /**
    * ```xml
@@ -2856,7 +2718,6 @@ export const createMultipartUploadOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#xmlName ("Bucket") on structure member CreateMultipartUploadOutput.Bucket is not mapped to zod.
   Bucket: bucketNameSchema.optional(),
   /**
    * ```xml
@@ -2879,7 +2740,6 @@ export const createMultipartUploadOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member CreateMultipartUploadOutput.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -2890,7 +2750,6 @@ export const createMultipartUploadOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member CreateMultipartUploadOutput.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -2902,14 +2761,12 @@ export const createMultipartUploadOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member CreateMultipartUploadOutput.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
    * <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member CreateMultipartUploadOutput.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -2917,7 +2774,6 @@ export const createMultipartUploadOutputSchema = z.object({
    *          this header is a Base64 encoded string of a UTF-8 encoded JSON, which contains the encryption context as key-value pairs.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-context") on structure member CreateMultipartUploadOutput.SSEKMSEncryptionContext is not mapped to zod.
   SSEKMSEncryptionContext: ssekmsEncryptionContextSchema.optional(),
   /**
    * ```xml
@@ -2925,16 +2781,13 @@ export const createMultipartUploadOutputSchema = z.object({
    *       Key Management Service (KMS) keys (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member CreateMultipartUploadOutput.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member CreateMultipartUploadOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
   /**
    * ```xml
    * <p>The algorithm that was used to create a checksum of the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-algorithm") on structure member CreateMultipartUploadOutput.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -2943,11 +2796,9 @@ export const createMultipartUploadOutputSchema = z.object({
    *         User Guide</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-type") on structure member CreateMultipartUploadOutput.ChecksumType is not mapped to zod.
   ChecksumType: checksumTypeSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure CreateMultipartUploadRequest is not mapped to zod.
 export const createMultipartUploadRequestSchema = z.object({
   /**
    * ```xml
@@ -2973,7 +2824,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-acl") on structure member CreateMultipartUploadRequest.ACL is not mapped to zod.
   ACL: objectCannedAclSchema.optional(),
   /**
    * ```xml
@@ -2997,22 +2847,18 @@ export const createMultipartUploadRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CreateMultipartUploadRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member CreateMultipartUploadRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Specifies caching behavior along the request/reply chain.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Cache-Control") on structure member CreateMultipartUploadRequest.CacheControl is not mapped to zod.
   CacheControl: cacheControlSchema.optional(),
   /**
    * ```xml
    * <p>Specifies presentational information for the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Disposition") on structure member CreateMultipartUploadRequest.ContentDisposition is not mapped to zod.
   ContentDisposition: contentDispositionSchema.optional(),
   /**
    * ```xml
@@ -3023,28 +2869,24 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Encoding") on structure member CreateMultipartUploadRequest.ContentEncoding is not mapped to zod.
   ContentEncoding: contentEncodingSchema.optional(),
   /**
    * ```xml
    * <p>The language that the content is in.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Language") on structure member CreateMultipartUploadRequest.ContentLanguage is not mapped to zod.
   ContentLanguage: contentLanguageSchema.optional(),
   /**
    * ```xml
    * <p>A standard MIME type describing the format of the object data.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Type") on structure member CreateMultipartUploadRequest.ContentType is not mapped to zod.
   ContentType: contentTypeSchema.optional(),
   /**
    * ```xml
    * <p>The date and time at which the object is no longer cacheable.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Expires") on structure member CreateMultipartUploadRequest.Expires is not mapped to zod.
   Expires: expiresSchema.optional(),
   /**
    * ```xml
@@ -3117,7 +2959,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-full-control") on structure member CreateMultipartUploadRequest.GrantFullControl is not mapped to zod.
   GrantFullControl: grantFullControlSchema.optional(),
   /**
    * ```xml
@@ -3190,7 +3031,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read") on structure member CreateMultipartUploadRequest.GrantRead is not mapped to zod.
   GrantRead: grantReadSchema.optional(),
   /**
    * ```xml
@@ -3262,7 +3102,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read-acp") on structure member CreateMultipartUploadRequest.GrantReadACP is not mapped to zod.
   GrantReadACP: grantReadAcpSchema.optional(),
   /**
    * ```xml
@@ -3335,24 +3174,19 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-write-acp") on structure member CreateMultipartUploadRequest.GrantWriteACP is not mapped to zod.
   GrantWriteACP: grantWriteAcpSchema.optional(),
   /**
    * ```xml
    * <p>Object key for which the multipart upload is to be initiated.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CreateMultipartUploadRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member CreateMultipartUploadRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>A map of metadata to store with the object in S3.</p>
    * ```
    */
-  // TODO: smithy.api#httpPrefixHeaders ("x-amz-meta-") on structure member CreateMultipartUploadRequest.Metadata is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Metadata for CreateMultipartUploadRequest.Metadata is not generated yet.
-  Metadata: z.unknown().optional(),
+  Metadata: metadataSchema.optional(),
   /**
    * ```xml
    * <p>The server-side encryption algorithm used when you store this object in Amazon S3 or Amazon FSx.</p>
@@ -3389,7 +3223,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </ul>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member CreateMultipartUploadRequest.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -3411,7 +3244,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-storage-class") on structure member CreateMultipartUploadRequest.StorageClass is not mapped to zod.
   StorageClass: storageClassSchema.optional(),
   /**
    * ```xml
@@ -3423,7 +3255,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-website-redirect-location") on structure member CreateMultipartUploadRequest.WebsiteRedirectLocation is not mapped to zod.
   WebsiteRedirectLocation: websiteRedirectLocationSchema.optional(),
   /**
    * ```xml
@@ -3433,7 +3264,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member CreateMultipartUploadRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -3446,7 +3276,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member CreateMultipartUploadRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -3458,7 +3287,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member CreateMultipartUploadRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
@@ -3480,7 +3308,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *  Incorrect key specification results in an HTTP <code>400 Bad Request</code> error. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member CreateMultipartUploadRequest.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -3490,7 +3317,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *             <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-context") on structure member CreateMultipartUploadRequest.SSEKMSEncryptionContext is not mapped to zod.
   SSEKMSEncryptionContext: ssekmsEncryptionContextSchema.optional(),
   /**
    * ```xml
@@ -3507,9 +3333,7 @@ export const createMultipartUploadRequestSchema = z.object({
    *                             <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member CreateMultipartUploadRequest.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member CreateMultipartUploadRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -3519,7 +3343,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-tagging") on structure member CreateMultipartUploadRequest.Tagging is not mapped to zod.
   Tagging: taggingHeaderSchema.optional(),
   /**
    * ```xml
@@ -3529,7 +3352,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-mode") on structure member CreateMultipartUploadRequest.ObjectLockMode is not mapped to zod.
   ObjectLockMode: objectLockModeSchema.optional(),
   /**
    * ```xml
@@ -3539,7 +3361,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-retain-until-date") on structure member CreateMultipartUploadRequest.ObjectLockRetainUntilDate is not mapped to zod.
   ObjectLockRetainUntilDate: objectLockRetainUntilDateSchema.optional(),
   /**
    * ```xml
@@ -3549,14 +3370,12 @@ export const createMultipartUploadRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-legal-hold") on structure member CreateMultipartUploadRequest.ObjectLockLegalHoldStatus is not mapped to zod.
   ObjectLockLegalHoldStatus: objectLockLegalHoldStatusSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member CreateMultipartUploadRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -3565,7 +3384,6 @@ export const createMultipartUploadRequestSchema = z.object({
    *     the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-algorithm") on structure member CreateMultipartUploadRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -3574,12 +3392,9 @@ export const createMultipartUploadRequestSchema = z.object({
    *         User Guide</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-type") on structure member CreateMultipartUploadRequest.ChecksumType is not mapped to zod.
   ChecksumType: checksumTypeSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure CreateSessionOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("CreateSessionResult") on structure CreateSessionOutput is not mapped to zod.
 export const createSessionOutputSchema = z.object({
   /**
    * ```xml
@@ -3590,7 +3405,6 @@ export const createSessionOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member CreateSessionOutput.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -3598,7 +3412,6 @@ export const createSessionOutputSchema = z.object({
    *          symmetric encryption customer managed key that was used for object encryption.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member CreateSessionOutput.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -3609,7 +3422,6 @@ export const createSessionOutputSchema = z.object({
    *          operations on this object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-context") on structure member CreateSessionOutput.SSEKMSEncryptionContext is not mapped to zod.
   SSEKMSEncryptionContext: ssekmsEncryptionContextSchema.optional(),
   /**
    * ```xml
@@ -3617,19 +3429,15 @@ export const createSessionOutputSchema = z.object({
    *          with KMS keys (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member CreateSessionOutput.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
   /**
    * ```xml
    * <p>The established temporary security credentials for the created session.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("Credentials") on structure member CreateSessionOutput.Credentials is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#SessionCredentials for CreateSessionOutput.Credentials is not generated yet.
-  Credentials: z.unknown(),
+  Credentials: z.lazy(() => sessionCredentialsSchema),
 });
 
-// TODO: smithy.api#input ({}) on structure CreateSessionRequest is not mapped to zod.
 export const createSessionRequestSchema = z.object({
   /**
    * ```xml
@@ -3642,15 +3450,12 @@ export const createSessionRequestSchema = z.object({
    *       <code>ListMultipartUploads</code>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-create-session-mode") on structure member CreateSessionRequest.SessionMode is not mapped to zod.
   SessionMode: sessionModeSchema.optional(),
   /**
    * ```xml
    * <p>The name of the bucket that you create a session for.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member CreateSessionRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member CreateSessionRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -3666,7 +3471,6 @@ export const createSessionRequestSchema = z.object({
    *       read. These processes are handled transparently by Amazon FSx.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member CreateSessionRequest.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -3679,7 +3483,6 @@ export const createSessionRequestSchema = z.object({
    * </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member CreateSessionRequest.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -3694,7 +3497,6 @@ export const createSessionRequestSchema = z.object({
    *             <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-context") on structure member CreateSessionRequest.SSEKMSEncryptionContext is not mapped to zod.
   SSEKMSEncryptionContext: ssekmsEncryptionContextSchema.optional(),
   /**
    * ```xml
@@ -3705,7 +3507,6 @@ export const createSessionRequestSchema = z.object({
    *                             <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member CreateSessionRequest.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
 });
 
@@ -3769,10 +3570,7 @@ export const deleteSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member Delete.Objects is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Object") on structure member Delete.Objects is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ObjectIdentifierList for Delete.Objects is not generated yet.
-  Objects: z.unknown(),
+  Objects: objectIdentifierListSchema,
   /**
    * ```xml
    * <p>Element to enable quiet mode for the request. When you add this element, you must set its value to
@@ -3782,52 +3580,42 @@ export const deleteSchema = z.object({
   Quiet: quietSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketAnalyticsConfigurationRequest is not mapped to zod.
 export const deleteBucketAnalyticsConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket from which an analytics configuration is deleted.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketAnalyticsConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketAnalyticsConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The ID that identifies the analytics configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member DeleteBucketAnalyticsConfigurationRequest.Id is not mapped to zod.
   Id: analyticsIdSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketAnalyticsConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketCorsRequest is not mapped to zod.
 export const deleteBucketCorsRequestSchema = z.object({
   /**
    * ```xml
    * <p>Specifies the bucket whose <code>cors</code> configuration is being deleted.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketCorsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketCorsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketCorsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketEncryptionRequest is not mapped to zod.
 export const deleteBucketEncryptionRequestSchema = z.object({
   /**
    * ```xml
@@ -3840,8 +3628,6 @@ export const deleteBucketEncryptionRequestSchema = z.object({
    *          </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketEncryptionRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketEncryptionRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -3852,71 +3638,57 @@ export const deleteBucketEncryptionRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketEncryptionRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketIntelligentTieringConfigurationRequest is not mapped to zod.
 export const deleteBucketIntelligentTieringConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketIntelligentTieringConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketIntelligentTieringConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The ID used to identify the S3 Intelligent-Tiering configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member DeleteBucketIntelligentTieringConfigurationRequest.Id is not mapped to zod.
   Id: intelligentTieringIdSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketIntelligentTieringConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketInventoryConfigurationRequest is not mapped to zod.
 export const deleteBucketInventoryConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket containing the inventory configuration to delete.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketInventoryConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketInventoryConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The ID used to identify the inventory configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member DeleteBucketInventoryConfigurationRequest.Id is not mapped to zod.
   Id: inventoryIdSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketInventoryConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketLifecycleRequest is not mapped to zod.
 export const deleteBucketLifecycleRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name of the lifecycle to delete.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketLifecycleRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketLifecycleRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -3927,11 +3699,9 @@ export const deleteBucketLifecycleRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketLifecycleRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketMetadataConfigurationRequest is not mapped to zod.
 export const deleteBucketMetadataConfigurationRequestSchema = z.object({
   /**
    * ```xml
@@ -3940,8 +3710,6 @@ export const deleteBucketMetadataConfigurationRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketMetadataConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketMetadataConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -3951,19 +3719,15 @@ export const deleteBucketMetadataConfigurationRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketMetadataConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketMetadataTableConfigurationRequest is not mapped to zod.
 export const deleteBucketMetadataTableConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p> The general purpose bucket that you want to remove the metadata table configuration from. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketMetadataTableConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketMetadataTableConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -3971,19 +3735,15 @@ export const deleteBucketMetadataTableConfigurationRequestSchema = z.object({
    *       configuration from. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketMetadataTableConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketMetricsConfigurationRequest is not mapped to zod.
 export const deleteBucketMetricsConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket containing the metrics configuration to delete.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketMetricsConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketMetricsConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -3991,37 +3751,30 @@ export const deleteBucketMetricsConfigurationRequestSchema = z.object({
    *       contain letters, numbers, periods, dashes, and underscores.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member DeleteBucketMetricsConfigurationRequest.Id is not mapped to zod.
   Id: metricsIdSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketMetricsConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketOwnershipControlsRequest is not mapped to zod.
 export const deleteBucketOwnershipControlsRequestSchema = z.object({
   /**
    * ```xml
    * <p>The Amazon S3 bucket whose <code>OwnershipControls</code> you want to delete. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketOwnershipControlsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketOwnershipControlsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketOwnershipControlsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketPolicyRequest is not mapped to zod.
 export const deleteBucketPolicyRequestSchema = z.object({
   /**
    * ```xml
@@ -4034,8 +3787,6 @@ export const deleteBucketPolicyRequestSchema = z.object({
    *          </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketPolicyRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketPolicyRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -4046,30 +3797,24 @@ export const deleteBucketPolicyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketPolicyRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketReplicationRequest is not mapped to zod.
 export const deleteBucketReplicationRequestSchema = z.object({
   /**
    * ```xml
    * <p> The bucket name. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketReplicationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketReplicationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketReplicationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketRequest is not mapped to zod.
 export const deleteBucketRequestSchema = z.object({
   /**
    * ```xml
@@ -4082,8 +3827,6 @@ export const deleteBucketRequestSchema = z.object({
    *          </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -4094,45 +3837,36 @@ export const deleteBucketRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketTaggingRequest is not mapped to zod.
 export const deleteBucketTaggingRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket that has the tag set to be removed.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketTaggingRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketTaggingRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketTaggingRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteBucketWebsiteRequest is not mapped to zod.
 export const deleteBucketWebsiteRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name for which you want to remove the website configuration. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteBucketWebsiteRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteBucketWebsiteRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteBucketWebsiteRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
@@ -4147,8 +3881,7 @@ export const deleteMarkerEntrySchema = z.object({
    * <p>The account that created the delete marker. </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Owner for DeleteMarkerEntry.Owner is not generated yet.
-  Owner: z.unknown().optional(),
+  Owner: z.lazy(() => ownerSchema).optional(),
   /**
    * ```xml
    * <p>The object key.</p>
@@ -4202,7 +3935,6 @@ export const deleteMarkerReplicationSchema = z.object({
   Status: deleteMarkerReplicationStatusSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure DeleteObjectOutput is not mapped to zod.
 export const deleteObjectOutputSchema = z.object({
   /**
    * ```xml
@@ -4216,7 +3948,6 @@ export const deleteObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-delete-marker") on structure member DeleteObjectOutput.DeleteMarker is not mapped to zod.
   DeleteMarker: deleteMarkerSchema.optional(),
   /**
    * ```xml
@@ -4226,13 +3957,10 @@ export const deleteObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member DeleteObjectOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member DeleteObjectOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteObjectRequest is not mapped to zod.
 export const deleteObjectRequestSchema = z.object({
   /**
    * ```xml
@@ -4255,16 +3983,12 @@ export const deleteObjectRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteObjectRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteObjectRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Key name of the object to delete.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteObjectRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member DeleteObjectRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
@@ -4276,7 +4000,6 @@ export const deleteObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-mfa") on structure member DeleteObjectRequest.MFA is not mapped to zod.
   MFA: mfaSchema.optional(),
   /**
    * ```xml
@@ -4286,9 +4009,7 @@ export const deleteObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member DeleteObjectRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member DeleteObjectRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -4300,14 +4021,12 @@ export const deleteObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bypass-governance-retention") on structure member DeleteObjectRequest.BypassGovernanceRetention is not mapped to zod.
   BypassGovernanceRetention: bypassGovernanceRetentionSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteObjectRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -4317,7 +4036,6 @@ export const deleteObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Match") on structure member DeleteObjectRequest.IfMatch is not mapped to zod.
   IfMatch: ifMatchSchema.optional(),
   /**
    * ```xml
@@ -4330,7 +4048,6 @@ export const deleteObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-if-match-last-modified-time") on structure member DeleteObjectRequest.IfMatchLastModifiedTime is not mapped to zod.
   IfMatchLastModifiedTime: ifMatchLastModifiedTimeSchema.optional(),
   /**
    * ```xml
@@ -4348,22 +4065,18 @@ export const deleteObjectRequestSchema = z.object({
    *          </important>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-if-match-size") on structure member DeleteObjectRequest.IfMatchSize is not mapped to zod.
   IfMatchSize: ifMatchSizeSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure DeleteObjectTaggingOutput is not mapped to zod.
 export const deleteObjectTaggingOutputSchema = z.object({
   /**
    * ```xml
    * <p>The versionId of the object the tag-set was removed from.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member DeleteObjectTaggingOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteObjectTaggingRequest is not mapped to zod.
 export const deleteObjectTaggingRequestSchema = z.object({
   /**
    * ```xml
@@ -4376,34 +4089,27 @@ export const deleteObjectTaggingRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteObjectTaggingRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteObjectTaggingRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The key that identifies the object in the bucket from which to remove all tags.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteObjectTaggingRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>The versionId of the object that the tag-set will be removed from.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member DeleteObjectTaggingRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteObjectTaggingRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure DeleteObjectsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("DeleteResult") on structure DeleteObjectsOutput is not mapped to zod.
 export const deleteObjectsOutputSchema = z.object({
   /**
    * ```xml
@@ -4411,10 +4117,7 @@ export const deleteObjectsOutputSchema = z.object({
    *       deleted.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member DeleteObjectsOutput.Deleted is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#DeletedObjects for DeleteObjectsOutput.Deleted is not generated yet.
-  Deleted: z.unknown().optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member DeleteObjectsOutput.RequestCharged is not mapped to zod.
+  Deleted: deletedObjectsSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
   /**
    * ```xml
@@ -4422,13 +4125,9 @@ export const deleteObjectsOutputSchema = z.object({
    *       error it encountered.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member DeleteObjectsOutput.Errors is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Error") on structure member DeleteObjectsOutput.Errors is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Errors for DeleteObjectsOutput.Errors is not generated yet.
-  Errors: z.unknown().optional(),
+  Errors: errorsSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeleteObjectsRequest is not mapped to zod.
 export const deleteObjectsRequestSchema = z.object({
   /**
    * ```xml
@@ -4451,17 +4150,13 @@ export const deleteObjectsRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeleteObjectsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeleteObjectsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Container for the request.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member DeleteObjectsRequest.Delete is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Delete") on structure member DeleteObjectsRequest.Delete is not mapped to zod.
-  Delete: deleteSchema,
+  Delete: z.lazy(() => deleteSchema),
   /**
    * ```xml
    * <p>The concatenation of the authentication device's serial number, a space, and the value that is
@@ -4478,9 +4173,7 @@ export const deleteObjectsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-mfa") on structure member DeleteObjectsRequest.MFA is not mapped to zod.
   MFA: mfaSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member DeleteObjectsRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -4492,14 +4185,12 @@ export const deleteObjectsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bypass-governance-retention") on structure member DeleteObjectsRequest.BypassGovernanceRetention is not mapped to zod.
   BypassGovernanceRetention: bypassGovernanceRetentionSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeleteObjectsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -4547,26 +4238,21 @@ export const deleteObjectsRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member DeleteObjectsRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure DeletePublicAccessBlockRequest is not mapped to zod.
 export const deletePublicAccessBlockRequestSchema = z.object({
   /**
    * ```xml
    * <p>The Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to delete. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member DeletePublicAccessBlockRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member DeletePublicAccessBlockRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member DeletePublicAccessBlockRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
@@ -4659,15 +4345,14 @@ export const destinationSchema = z.object({
    *       Amazon Web Services account that owns the source object.</p>
    * ```
    */
-  AccessControlTranslation: accessControlTranslationSchema.optional(),
+  AccessControlTranslation: z.lazy(() => accessControlTranslationSchema).optional(),
   /**
    * ```xml
    * <p>A container that provides information about encryption. If <code>SourceSelectionCriteria</code> is
    *       specified, you must specify this element.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#EncryptionConfiguration for Destination.EncryptionConfiguration is not generated yet.
-  EncryptionConfiguration: z.unknown().optional(),
+  EncryptionConfiguration: z.lazy(() => encryptionConfigurationSchema).optional(),
   /**
    * ```xml
    * <p> A container specifying S3 Replication Time Control (S3 RTC), including whether S3 RTC is enabled and the time when all
@@ -4675,16 +4360,14 @@ export const destinationSchema = z.object({
    *         <code>Metrics</code> block. </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#ReplicationTime for Destination.ReplicationTime is not generated yet.
-  ReplicationTime: z.unknown().optional(),
+  ReplicationTime: z.lazy(() => replicationTimeSchema).optional(),
   /**
    * ```xml
    * <p> A container specifying replication metrics-related settings enabling replication metrics and
    *       events. </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Metrics for Destination.Metrics is not generated yet.
-  Metrics: z.unknown().optional(),
+  Metrics: z.lazy(() => metricsSchema).optional(),
 });
 
 /**
@@ -4786,8 +4469,6 @@ export const encryptionConfigurationSchema = z.object({
  *       include the appropriate encryption parameters in the request or while creating the session. </p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure EncryptionTypeMismatch is not mapped to zod.
-// TODO: smithy.api#httpError (400) on structure EncryptionTypeMismatch is not mapped to zod.
 export const encryptionTypeMismatchSchema = z.object({});
 
 /**
@@ -6978,38 +6659,30 @@ export const filterRuleSchema = z.object({
   Value: filterRuleValueSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketAbacOutput is not mapped to zod.
 export const getBucketAbacOutputSchema = z.object({
   /**
    * ```xml
    * <p>The ABAC status of the general purpose bucket. </p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketAbacOutput.AbacStatus is not mapped to zod.
-  AbacStatus: abacStatusSchema.optional(),
+  AbacStatus: z.lazy(() => abacStatusSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketAbacRequest is not mapped to zod.
 export const getBucketAbacRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the general purpose bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketAbacRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketAbacRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The Amazon Web Services account ID of the general purpose bucket's owner. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketAbacRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketAccelerateConfigurationOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("AccelerateConfiguration") on structure GetBucketAccelerateConfigurationOutput is not mapped to zod.
 export const getBucketAccelerateConfigurationOutputSchema = z.object({
   /**
    * ```xml
@@ -7017,52 +6690,40 @@ export const getBucketAccelerateConfigurationOutputSchema = z.object({
    * ```
    */
   Status: bucketAccelerateStatusSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member GetBucketAccelerateConfigurationOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketAccelerateConfigurationRequest is not mapped to zod.
 export const getBucketAccelerateConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket for which the accelerate configuration is retrieved.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketAccelerateConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketAccelerateConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketAccelerateConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member GetBucketAccelerateConfigurationRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketAclOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("AccessControlPolicy") on structure GetBucketAclOutput is not mapped to zod.
 export const getBucketAclOutputSchema = z.object({
   /**
    * ```xml
    * <p>Container for the bucket owner's ID.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Owner for GetBucketAclOutput.Owner is not generated yet.
-  Owner: z.unknown().optional(),
+  Owner: z.lazy(() => ownerSchema).optional(),
   /**
    * ```xml
    * <p>A list of grants.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("AccessControlList") on structure member GetBucketAclOutput.Grants is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Grants for GetBucketAclOutput.Grants is not generated yet.
-  Grants: z.unknown().optional(),
+  Grants: grantsSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketAclRequest is not mapped to zod.
 export const getBucketAclRequestSchema = z.object({
   /**
    * ```xml
@@ -7074,57 +6735,45 @@ export const getBucketAclRequestSchema = z.object({
    *             Error Codes</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketAclRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketAclRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketAclRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketAnalyticsConfigurationOutput is not mapped to zod.
 export const getBucketAnalyticsConfigurationOutputSchema = z.object({
   /**
    * ```xml
    * <p>The configuration and any analyses for the analytics filter.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketAnalyticsConfigurationOutput.AnalyticsConfiguration is not mapped to zod.
-  AnalyticsConfiguration: analyticsConfigurationSchema.optional(),
+  AnalyticsConfiguration: z.lazy(() => analyticsConfigurationSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketAnalyticsConfigurationRequest is not mapped to zod.
 export const getBucketAnalyticsConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket from which an analytics configuration is retrieved.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketAnalyticsConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketAnalyticsConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The ID that identifies the analytics configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member GetBucketAnalyticsConfigurationRequest.Id is not mapped to zod.
   Id: analyticsIdSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketAnalyticsConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketCorsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("CORSConfiguration") on structure GetBucketCorsOutput is not mapped to zod.
 export const getBucketCorsOutputSchema = z.object({
   /**
    * ```xml
@@ -7132,13 +6781,9 @@ export const getBucketCorsOutputSchema = z.object({
    *       rules to the configuration.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member GetBucketCorsOutput.CORSRules is not mapped to zod.
-  // TODO: smithy.api#xmlName ("CORSRule") on structure member GetBucketCorsOutput.CORSRules is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#CORSRules for GetBucketCorsOutput.CORSRules is not generated yet.
-  CORSRules: z.unknown().optional(),
+  CORSRules: corsRulesSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketCorsRequest is not mapped to zod.
 export const getBucketCorsRequestSchema = z.object({
   /**
    * ```xml
@@ -7150,26 +6795,19 @@ export const getBucketCorsRequestSchema = z.object({
    *             Error Codes</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketCorsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketCorsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketCorsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketEncryptionOutput is not mapped to zod.
 export const getBucketEncryptionOutputSchema = z.object({
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketEncryptionOutput.ServerSideEncryptionConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ServerSideEncryptionConfiguration for GetBucketEncryptionOutput.ServerSideEncryptionConfiguration is not generated yet.
-  ServerSideEncryptionConfiguration: z.unknown().optional(),
+  ServerSideEncryptionConfiguration: z.lazy(() => serverSideEncryptionConfigurationSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketEncryptionRequest is not mapped to zod.
 export const getBucketEncryptionRequestSchema = z.object({
   /**
    * ```xml
@@ -7182,8 +6820,6 @@ export const getBucketEncryptionRequestSchema = z.object({
    *          </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketEncryptionRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketEncryptionRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -7194,98 +6830,76 @@ export const getBucketEncryptionRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketEncryptionRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketIntelligentTieringConfigurationOutput is not mapped to zod.
 export const getBucketIntelligentTieringConfigurationOutputSchema = z.object({
   /**
    * ```xml
    * <p>Container for S3 Intelligent-Tiering configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketIntelligentTieringConfigurationOutput.IntelligentTieringConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#IntelligentTieringConfiguration for GetBucketIntelligentTieringConfigurationOutput.IntelligentTieringConfiguration is not generated yet.
-  IntelligentTieringConfiguration: z.unknown().optional(),
+  IntelligentTieringConfiguration: z.lazy(() => intelligentTieringConfigurationSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketIntelligentTieringConfigurationRequest is not mapped to zod.
 export const getBucketIntelligentTieringConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketIntelligentTieringConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketIntelligentTieringConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The ID used to identify the S3 Intelligent-Tiering configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member GetBucketIntelligentTieringConfigurationRequest.Id is not mapped to zod.
   Id: intelligentTieringIdSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketIntelligentTieringConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketInventoryConfigurationOutput is not mapped to zod.
 export const getBucketInventoryConfigurationOutputSchema = z.object({
   /**
    * ```xml
    * <p>Specifies the inventory configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketInventoryConfigurationOutput.InventoryConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#InventoryConfiguration for GetBucketInventoryConfigurationOutput.InventoryConfiguration is not generated yet.
-  InventoryConfiguration: z.unknown().optional(),
+  InventoryConfiguration: z.lazy(() => inventoryConfigurationSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketInventoryConfigurationRequest is not mapped to zod.
 export const getBucketInventoryConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket containing the inventory configuration to retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketInventoryConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketInventoryConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The ID used to identify the inventory configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member GetBucketInventoryConfigurationRequest.Id is not mapped to zod.
   Id: inventoryIdSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketInventoryConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketLifecycleConfigurationOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("LifecycleConfiguration") on structure GetBucketLifecycleConfigurationOutput is not mapped to zod.
 export const getBucketLifecycleConfigurationOutputSchema = z.object({
   /**
    * ```xml
    * <p>Container for a lifecycle rule.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member GetBucketLifecycleConfigurationOutput.Rules is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Rule") on structure member GetBucketLifecycleConfigurationOutput.Rules is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#LifecycleRules for GetBucketLifecycleConfigurationOutput.Rules is not generated yet.
-  Rules: z.unknown().optional(),
+  Rules: lifecycleRulesSchema.optional(),
   /**
    * ```xml
    * <p>Indicates which default minimum object size behavior is applied to the lifecycle
@@ -7312,19 +6926,15 @@ export const getBucketLifecycleConfigurationOutputSchema = z.object({
    *       rule. Custom filters always take precedence over the default transition behavior.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-transition-default-minimum-object-size") on structure member GetBucketLifecycleConfigurationOutput.TransitionDefaultMinimumObjectSize is not mapped to zod.
   TransitionDefaultMinimumObjectSize: transitionDefaultMinimumObjectSizeSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketLifecycleConfigurationRequest is not mapped to zod.
 export const getBucketLifecycleConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket for which to get the lifecycle information.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketLifecycleConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketLifecycleConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -7335,12 +6945,9 @@ export const getBucketLifecycleConfigurationRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketLifecycleConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketLocationOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("LocationConstraint") on structure GetBucketLocationOutput is not mapped to zod.
 export const getBucketLocationOutputSchema = z.object({
   /**
    * ```xml
@@ -7353,7 +6960,6 @@ export const getBucketLocationOutputSchema = z.object({
   LocationConstraint: bucketLocationConstraintSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketLocationRequest is not mapped to zod.
 export const getBucketLocationRequestSchema = z.object({
   /**
    * ```xml
@@ -7365,45 +6971,32 @@ export const getBucketLocationRequestSchema = z.object({
    *             Error Codes</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketLocationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketLocationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketLocationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketLoggingOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("BucketLoggingStatus") on structure GetBucketLoggingOutput is not mapped to zod.
-export const getBucketLoggingOutputSchema = z.object({
-  // TODO: structure member target com.amazonaws.s3#LoggingEnabled for GetBucketLoggingOutput.LoggingEnabled is not generated yet.
-  LoggingEnabled: z.unknown().optional(),
-});
+export const getBucketLoggingOutputSchema = z.object({ LoggingEnabled: z.lazy(() => loggingEnabledSchema).optional() });
 
-// TODO: smithy.api#input ({}) on structure GetBucketLoggingRequest is not mapped to zod.
 export const getBucketLoggingRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name for which to get the logging information.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketLoggingRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketLoggingRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketLoggingRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketMetadataConfigurationOutput is not mapped to zod.
 export const getBucketMetadataConfigurationOutputSchema = z.object({
   /**
    * ```xml
@@ -7412,12 +7005,9 @@ export const getBucketMetadataConfigurationOutputSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketMetadataConfigurationOutput.GetBucketMetadataConfigurationResult is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#GetBucketMetadataConfigurationResult for GetBucketMetadataConfigurationOutput.GetBucketMetadataConfigurationResult is not generated yet.
-  GetBucketMetadataConfigurationResult: z.unknown().optional(),
+  GetBucketMetadataConfigurationResult: z.lazy(() => getBucketMetadataConfigurationResultSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketMetadataConfigurationRequest is not mapped to zod.
 export const getBucketMetadataConfigurationRequestSchema = z.object({
   /**
    * ```xml
@@ -7427,8 +7017,6 @@ export const getBucketMetadataConfigurationRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketMetadataConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketMetadataConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -7438,7 +7026,6 @@ export const getBucketMetadataConfigurationRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketMetadataConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
@@ -7457,23 +7044,18 @@ export const getBucketMetadataConfigurationResultSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#MetadataConfigurationResult for GetBucketMetadataConfigurationResult.MetadataConfigurationResult is not generated yet.
-  MetadataConfigurationResult: z.unknown(),
+  MetadataConfigurationResult: z.lazy(() => metadataConfigurationResultSchema),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketMetadataTableConfigurationOutput is not mapped to zod.
 export const getBucketMetadataTableConfigurationOutputSchema = z.object({
   /**
    * ```xml
    * <p> The metadata table configuration for the general purpose bucket. </p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketMetadataTableConfigurationOutput.GetBucketMetadataTableConfigurationResult is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#GetBucketMetadataTableConfigurationResult for GetBucketMetadataTableConfigurationOutput.GetBucketMetadataTableConfigurationResult is not generated yet.
-  GetBucketMetadataTableConfigurationResult: z.unknown().optional(),
+  GetBucketMetadataTableConfigurationResult: z.lazy(() => getBucketMetadataTableConfigurationResultSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketMetadataTableConfigurationRequest is not mapped to zod.
 export const getBucketMetadataTableConfigurationRequestSchema = z.object({
   /**
    * ```xml
@@ -7481,8 +7063,6 @@ export const getBucketMetadataTableConfigurationRequestSchema = z.object({
    *       retrieve. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketMetadataTableConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketMetadataTableConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -7490,7 +7070,6 @@ export const getBucketMetadataTableConfigurationRequestSchema = z.object({
    *       configuration for. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketMetadataTableConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
@@ -7510,8 +7089,7 @@ export const getBucketMetadataTableConfigurationResultSchema = z.object({
    * <p> The V1 S3 Metadata configuration for a general purpose bucket. </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#MetadataTableConfigurationResult for GetBucketMetadataTableConfigurationResult.MetadataTableConfigurationResult is not generated yet.
-  MetadataTableConfigurationResult: z.unknown(),
+  MetadataTableConfigurationResult: z.lazy(() => metadataTableConfigurationResultSchema),
   /**
    * ```xml
    * <p> The status of the metadata table. The status values are: </p>
@@ -7541,30 +7119,24 @@ export const getBucketMetadataTableConfigurationResultSchema = z.object({
    *       unable to create the table, this structure contains the error code and error message. </p>
    * ```
    */
-  Error: errorDetailsSchema.optional(),
+  Error: z.lazy(() => errorDetailsSchema).optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketMetricsConfigurationOutput is not mapped to zod.
 export const getBucketMetricsConfigurationOutputSchema = z.object({
   /**
    * ```xml
    * <p>Specifies the metrics configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketMetricsConfigurationOutput.MetricsConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#MetricsConfiguration for GetBucketMetricsConfigurationOutput.MetricsConfiguration is not generated yet.
-  MetricsConfiguration: z.unknown().optional(),
+  MetricsConfiguration: z.lazy(() => metricsConfigurationSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketMetricsConfigurationRequest is not mapped to zod.
 export const getBucketMetricsConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket containing the metrics configuration to retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketMetricsConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketMetricsConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -7572,18 +7144,15 @@ export const getBucketMetricsConfigurationRequestSchema = z.object({
    *       contain letters, numbers, periods, dashes, and underscores.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member GetBucketMetricsConfigurationRequest.Id is not mapped to zod.
   Id: metricsIdSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketMetricsConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketNotificationConfigurationRequest is not mapped to zod.
 export const getBucketNotificationConfigurationRequestSchema = z.object({
   /**
    * ```xml
@@ -7595,19 +7164,15 @@ export const getBucketNotificationConfigurationRequestSchema = z.object({
    *             Error Codes</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketNotificationConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketNotificationConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketNotificationConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketOwnershipControlsOutput is not mapped to zod.
 export const getBucketOwnershipControlsOutputSchema = z.object({
   /**
    * ```xml
@@ -7615,42 +7180,33 @@ export const getBucketOwnershipControlsOutputSchema = z.object({
    *       currently in effect for this Amazon S3 bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketOwnershipControlsOutput.OwnershipControls is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#OwnershipControls for GetBucketOwnershipControlsOutput.OwnershipControls is not generated yet.
-  OwnershipControls: z.unknown().optional(),
+  OwnershipControls: z.lazy(() => ownershipControlsSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketOwnershipControlsRequest is not mapped to zod.
 export const getBucketOwnershipControlsRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the Amazon S3 bucket whose <code>OwnershipControls</code> you want to retrieve. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketOwnershipControlsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketOwnershipControlsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketOwnershipControlsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketPolicyOutput is not mapped to zod.
 export const getBucketPolicyOutputSchema = z.object({
   /**
    * ```xml
    * <p>The bucket policy as a JSON document.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketPolicyOutput.Policy is not mapped to zod.
   Policy: policySchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketPolicyRequest is not mapped to zod.
 export const getBucketPolicyRequestSchema = z.object({
   /**
    * ```xml
@@ -7673,8 +7229,6 @@ export const getBucketPolicyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketPolicyRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketPolicyRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -7685,69 +7239,52 @@ export const getBucketPolicyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketPolicyRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketPolicyStatusOutput is not mapped to zod.
 export const getBucketPolicyStatusOutputSchema = z.object({
   /**
    * ```xml
    * <p>The policy status for the specified bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketPolicyStatusOutput.PolicyStatus is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#PolicyStatus for GetBucketPolicyStatusOutput.PolicyStatus is not generated yet.
-  PolicyStatus: z.unknown().optional(),
+  PolicyStatus: z.lazy(() => policyStatusSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketPolicyStatusRequest is not mapped to zod.
 export const getBucketPolicyStatusRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the Amazon S3 bucket whose policy status you want to retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketPolicyStatusRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketPolicyStatusRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketPolicyStatusRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketReplicationOutput is not mapped to zod.
 export const getBucketReplicationOutputSchema = z.object({
-  // TODO: smithy.api#httpPayload ({}) on structure member GetBucketReplicationOutput.ReplicationConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ReplicationConfiguration for GetBucketReplicationOutput.ReplicationConfiguration is not generated yet.
-  ReplicationConfiguration: z.unknown().optional(),
+  ReplicationConfiguration: z.lazy(() => replicationConfigurationSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketReplicationRequest is not mapped to zod.
 export const getBucketReplicationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name for which to get the replication information.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketReplicationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketReplicationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketReplicationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketRequestPaymentOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("RequestPaymentConfiguration") on structure GetBucketRequestPaymentOutput is not mapped to zod.
 export const getBucketRequestPaymentOutputSchema = z.object({
   /**
    * ```xml
@@ -7757,58 +7294,45 @@ export const getBucketRequestPaymentOutputSchema = z.object({
   Payer: payerSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketRequestPaymentRequest is not mapped to zod.
 export const getBucketRequestPaymentRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket for which to get the payment request configuration</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketRequestPaymentRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketRequestPaymentRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketRequestPaymentRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketTaggingOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("Tagging") on structure GetBucketTaggingOutput is not mapped to zod.
 export const getBucketTaggingOutputSchema = z.object({
   /**
    * ```xml
    * <p>Contains the tag set.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#TagSet for GetBucketTaggingOutput.TagSet is not generated yet.
-  TagSet: z.unknown(),
+  TagSet: tagSetSchema,
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketTaggingRequest is not mapped to zod.
 export const getBucketTaggingRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket for which to get the tagging information.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketTaggingRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketTaggingRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketTaggingRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketVersioningOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("VersioningConfiguration") on structure GetBucketVersioningOutput is not mapped to zod.
 export const getBucketVersioningOutputSchema = z.object({
   /**
    * ```xml
@@ -7823,103 +7347,82 @@ export const getBucketVersioningOutputSchema = z.object({
    *       this element is not returned.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("MfaDelete") on structure member GetBucketVersioningOutput.MFADelete is not mapped to zod.
   MFADelete: mfaDeleteStatusSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketVersioningRequest is not mapped to zod.
 export const getBucketVersioningRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket for which to get the versioning information.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketVersioningRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketVersioningRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketVersioningRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetBucketWebsiteOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("WebsiteConfiguration") on structure GetBucketWebsiteOutput is not mapped to zod.
 export const getBucketWebsiteOutputSchema = z.object({
   /**
    * ```xml
    * <p>Specifies the redirect behavior of all requests to a website endpoint of an Amazon S3 bucket.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#RedirectAllRequestsTo for GetBucketWebsiteOutput.RedirectAllRequestsTo is not generated yet.
-  RedirectAllRequestsTo: z.unknown().optional(),
+  RedirectAllRequestsTo: z.lazy(() => redirectAllRequestsToSchema).optional(),
   /**
    * ```xml
    * <p>The name of the index document for the website (for example <code>index.html</code>).</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#IndexDocument for GetBucketWebsiteOutput.IndexDocument is not generated yet.
-  IndexDocument: z.unknown().optional(),
+  IndexDocument: z.lazy(() => indexDocumentSchema).optional(),
   /**
    * ```xml
    * <p>The object key name of the website error document to use for 4XX class errors.</p>
    * ```
    */
-  ErrorDocument: errorDocumentSchema.optional(),
+  ErrorDocument: z.lazy(() => errorDocumentSchema).optional(),
   /**
    * ```xml
    * <p>Rules that define when a redirect is applied and the redirect behavior.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#RoutingRules for GetBucketWebsiteOutput.RoutingRules is not generated yet.
-  RoutingRules: z.unknown().optional(),
+  RoutingRules: routingRulesSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetBucketWebsiteRequest is not mapped to zod.
 export const getBucketWebsiteRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name for which to get the website configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetBucketWebsiteRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetBucketWebsiteRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetBucketWebsiteRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetObjectAclOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("AccessControlPolicy") on structure GetObjectAclOutput is not mapped to zod.
 export const getObjectAclOutputSchema = z.object({
   /**
    * ```xml
    * <p> Container for the bucket owner's ID.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Owner for GetObjectAclOutput.Owner is not generated yet.
-  Owner: z.unknown().optional(),
+  Owner: z.lazy(() => ownerSchema).optional(),
   /**
    * ```xml
    * <p>A list of grants.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("AccessControlList") on structure member GetObjectAclOutput.Grants is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Grants for GetObjectAclOutput.Grants is not generated yet.
-  Grants: z.unknown().optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member GetObjectAclOutput.RequestCharged is not mapped to zod.
+  Grants: grantsSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetObjectAclRequest is not mapped to zod.
 export const getObjectAclRequestSchema = z.object({
   /**
    * ```xml
@@ -7928,16 +7431,12 @@ export const getObjectAclRequestSchema = z.object({
    *             <b>Access points</b> - When you use this action with an access point for general purpose buckets, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When you use this action with an access point for directory buckets, you must provide the access point name in place of the bucket name. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectAclRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetObjectAclRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The key of the object for which to get the ACL information.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectAclRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member GetObjectAclRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
@@ -7947,21 +7446,16 @@ export const getObjectAclRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member GetObjectAclRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member GetObjectAclRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetObjectAclRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetObjectAttributesOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("GetObjectAttributesResponse") on structure GetObjectAttributesOutput is not mapped to zod.
 export const getObjectAttributesOutputSchema = z.object({
   /**
    * ```xml
@@ -7973,14 +7467,12 @@ export const getObjectAttributesOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-delete-marker") on structure member GetObjectAttributesOutput.DeleteMarker is not mapped to zod.
   DeleteMarker: deleteMarkerSchema.optional(),
   /**
    * ```xml
    * <p>Date and time when the object was last modified.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Last-Modified") on structure member GetObjectAttributesOutput.LastModified is not mapped to zod.
   LastModified: lastModifiedSchema.optional(),
   /**
    * ```xml
@@ -7990,9 +7482,7 @@ export const getObjectAttributesOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member GetObjectAttributesOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member GetObjectAttributesOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
   /**
    * ```xml
@@ -8006,14 +7496,13 @@ export const getObjectAttributesOutputSchema = z.object({
    * <p>The checksum or digest of the object.</p>
    * ```
    */
-  Checksum: checksumSchema.optional(),
+  Checksum: z.lazy(() => checksumSchema).optional(),
   /**
    * ```xml
    * <p>A collection of parts associated with a multipart upload.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#GetObjectAttributesParts for GetObjectAttributesOutput.ObjectParts is not generated yet.
-  ObjectParts: z.unknown().optional(),
+  ObjectParts: z.lazy(() => getObjectAttributesPartsSchema).optional(),
   /**
    * ```xml
    * <p>Provides the storage class information of the object. Amazon S3 returns this header for all objects
@@ -8046,7 +7535,6 @@ export const getObjectAttributesPartsSchema = z.object({
    * <p>The total number of parts.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("PartsCount") on structure member GetObjectAttributesParts.TotalPartsCount is not mapped to zod.
   TotalPartsCount: partsCountSchema.optional(),
   /**
    * ```xml
@@ -8099,13 +7587,9 @@ export const getObjectAttributesPartsSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member GetObjectAttributesParts.Parts is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Part") on structure member GetObjectAttributesParts.Parts is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#PartsList for GetObjectAttributesParts.Parts is not generated yet.
-  Parts: z.unknown().optional(),
+  Parts: partsListSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetObjectAttributesRequest is not mapped to zod.
 export const getObjectAttributesRequestSchema = z.object({
   /**
    * ```xml
@@ -8128,15 +7612,12 @@ export const getObjectAttributesRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectAttributesRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetObjectAttributesRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The object key.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectAttributesRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
@@ -8147,7 +7628,6 @@ export const getObjectAttributesRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member GetObjectAttributesRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
@@ -8155,7 +7635,6 @@ export const getObjectAttributesRequestSchema = z.object({
    *         in Amazon S3 </a> in the <i>Amazon Simple Storage Service user guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-max-parts") on structure member GetObjectAttributesRequest.MaxParts is not mapped to zod.
   MaxParts: maxPartsSchema.optional(),
   /**
    * ```xml
@@ -8164,7 +7643,6 @@ export const getObjectAttributesRequestSchema = z.object({
    *         in Amazon S3 </a> in the <i>Amazon Simple Storage Service user guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-part-number-marker") on structure member GetObjectAttributesRequest.PartNumberMarker is not mapped to zod.
   PartNumberMarker: partNumberMarkerSchema.optional(),
   /**
    * ```xml
@@ -8174,7 +7652,6 @@ export const getObjectAttributesRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member GetObjectAttributesRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -8187,7 +7664,6 @@ export const getObjectAttributesRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member GetObjectAttributesRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -8198,16 +7674,13 @@ export const getObjectAttributesRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member GetObjectAttributesRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member GetObjectAttributesRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetObjectAttributesRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -8215,25 +7688,18 @@ export const getObjectAttributesRequestSchema = z.object({
    *       not specify are not returned.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-attributes") on structure member GetObjectAttributesRequest.ObjectAttributes is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ObjectAttributesList for GetObjectAttributesRequest.ObjectAttributes is not generated yet.
-  ObjectAttributes: z.unknown(),
+  ObjectAttributes: objectAttributesListSchema,
 });
 
-// TODO: smithy.api#output ({}) on structure GetObjectLegalHoldOutput is not mapped to zod.
 export const getObjectLegalHoldOutputSchema = z.object({
   /**
    * ```xml
    * <p>The current legal hold status for the specified object.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetObjectLegalHoldOutput.LegalHold is not mapped to zod.
-  // TODO: smithy.api#xmlName ("LegalHold") on structure member GetObjectLegalHoldOutput.LegalHold is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ObjectLockLegalHold for GetObjectLegalHoldOutput.LegalHold is not generated yet.
-  LegalHold: z.unknown().optional(),
+  LegalHold: z.lazy(() => objectLockLegalHoldSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetObjectLegalHoldRequest is not mapped to zod.
 export const getObjectLegalHoldRequestSchema = z.object({
   /**
    * ```xml
@@ -8242,47 +7708,37 @@ export const getObjectLegalHoldRequestSchema = z.object({
    *             <b>Access points</b> - When you use this action with an access point for general purpose buckets, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When you use this action with an access point for directory buckets, you must provide the access point name in place of the bucket name. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectLegalHoldRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetObjectLegalHoldRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The key name for the object whose legal hold status you want to retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectLegalHoldRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>The version ID of the object whose legal hold status you want to retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member GetObjectLegalHoldRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member GetObjectLegalHoldRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetObjectLegalHoldRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetObjectLockConfigurationOutput is not mapped to zod.
 export const getObjectLockConfigurationOutputSchema = z.object({
   /**
    * ```xml
    * <p>The specified bucket's Object Lock configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetObjectLockConfigurationOutput.ObjectLockConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ObjectLockConfiguration for GetObjectLockConfigurationOutput.ObjectLockConfiguration is not generated yet.
-  ObjectLockConfiguration: z.unknown().optional(),
+  ObjectLockConfiguration: z.lazy(() => objectLockConfigurationSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetObjectLockConfigurationRequest is not mapped to zod.
 export const getObjectLockConfigurationRequestSchema = z.object({
   /**
    * ```xml
@@ -8291,26 +7747,21 @@ export const getObjectLockConfigurationRequestSchema = z.object({
    *             <b>Access points</b> - When you use this action with an access point for general purpose buckets, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When you use this action with an access point for directory buckets, you must provide the access point name in place of the bucket name. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectLockConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetObjectLockConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetObjectLockConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetObjectOutput is not mapped to zod.
 export const getObjectOutputSchema = z.object({
   /**
    * ```xml
    * <p>Object data.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetObjectOutput.Body is not mapped to zod.
   Body: streamingBlobSchema.optional().default(new Uint8Array([])),
   /**
    * ```xml
@@ -8331,14 +7782,12 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-delete-marker") on structure member GetObjectOutput.DeleteMarker is not mapped to zod.
   DeleteMarker: deleteMarkerSchema.optional(),
   /**
    * ```xml
    * <p>Indicates that a range of bytes was specified in the request.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("accept-ranges") on structure member GetObjectOutput.AcceptRanges is not mapped to zod.
   AcceptRanges: acceptRangesSchema.optional(),
   /**
    * ```xml
@@ -8353,7 +7802,6 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expiration") on structure member GetObjectOutput.Expiration is not mapped to zod.
   Expiration: expirationSchema.optional(),
   /**
    * ```xml
@@ -8364,7 +7812,6 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-restore") on structure member GetObjectOutput.Restore is not mapped to zod.
   Restore: restoreSchema.optional(),
   /**
    * ```xml
@@ -8376,14 +7823,12 @@ export const getObjectOutputSchema = z.object({
    *         <code>Last-Modified: timestamp</code> response header.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Last-Modified") on structure member GetObjectOutput.LastModified is not mapped to zod.
   LastModified: lastModifiedSchema.optional(),
   /**
    * ```xml
    * <p>Size of the body in bytes.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Length") on structure member GetObjectOutput.ContentLength is not mapped to zod.
   ContentLength: contentLengthSchema.optional(),
   /**
    * ```xml
@@ -8391,7 +7836,6 @@ export const getObjectOutputSchema = z.object({
    *       resource found at a URL.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("ETag") on structure member GetObjectOutput.ETag is not mapped to zod.
   ETag: eTagSchema.optional(),
   /**
    * ```xml
@@ -8400,7 +7844,6 @@ export const getObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32") on structure member GetObjectOutput.ChecksumCRC32 is not mapped to zod.
   ChecksumCRC32: checksumCrc32Schema.optional(),
   /**
    * ```xml
@@ -8409,7 +7852,6 @@ export const getObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32c") on structure member GetObjectOutput.ChecksumCRC32C is not mapped to zod.
   ChecksumCRC32C: checksumCrc32CSchema.optional(),
   /**
    * ```xml
@@ -8418,7 +7860,6 @@ export const getObjectOutputSchema = z.object({
    *         object integrity in the Amazon S3 User Guide</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc64nvme") on structure member GetObjectOutput.ChecksumCRC64NVME is not mapped to zod.
   ChecksumCRC64NVME: checksumCrc64NvmeSchema.optional(),
   /**
    * ```xml
@@ -8427,7 +7868,6 @@ export const getObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha1") on structure member GetObjectOutput.ChecksumSHA1 is not mapped to zod.
   ChecksumSHA1: checksumSha1Schema.optional(),
   /**
    * ```xml
@@ -8436,7 +7876,6 @@ export const getObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha256") on structure member GetObjectOutput.ChecksumSHA256 is not mapped to zod.
   ChecksumSHA256: checksumSha256Schema.optional(),
   /**
    * ```xml
@@ -8447,7 +7886,6 @@ export const getObjectOutputSchema = z.object({
    *       the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-type") on structure member GetObjectOutput.ChecksumType is not mapped to zod.
   ChecksumType: checksumTypeSchema.optional(),
   /**
    * ```xml
@@ -8460,7 +7898,6 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-missing-meta") on structure member GetObjectOutput.MissingMeta is not mapped to zod.
   MissingMeta: missingMetaSchema.optional(),
   /**
    * ```xml
@@ -8470,21 +7907,18 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member GetObjectOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
    * <p>Specifies caching behavior along the request/reply chain.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Cache-Control") on structure member GetObjectOutput.CacheControl is not mapped to zod.
   CacheControl: cacheControlSchema.optional(),
   /**
    * ```xml
    * <p>Specifies presentational information for the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Disposition") on structure member GetObjectOutput.ContentDisposition is not mapped to zod.
   ContentDisposition: contentDispositionSchema.optional(),
   /**
    * ```xml
@@ -8492,35 +7926,30 @@ export const getObjectOutputSchema = z.object({
    *       must be applied to obtain the media-type referenced by the Content-Type header field.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Encoding") on structure member GetObjectOutput.ContentEncoding is not mapped to zod.
   ContentEncoding: contentEncodingSchema.optional(),
   /**
    * ```xml
    * <p>The language the content is in.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Language") on structure member GetObjectOutput.ContentLanguage is not mapped to zod.
   ContentLanguage: contentLanguageSchema.optional(),
   /**
    * ```xml
    * <p>The portion of the object returned in the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Range") on structure member GetObjectOutput.ContentRange is not mapped to zod.
   ContentRange: contentRangeSchema.optional(),
   /**
    * ```xml
    * <p>A standard MIME type describing the format of the object data.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Type") on structure member GetObjectOutput.ContentType is not mapped to zod.
   ContentType: contentTypeSchema.optional(),
   /**
    * ```xml
    * <p>The date and time at which the object is no longer cacheable.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Expires") on structure member GetObjectOutput.Expires is not mapped to zod.
   Expires: expiresSchema.optional(),
   /**
    * ```xml
@@ -8532,7 +7961,6 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-website-redirect-location") on structure member GetObjectOutput.WebsiteRedirectLocation is not mapped to zod.
   WebsiteRedirectLocation: websiteRedirectLocationSchema.optional(),
   /**
    * ```xml
@@ -8543,16 +7971,13 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member GetObjectOutput.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
    * <p>A map of metadata to store with the object in S3.</p>
    * ```
    */
-  // TODO: smithy.api#httpPrefixHeaders ("x-amz-meta-") on structure member GetObjectOutput.Metadata is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Metadata for GetObjectOutput.Metadata is not generated yet.
-  Metadata: z.unknown().optional(),
+  Metadata: metadataSchema.optional(),
   /**
    * ```xml
    * <p>If server-side encryption with a customer-provided encryption key was requested, the response will
@@ -8562,7 +7987,6 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member GetObjectOutput.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -8574,14 +7998,12 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member GetObjectOutput.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
    * <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member GetObjectOutput.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -8589,7 +8011,6 @@ export const getObjectOutputSchema = z.object({
    *       keys (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member GetObjectOutput.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
   /**
    * ```xml
@@ -8602,9 +8023,7 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-storage-class") on structure member GetObjectOutput.StorageClass is not mapped to zod.
   StorageClass: storageClassSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member GetObjectOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
   /**
    * ```xml
@@ -8615,7 +8034,6 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-replication-status") on structure member GetObjectOutput.ReplicationStatus is not mapped to zod.
   ReplicationStatus: replicationStatusSchema.optional(),
   /**
    * ```xml
@@ -8623,7 +8041,6 @@ export const getObjectOutputSchema = z.object({
    *         <code>partNumber</code> in your request and the object was uploaded as a multipart upload.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-mp-parts-count") on structure member GetObjectOutput.PartsCount is not mapped to zod.
   PartsCount: partsCountSchema.optional(),
   /**
    * ```xml
@@ -8635,7 +8052,6 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-tagging-count") on structure member GetObjectOutput.TagCount is not mapped to zod.
   TagCount: tagCountSchema.optional(),
   /**
    * ```xml
@@ -8645,7 +8061,6 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-mode") on structure member GetObjectOutput.ObjectLockMode is not mapped to zod.
   ObjectLockMode: objectLockModeSchema.optional(),
   /**
    * ```xml
@@ -8655,7 +8070,6 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-retain-until-date") on structure member GetObjectOutput.ObjectLockRetainUntilDate is not mapped to zod.
   ObjectLockRetainUntilDate: objectLockRetainUntilDateSchema.optional(),
   /**
    * ```xml
@@ -8666,11 +8080,9 @@ export const getObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-legal-hold") on structure member GetObjectOutput.ObjectLockLegalHoldStatus is not mapped to zod.
   ObjectLockLegalHoldStatus: objectLockLegalHoldStatusSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetObjectRequest is not mapped to zod.
 export const getObjectRequestSchema = z.object({
   /**
    * ```xml
@@ -8695,8 +8107,6 @@ export const getObjectRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetObjectRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -8709,7 +8119,6 @@ export const getObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Match") on structure member GetObjectRequest.IfMatch is not mapped to zod.
   IfMatch: ifMatchSchema.optional(),
   /**
    * ```xml
@@ -8722,7 +8131,6 @@ export const getObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Modified-Since") on structure member GetObjectRequest.IfModifiedSince is not mapped to zod.
   IfModifiedSince: ifModifiedSinceSchema.optional(),
   /**
    * ```xml
@@ -8735,7 +8143,6 @@ export const getObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-None-Match") on structure member GetObjectRequest.IfNoneMatch is not mapped to zod.
   IfNoneMatch: ifNoneMatchSchema.optional(),
   /**
    * ```xml
@@ -8748,15 +8155,12 @@ export const getObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Unmodified-Since") on structure member GetObjectRequest.IfUnmodifiedSince is not mapped to zod.
   IfUnmodifiedSince: ifUnmodifiedSinceSchema.optional(),
   /**
    * ```xml
    * <p>Key of the object to get.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member GetObjectRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
@@ -8767,49 +8171,42 @@ export const getObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Range") on structure member GetObjectRequest.Range is not mapped to zod.
   Range: rangeSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Cache-Control</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-cache-control") on structure member GetObjectRequest.ResponseCacheControl is not mapped to zod.
   ResponseCacheControl: responseCacheControlSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Content-Disposition</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-content-disposition") on structure member GetObjectRequest.ResponseContentDisposition is not mapped to zod.
   ResponseContentDisposition: responseContentDispositionSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Content-Encoding</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-content-encoding") on structure member GetObjectRequest.ResponseContentEncoding is not mapped to zod.
   ResponseContentEncoding: responseContentEncodingSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Content-Language</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-content-language") on structure member GetObjectRequest.ResponseContentLanguage is not mapped to zod.
   ResponseContentLanguage: responseContentLanguageSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Content-Type</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-content-type") on structure member GetObjectRequest.ResponseContentType is not mapped to zod.
   ResponseContentType: responseContentTypeSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Expires</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-expires") on structure member GetObjectRequest.ResponseExpires is not mapped to zod.
   ResponseExpires: responseExpiresSchema.optional(),
   /**
    * ```xml
@@ -8839,7 +8236,6 @@ export const getObjectRequestSchema = z.object({
    *          <p>For more information about versioning, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketVersioning.html">PutBucketVersioning</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member GetObjectRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
@@ -8871,7 +8267,6 @@ export const getObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member GetObjectRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -8906,7 +8301,6 @@ export const getObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member GetObjectRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -8940,9 +8334,7 @@ export const getObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member GetObjectRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member GetObjectRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -8951,38 +8343,30 @@ export const getObjectRequestSchema = z.object({
    *       object.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("partNumber") on structure member GetObjectRequest.PartNumber is not mapped to zod.
   PartNumber: partNumberSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetObjectRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
    * <p>To retrieve the checksum, this mode must be enabled.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-mode") on structure member GetObjectRequest.ChecksumMode is not mapped to zod.
   ChecksumMode: checksumModeSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetObjectRetentionOutput is not mapped to zod.
 export const getObjectRetentionOutputSchema = z.object({
   /**
    * ```xml
    * <p>The container element for an object's retention settings.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetObjectRetentionOutput.Retention is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Retention") on structure member GetObjectRetentionOutput.Retention is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ObjectLockRetention for GetObjectRetentionOutput.Retention is not generated yet.
-  Retention: z.unknown().optional(),
+  Retention: z.lazy(() => objectLockRetentionSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetObjectRetentionRequest is not mapped to zod.
 export const getObjectRetentionRequestSchema = z.object({
   /**
    * ```xml
@@ -8991,54 +8375,43 @@ export const getObjectRetentionRequestSchema = z.object({
    *             <b>Access points</b> - When you use this action with an access point for general purpose buckets, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When you use this action with an access point for directory buckets, you must provide the access point name in place of the bucket name. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectRetentionRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetObjectRetentionRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The key name for the object whose retention settings you want to retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectRetentionRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>The version ID for the object whose retention settings you want to retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member GetObjectRetentionRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member GetObjectRetentionRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetObjectRetentionRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetObjectTaggingOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("Tagging") on structure GetObjectTaggingOutput is not mapped to zod.
 export const getObjectTaggingOutputSchema = z.object({
   /**
    * ```xml
    * <p>The versionId of the object for which you got the tagging information.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member GetObjectTaggingOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
    * <p>Contains the tag set.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#TagSet for GetObjectTaggingOutput.TagSet is not generated yet.
-  TagSet: z.unknown(),
+  TagSet: tagSetSchema,
 });
 
-// TODO: smithy.api#input ({}) on structure GetObjectTaggingRequest is not mapped to zod.
 export const getObjectTaggingRequestSchema = z.object({
   /**
    * ```xml
@@ -9051,88 +8424,69 @@ export const getObjectTaggingRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectTaggingRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetObjectTaggingRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Object key for which to get the tagging information.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectTaggingRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>The versionId of the object for which to get the tagging information.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member GetObjectTaggingRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetObjectTaggingRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member GetObjectTaggingRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetObjectTorrentOutput is not mapped to zod.
 export const getObjectTorrentOutputSchema = z.object({
   /**
    * ```xml
    * <p>A Bencoded dictionary as defined by the BitTorrent specification</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetObjectTorrentOutput.Body is not mapped to zod.
   Body: streamingBlobSchema.optional().default(new Uint8Array([])),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member GetObjectTorrentOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetObjectTorrentRequest is not mapped to zod.
 export const getObjectTorrentRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket containing the object for which to get the torrent files.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectTorrentRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetObjectTorrentRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The object key for which to get the information.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetObjectTorrentRequest.Key is not mapped to zod.
   Key: objectKeySchema,
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member GetObjectTorrentRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetObjectTorrentRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure GetPublicAccessBlockOutput is not mapped to zod.
 export const getPublicAccessBlockOutputSchema = z.object({
   /**
    * ```xml
    * <p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3 bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member GetPublicAccessBlockOutput.PublicAccessBlockConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#PublicAccessBlockConfiguration for GetPublicAccessBlockOutput.PublicAccessBlockConfiguration is not generated yet.
-  PublicAccessBlockConfiguration: z.unknown().optional(),
+  PublicAccessBlockConfiguration: z.lazy(() => publicAccessBlockConfigurationSchema).optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure GetPublicAccessBlockRequest is not mapped to zod.
 export const getPublicAccessBlockRequestSchema = z.object({
   /**
    * ```xml
@@ -9140,15 +8494,12 @@ export const getPublicAccessBlockRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member GetPublicAccessBlockRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member GetPublicAccessBlockRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member GetPublicAccessBlockRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
@@ -9177,9 +8528,7 @@ export const grantSchema = z.object({
    * <p>The person being granted permissions.</p>
    * ```
    */
-  // TODO: smithy.api#xmlNamespace ({"prefix":"xsi","uri":"http://www.w3.org/2001/XMLSchema-instance"}) on structure member Grant.Grantee is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Grantee for Grant.Grantee is not generated yet.
-  Grantee: z.unknown().optional(),
+  Grantee: z.lazy(() => granteeSchema).optional(),
   /**
    * ```xml
    * <p>Specifies the permission given to the grantee.</p>
@@ -9223,12 +8572,9 @@ export const granteeSchema = z.object({
    * <p>Type of grantee</p>
    * ```
    */
-  // TODO: smithy.api#xmlAttribute ({}) on structure member Grantee.Type is not mapped to zod.
-  // TODO: smithy.api#xmlName ("xsi:type") on structure member Grantee.Type is not mapped to zod.
   Type: typeSchema,
 });
 
-// TODO: smithy.api#output ({}) on structure HeadBucketOutput is not mapped to zod.
 export const headBucketOutputSchema = z.object({
   /**
    * ```xml
@@ -9240,7 +8586,6 @@ export const headBucketOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bucket-arn") on structure member HeadBucketOutput.BucketArn is not mapped to zod.
   BucketArn: s3RegionalOrS3ExpressBucketArnStringSchema.optional(),
   /**
    * ```xml
@@ -9250,7 +8595,6 @@ export const headBucketOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bucket-location-type") on structure member HeadBucketOutput.BucketLocationType is not mapped to zod.
   BucketLocationType: locationTypeSchema.optional(),
   /**
    * ```xml
@@ -9262,14 +8606,12 @@ export const headBucketOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bucket-location-name") on structure member HeadBucketOutput.BucketLocationName is not mapped to zod.
   BucketLocationName: bucketLocationNameSchema.optional(),
   /**
    * ```xml
    * <p>The Region that the bucket is located.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bucket-region") on structure member HeadBucketOutput.BucketRegion is not mapped to zod.
   BucketRegion: regionSchema.optional(),
   /**
    * ```xml
@@ -9279,11 +8621,9 @@ export const headBucketOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-access-point-alias") on structure member HeadBucketOutput.AccessPointAlias is not mapped to zod.
   AccessPointAlias: accessPointAliasSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure HeadBucketRequest is not mapped to zod.
 export const headBucketRequestSchema = z.object({
   /**
    * ```xml
@@ -9311,19 +8651,15 @@ export const headBucketRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member HeadBucketRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member HeadBucketRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member HeadBucketRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure HeadObjectOutput is not mapped to zod.
 export const headObjectOutputSchema = z.object({
   /**
    * ```xml
@@ -9334,14 +8670,12 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-delete-marker") on structure member HeadObjectOutput.DeleteMarker is not mapped to zod.
   DeleteMarker: deleteMarkerSchema.optional(),
   /**
    * ```xml
    * <p>Indicates that a range of bytes was specified.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("accept-ranges") on structure member HeadObjectOutput.AcceptRanges is not mapped to zod.
   AcceptRanges: acceptRangesSchema.optional(),
   /**
    * ```xml
@@ -9356,7 +8690,6 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expiration") on structure member HeadObjectOutput.Expiration is not mapped to zod.
   Expiration: expirationSchema.optional(),
   /**
    * ```xml
@@ -9377,7 +8710,6 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-restore") on structure member HeadObjectOutput.Restore is not mapped to zod.
   Restore: restoreSchema.optional(),
   /**
    * ```xml
@@ -9387,21 +8719,18 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-archive-status") on structure member HeadObjectOutput.ArchiveStatus is not mapped to zod.
   ArchiveStatus: archiveStatusSchema.optional(),
   /**
    * ```xml
    * <p>Date and time when the object was last modified.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Last-Modified") on structure member HeadObjectOutput.LastModified is not mapped to zod.
   LastModified: lastModifiedSchema.optional(),
   /**
    * ```xml
    * <p>Size of the body in bytes.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Length") on structure member HeadObjectOutput.ContentLength is not mapped to zod.
   ContentLength: contentLengthSchema.optional(),
   /**
    * ```xml
@@ -9411,7 +8740,6 @@ export const headObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32") on structure member HeadObjectOutput.ChecksumCRC32 is not mapped to zod.
   ChecksumCRC32: checksumCrc32Schema.optional(),
   /**
    * ```xml
@@ -9421,7 +8749,6 @@ export const headObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32c") on structure member HeadObjectOutput.ChecksumCRC32C is not mapped to zod.
   ChecksumCRC32C: checksumCrc32CSchema.optional(),
   /**
    * ```xml
@@ -9430,7 +8757,6 @@ export const headObjectOutputSchema = z.object({
    *         object integrity in the Amazon S3 User Guide</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc64nvme") on structure member HeadObjectOutput.ChecksumCRC64NVME is not mapped to zod.
   ChecksumCRC64NVME: checksumCrc64NvmeSchema.optional(),
   /**
    * ```xml
@@ -9440,7 +8766,6 @@ export const headObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha1") on structure member HeadObjectOutput.ChecksumSHA1 is not mapped to zod.
   ChecksumSHA1: checksumSha1Schema.optional(),
   /**
    * ```xml
@@ -9450,7 +8775,6 @@ export const headObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha256") on structure member HeadObjectOutput.ChecksumSHA256 is not mapped to zod.
   ChecksumSHA256: checksumSha256Schema.optional(),
   /**
    * ```xml
@@ -9461,7 +8785,6 @@ export const headObjectOutputSchema = z.object({
    *         User Guide</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-type") on structure member HeadObjectOutput.ChecksumType is not mapped to zod.
   ChecksumType: checksumTypeSchema.optional(),
   /**
    * ```xml
@@ -9469,7 +8792,6 @@ export const headObjectOutputSchema = z.object({
    *       resource found at a URL.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("ETag") on structure member HeadObjectOutput.ETag is not mapped to zod.
   ETag: eTagSchema.optional(),
   /**
    * ```xml
@@ -9482,7 +8804,6 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-missing-meta") on structure member HeadObjectOutput.MissingMeta is not mapped to zod.
   MissingMeta: missingMetaSchema.optional(),
   /**
    * ```xml
@@ -9492,21 +8813,18 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member HeadObjectOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
    * <p>Specifies caching behavior along the request/reply chain.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Cache-Control") on structure member HeadObjectOutput.CacheControl is not mapped to zod.
   CacheControl: cacheControlSchema.optional(),
   /**
    * ```xml
    * <p>Specifies presentational information for the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Disposition") on structure member HeadObjectOutput.ContentDisposition is not mapped to zod.
   ContentDisposition: contentDispositionSchema.optional(),
   /**
    * ```xml
@@ -9514,35 +8832,30 @@ export const headObjectOutputSchema = z.object({
    *       must be applied to obtain the media-type referenced by the Content-Type header field.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Encoding") on structure member HeadObjectOutput.ContentEncoding is not mapped to zod.
   ContentEncoding: contentEncodingSchema.optional(),
   /**
    * ```xml
    * <p>The language the content is in.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Language") on structure member HeadObjectOutput.ContentLanguage is not mapped to zod.
   ContentLanguage: contentLanguageSchema.optional(),
   /**
    * ```xml
    * <p>A standard MIME type describing the format of the object data.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Type") on structure member HeadObjectOutput.ContentType is not mapped to zod.
   ContentType: contentTypeSchema.optional(),
   /**
    * ```xml
    * <p>The portion of the object returned in the response for a <code>GET</code> request.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Range") on structure member HeadObjectOutput.ContentRange is not mapped to zod.
   ContentRange: contentRangeSchema.optional(),
   /**
    * ```xml
    * <p>The date and time at which the object is no longer cacheable.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Expires") on structure member HeadObjectOutput.Expires is not mapped to zod.
   Expires: expiresSchema.optional(),
   /**
    * ```xml
@@ -9554,7 +8867,6 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-website-redirect-location") on structure member HeadObjectOutput.WebsiteRedirectLocation is not mapped to zod.
   WebsiteRedirectLocation: websiteRedirectLocationSchema.optional(),
   /**
    * ```xml
@@ -9565,16 +8877,13 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member HeadObjectOutput.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
    * <p>A map of metadata to store with the object in S3.</p>
    * ```
    */
-  // TODO: smithy.api#httpPrefixHeaders ("x-amz-meta-") on structure member HeadObjectOutput.Metadata is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Metadata for HeadObjectOutput.Metadata is not generated yet.
-  Metadata: z.unknown().optional(),
+  Metadata: metadataSchema.optional(),
   /**
    * ```xml
    * <p>If server-side encryption with a customer-provided encryption key was requested, the response will
@@ -9584,7 +8893,6 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member HeadObjectOutput.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -9596,14 +8904,12 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member HeadObjectOutput.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
    * <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member HeadObjectOutput.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -9611,7 +8917,6 @@ export const headObjectOutputSchema = z.object({
    *       keys (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member HeadObjectOutput.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
   /**
    * ```xml
@@ -9625,9 +8930,7 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-storage-class") on structure member HeadObjectOutput.StorageClass is not mapped to zod.
   StorageClass: storageClassSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member HeadObjectOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
   /**
    * ```xml
@@ -9672,7 +8975,6 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-replication-status") on structure member HeadObjectOutput.ReplicationStatus is not mapped to zod.
   ReplicationStatus: replicationStatusSchema.optional(),
   /**
    * ```xml
@@ -9680,7 +8982,6 @@ export const headObjectOutputSchema = z.object({
    *         <code>partNumber</code> in your request and the object was uploaded as a multipart upload.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-mp-parts-count") on structure member HeadObjectOutput.PartsCount is not mapped to zod.
   PartsCount: partsCountSchema.optional(),
   /**
    * ```xml
@@ -9692,7 +8993,6 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-tagging-count") on structure member HeadObjectOutput.TagCount is not mapped to zod.
   TagCount: tagCountSchema.optional(),
   /**
    * ```xml
@@ -9704,7 +9004,6 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-mode") on structure member HeadObjectOutput.ObjectLockMode is not mapped to zod.
   ObjectLockMode: objectLockModeSchema.optional(),
   /**
    * ```xml
@@ -9715,7 +9014,6 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-retain-until-date") on structure member HeadObjectOutput.ObjectLockRetainUntilDate is not mapped to zod.
   ObjectLockRetainUntilDate: objectLockRetainUntilDateSchema.optional(),
   /**
    * ```xml
@@ -9729,11 +9027,9 @@ export const headObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-legal-hold") on structure member HeadObjectOutput.ObjectLockLegalHoldStatus is not mapped to zod.
   ObjectLockLegalHoldStatus: objectLockLegalHoldStatusSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure HeadObjectRequest is not mapped to zod.
 export const headObjectRequestSchema = z.object({
   /**
    * ```xml
@@ -9756,8 +9052,6 @@ export const headObjectRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member HeadObjectRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member HeadObjectRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -9779,7 +9073,6 @@ export const headObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Match") on structure member HeadObjectRequest.IfMatch is not mapped to zod.
   IfMatch: ifMatchSchema.optional(),
   /**
    * ```xml
@@ -9801,7 +9094,6 @@ export const headObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Modified-Since") on structure member HeadObjectRequest.IfModifiedSince is not mapped to zod.
   IfModifiedSince: ifModifiedSinceSchema.optional(),
   /**
    * ```xml
@@ -9823,7 +9115,6 @@ export const headObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-None-Match") on structure member HeadObjectRequest.IfNoneMatch is not mapped to zod.
   IfNoneMatch: ifNoneMatchSchema.optional(),
   /**
    * ```xml
@@ -9845,15 +9136,12 @@ export const headObjectRequestSchema = z.object({
    *          <p>For more information about conditional requests, see <a href="https://tools.ietf.org/html/rfc7232">RFC 7232</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Unmodified-Since") on structure member HeadObjectRequest.IfUnmodifiedSince is not mapped to zod.
   IfUnmodifiedSince: ifUnmodifiedSinceSchema.optional(),
   /**
    * ```xml
    * <p>The object key.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member HeadObjectRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member HeadObjectRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
@@ -9862,49 +9150,42 @@ export const headObjectRequestSchema = z.object({
    *         <code>416 - Requested Range Not Satisfiable</code> error.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Range") on structure member HeadObjectRequest.Range is not mapped to zod.
   Range: rangeSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Cache-Control</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-cache-control") on structure member HeadObjectRequest.ResponseCacheControl is not mapped to zod.
   ResponseCacheControl: responseCacheControlSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Content-Disposition</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-content-disposition") on structure member HeadObjectRequest.ResponseContentDisposition is not mapped to zod.
   ResponseContentDisposition: responseContentDispositionSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Content-Encoding</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-content-encoding") on structure member HeadObjectRequest.ResponseContentEncoding is not mapped to zod.
   ResponseContentEncoding: responseContentEncodingSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Content-Language</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-content-language") on structure member HeadObjectRequest.ResponseContentLanguage is not mapped to zod.
   ResponseContentLanguage: responseContentLanguageSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Content-Type</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-content-type") on structure member HeadObjectRequest.ResponseContentType is not mapped to zod.
   ResponseContentType: responseContentTypeSchema.optional(),
   /**
    * ```xml
    * <p>Sets the <code>Expires</code> header of the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("response-expires") on structure member HeadObjectRequest.ResponseExpires is not mapped to zod.
   ResponseExpires: responseExpiresSchema.optional(),
   /**
    * ```xml
@@ -9914,7 +9195,6 @@ export const headObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member HeadObjectRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
@@ -9924,7 +9204,6 @@ export const headObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member HeadObjectRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -9937,7 +9216,6 @@ export const headObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member HeadObjectRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -9948,9 +9226,7 @@ export const headObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member HeadObjectRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member HeadObjectRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -9959,14 +9235,12 @@ export const headObjectRequestSchema = z.object({
    *       the number of parts in this object.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("partNumber") on structure member HeadObjectRequest.PartNumber is not mapped to zod.
   PartNumber: partNumberSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member HeadObjectRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -9983,7 +9257,6 @@ export const headObjectRequestSchema = z.object({
    *       policies and KMS key policies for the KMS key to retrieve the checksum of the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-mode") on structure member HeadObjectRequest.ChecksumMode is not mapped to zod.
   ChecksumMode: checksumModeSchema.optional(),
 });
 
@@ -9998,8 +9271,6 @@ export const headObjectRequestSchema = z.object({
  *          </note>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure IdempotencyParameterMismatch is not mapped to zod.
-// TODO: smithy.api#httpError (400) on structure IdempotencyParameterMismatch is not mapped to zod.
 export const idempotencyParameterMismatchSchema = z.object({});
 
 /**
@@ -10066,7 +9337,7 @@ export const inputSerializationSchema = z.object({
    * <p>Describes the serialization of a CSV-encoded object.</p>
    * ```
    */
-  CSV: csvInputSchema.optional(),
+  CSV: z.lazy(() => csvInputSchema).optional(),
   /**
    * ```xml
    * <p>Specifies object's compression format. Valid values: NONE, GZIP, BZIP2. Default Value: NONE.</p>
@@ -10078,15 +9349,13 @@ export const inputSerializationSchema = z.object({
    * <p>Specifies JSON as object's input serialization format.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#JSONInput for InputSerialization.JSON is not generated yet.
-  JSON: z.unknown().optional(),
+  JSON: z.lazy(() => jsonInputSchema).optional(),
   /**
    * ```xml
    * <p>Specifies Parquet as object's input serialization format.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#ParquetInput for InputSerialization.Parquet is not generated yet.
-  Parquet: z.unknown().optional(),
+  Parquet: z.lazy(() => parquetInputSchema).optional(),
 });
 
 /**
@@ -10108,10 +9377,7 @@ export const intelligentTieringAndOperatorSchema = z.object({
    * <p>All of these tags must exist in the object's tag set in order for the configuration to apply.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member IntelligentTieringAndOperator.Tags is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Tag") on structure member IntelligentTieringAndOperator.Tags is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#TagSet for IntelligentTieringAndOperator.Tags is not generated yet.
-  Tags: z.unknown().optional(),
+  Tags: tagSetSchema.optional(),
 });
 
 /**
@@ -10134,8 +9400,7 @@ export const intelligentTieringConfigurationSchema = z.object({
    *       criteria.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#IntelligentTieringFilter for IntelligentTieringConfiguration.Filter is not generated yet.
-  Filter: z.unknown().optional(),
+  Filter: z.lazy(() => intelligentTieringFilterSchema).optional(),
   /**
    * ```xml
    * <p>Specifies the status of the configuration.</p>
@@ -10147,10 +9412,7 @@ export const intelligentTieringConfigurationSchema = z.object({
    * <p>Specifies the S3 Intelligent-Tiering storage class tier of the configuration.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member IntelligentTieringConfiguration.Tierings is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Tiering") on structure member IntelligentTieringConfiguration.Tierings is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#TieringList for IntelligentTieringConfiguration.Tierings is not generated yet.
-  Tierings: z.unknown(),
+  Tierings: tieringListSchema,
 });
 
 /**
@@ -10171,8 +9433,7 @@ export const intelligentTieringFilterSchema = z.object({
    * ```
    */
   Prefix: prefixSchema.optional(),
-  // TODO: structure member target com.amazonaws.s3#Tag for IntelligentTieringFilter.Tag is not generated yet.
-  Tag: z.unknown().optional(),
+  Tag: z.lazy(() => tagSchema).optional(),
   /**
    * ```xml
    * <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The
@@ -10180,7 +9441,7 @@ export const intelligentTieringFilterSchema = z.object({
    *       the filter to apply.</p>
    * ```
    */
-  And: intelligentTieringAndOperatorSchema.optional(),
+  And: z.lazy(() => intelligentTieringAndOperatorSchema).optional(),
 });
 
 /**
@@ -10194,8 +9455,6 @@ export const intelligentTieringFilterSchema = z.object({
  *         <i>Amazon S3 User Guide</i>.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure InvalidObjectState is not mapped to zod.
-// TODO: smithy.api#httpError (403) on structure InvalidObjectState is not mapped to zod.
 export const invalidObjectStateSchema = z.object({
   StorageClass: storageClassSchema.optional(),
   AccessTier: intelligentTieringAccessTierSchema.optional(),
@@ -10207,8 +9466,6 @@ export const invalidObjectStateSchema = z.object({
  *       operation.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure InvalidRequest is not mapped to zod.
-// TODO: smithy.api#httpError (400) on structure InvalidRequest is not mapped to zod.
 export const invalidRequestSchema = z.object({});
 
 /**
@@ -10216,8 +9473,6 @@ export const invalidRequestSchema = z.object({});
  * <p> The write offset value that you specified does not match the current object size. </p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure InvalidWriteOffset is not mapped to zod.
-// TODO: smithy.api#httpError (400) on structure InvalidWriteOffset is not mapped to zod.
 export const invalidWriteOffsetSchema = z.object({});
 
 /**
@@ -10232,8 +9487,7 @@ export const inventoryConfigurationSchema = z.object({
    * <p>Contains information about where to publish the inventory results.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#InventoryDestination for InventoryConfiguration.Destination is not generated yet.
-  Destination: z.unknown(),
+  Destination: z.lazy(() => inventoryDestinationSchema),
   /**
    * ```xml
    * <p>Specifies whether the inventory is enabled or disabled. If set to <code>True</code>, an inventory
@@ -10247,8 +9501,7 @@ export const inventoryConfigurationSchema = z.object({
    *       criteria.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#InventoryFilter for InventoryConfiguration.Filter is not generated yet.
-  Filter: z.unknown().optional(),
+  Filter: z.lazy(() => inventoryFilterSchema).optional(),
   /**
    * ```xml
    * <p>The ID used to identify the inventory configuration.</p>
@@ -10269,15 +9522,13 @@ export const inventoryConfigurationSchema = z.object({
    * <p>Contains the optional fields that are included in the inventory results.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#InventoryOptionalFields for InventoryConfiguration.OptionalFields is not generated yet.
-  OptionalFields: z.unknown().optional(),
+  OptionalFields: inventoryOptionalFieldsSchema.optional(),
   /**
    * ```xml
    * <p>Specifies the schedule for generating inventory results.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#InventorySchedule for InventoryConfiguration.Schedule is not generated yet.
-  Schedule: z.unknown(),
+  Schedule: z.lazy(() => inventoryScheduleSchema),
 });
 
 /**
@@ -10292,8 +9543,7 @@ export const inventoryDestinationSchema = z.object({
    *       inventory results are published.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#InventoryS3BucketDestination for InventoryDestination.S3BucketDestination is not generated yet.
-  S3BucketDestination: z.unknown(),
+  S3BucketDestination: z.lazy(() => inventoryS3BucketDestinationSchema),
 });
 
 /**
@@ -10307,17 +9557,13 @@ export const inventoryEncryptionSchema = z.object({
    * <p>Specifies the use of SSE-S3 to encrypt delivered inventory reports.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("SSE-S3") on structure member InventoryEncryption.SSES3 is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#SSES3 for InventoryEncryption.SSES3 is not generated yet.
-  SSES3: z.unknown().optional(),
+  SSES3: z.lazy(() => sses3Schema).optional(),
   /**
    * ```xml
    * <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("SSE-KMS") on structure member InventoryEncryption.SSEKMS is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#SSEKMS for InventoryEncryption.SSEKMS is not generated yet.
-  SSEKMS: z.unknown().optional(),
+  SSEKMS: z.lazy(() => ssekmsSchema).optional(),
 });
 
 /**
@@ -10376,7 +9622,7 @@ export const inventoryS3BucketDestinationSchema = z.object({
    * <p>Contains the type of server-side encryption used to encrypt the inventory results.</p>
    * ```
    */
-  Encryption: inventoryEncryptionSchema.optional(),
+  Encryption: z.lazy(() => inventoryEncryptionSchema).optional(),
 });
 
 /**
@@ -10417,8 +9663,7 @@ export const inventoryTableConfigurationSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#MetadataTableEncryptionConfiguration for InventoryTableConfiguration.EncryptionConfiguration is not generated yet.
-  EncryptionConfiguration: z.unknown().optional(),
+  EncryptionConfiguration: z.lazy(() => metadataTableEncryptionConfigurationSchema).optional(),
 });
 
 /**
@@ -10472,7 +9717,7 @@ export const inventoryTableConfigurationResultSchema = z.object({
    * ```
    */
   TableStatus: metadataTableStatusSchema.optional(),
-  Error: errorDetailsSchema.optional(),
+  Error: z.lazy(() => errorDetailsSchema).optional(),
   /**
    * ```xml
    * <p>
@@ -10515,8 +9760,7 @@ export const inventoryTableConfigurationUpdatesSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#MetadataTableEncryptionConfiguration for InventoryTableConfigurationUpdates.EncryptionConfiguration is not generated yet.
-  EncryptionConfiguration: z.unknown().optional(),
+  EncryptionConfiguration: z.lazy(() => metadataTableEncryptionConfigurationSchema).optional(),
 });
 
 /**
@@ -10563,8 +9807,7 @@ export const journalTableConfigurationSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#RecordExpiration for JournalTableConfiguration.RecordExpiration is not generated yet.
-  RecordExpiration: z.unknown(),
+  RecordExpiration: z.lazy(() => recordExpirationSchema),
   /**
    * ```xml
    * <p>
@@ -10572,8 +9815,7 @@ export const journalTableConfigurationSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#MetadataTableEncryptionConfiguration for JournalTableConfiguration.EncryptionConfiguration is not generated yet.
-  EncryptionConfiguration: z.unknown().optional(),
+  EncryptionConfiguration: z.lazy(() => metadataTableEncryptionConfigurationSchema).optional(),
 });
 
 /**
@@ -10607,7 +9849,7 @@ export const journalTableConfigurationResultSchema = z.object({
    * ```
    */
   TableStatus: metadataTableStatusSchema,
-  Error: errorDetailsSchema.optional(),
+  Error: z.lazy(() => errorDetailsSchema).optional(),
   /**
    * ```xml
    * <p>
@@ -10631,8 +9873,7 @@ export const journalTableConfigurationResultSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#RecordExpiration for JournalTableConfigurationResult.RecordExpiration is not generated yet.
-  RecordExpiration: z.unknown(),
+  RecordExpiration: z.lazy(() => recordExpirationSchema),
 });
 
 /**
@@ -10650,8 +9891,7 @@ export const journalTableConfigurationUpdatesSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#RecordExpiration for JournalTableConfigurationUpdates.RecordExpiration is not generated yet.
-  RecordExpiration: z.unknown(),
+  RecordExpiration: z.lazy(() => recordExpirationSchema),
 });
 
 /**
@@ -10667,7 +9907,6 @@ export const lambdaFunctionConfigurationSchema = z.object({
    *       type occurs.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("CloudFunction") on structure member LambdaFunctionConfiguration.LambdaFunctionArn is not mapped to zod.
   LambdaFunctionArn: lambdaFunctionArnSchema,
   /**
    * ```xml
@@ -10675,12 +9914,8 @@ export const lambdaFunctionConfigurationSchema = z.object({
    *       the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member LambdaFunctionConfiguration.Events is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Event") on structure member LambdaFunctionConfiguration.Events is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#EventList for LambdaFunctionConfiguration.Events is not generated yet.
-  Events: z.unknown(),
-  // TODO: structure member target com.amazonaws.s3#NotificationConfigurationFilter for LambdaFunctionConfiguration.Filter is not generated yet.
-  Filter: z.unknown().optional(),
+  Events: eventListSchema,
+  Filter: z.lazy(() => notificationConfigurationFilterSchema).optional(),
 });
 
 /**
@@ -10737,7 +9972,7 @@ export const lifecycleRuleSchema = z.object({
    *       object has a delete marker.</p>
    * ```
    */
-  Expiration: lifecycleExpirationSchema.optional(),
+  Expiration: z.lazy(() => lifecycleExpirationSchema).optional(),
   /**
    * ```xml
    * <p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>
@@ -10770,8 +10005,7 @@ export const lifecycleRuleSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#LifecycleRuleFilter for LifecycleRule.Filter is not generated yet.
-  Filter: z.unknown().optional(),
+  Filter: z.lazy(() => lifecycleRuleFilterSchema).optional(),
   /**
    * ```xml
    * <p>If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being
@@ -10788,10 +10022,7 @@ export const lifecycleRuleSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member LifecycleRule.Transitions is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Transition") on structure member LifecycleRule.Transitions is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#TransitionList for LifecycleRule.Transitions is not generated yet.
-  Transitions: z.unknown().optional(),
+  Transitions: transitionListSchema.optional(),
   /**
    * ```xml
    * <p>Specifies the transition rule for the lifecycle rule that describes when noncurrent objects
@@ -10804,13 +10035,9 @@ export const lifecycleRuleSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member LifecycleRule.NoncurrentVersionTransitions is not mapped to zod.
-  // TODO: smithy.api#xmlName ("NoncurrentVersionTransition") on structure member LifecycleRule.NoncurrentVersionTransitions is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#NoncurrentVersionTransitionList for LifecycleRule.NoncurrentVersionTransitions is not generated yet.
-  NoncurrentVersionTransitions: z.unknown().optional(),
-  // TODO: structure member target com.amazonaws.s3#NoncurrentVersionExpiration for LifecycleRule.NoncurrentVersionExpiration is not generated yet.
-  NoncurrentVersionExpiration: z.unknown().optional(),
-  AbortIncompleteMultipartUpload: abortIncompleteMultipartUploadSchema.optional(),
+  NoncurrentVersionTransitions: noncurrentVersionTransitionListSchema.optional(),
+  NoncurrentVersionExpiration: z.lazy(() => noncurrentVersionExpirationSchema).optional(),
+  AbortIncompleteMultipartUpload: z.lazy(() => abortIncompleteMultipartUploadSchema).optional(),
 });
 
 /**
@@ -10832,10 +10059,7 @@ export const lifecycleRuleAndOperatorSchema = z.object({
    * <p>All of these tags must exist in the object's tag set in order for the rule to apply.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member LifecycleRuleAndOperator.Tags is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Tag") on structure member LifecycleRuleAndOperator.Tags is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#TagSet for LifecycleRuleAndOperator.Tags is not generated yet.
-  Tags: z.unknown().optional(),
+  Tags: tagSetSchema.optional(),
   /**
    * ```xml
    * <p>Minimum object size to which the rule applies.</p>
@@ -10880,8 +10104,7 @@ export const lifecycleRuleFilterSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Tag for LifecycleRuleFilter.Tag is not generated yet.
-  Tag: z.unknown().optional(),
+  Tag: z.lazy(() => tagSchema).optional(),
   /**
    * ```xml
    * <p>Minimum object size to which the rule applies.</p>
@@ -10894,11 +10117,9 @@ export const lifecycleRuleFilterSchema = z.object({
    * ```
    */
   ObjectSizeLessThan: objectSizeLessThanBytesSchema.optional(),
-  And: lifecycleRuleAndOperatorSchema.optional(),
+  And: z.lazy(() => lifecycleRuleAndOperatorSchema).optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListBucketAnalyticsConfigurationsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListBucketAnalyticsConfigurationResult") on structure ListBucketAnalyticsConfigurationsOutput is not mapped to zod.
 export const listBucketAnalyticsConfigurationsOutputSchema = z.object({
   /**
    * ```xml
@@ -10929,21 +10150,15 @@ export const listBucketAnalyticsConfigurationsOutputSchema = z.object({
    * <p>The list of analytics configurations for a bucket.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListBucketAnalyticsConfigurationsOutput.AnalyticsConfigurationList is not mapped to zod.
-  // TODO: smithy.api#xmlName ("AnalyticsConfiguration") on structure member ListBucketAnalyticsConfigurationsOutput.AnalyticsConfigurationList is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#AnalyticsConfigurationList for ListBucketAnalyticsConfigurationsOutput.AnalyticsConfigurationList is not generated yet.
-  AnalyticsConfigurationList: z.unknown().optional(),
+  AnalyticsConfigurationList: analyticsConfigurationListSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListBucketAnalyticsConfigurationsRequest is not mapped to zod.
 export const listBucketAnalyticsConfigurationsRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket from which analytics configurations are retrieved.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListBucketAnalyticsConfigurationsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member ListBucketAnalyticsConfigurationsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -10951,18 +10166,15 @@ export const listBucketAnalyticsConfigurationsRequestSchema = z.object({
    *       begin.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("continuation-token") on structure member ListBucketAnalyticsConfigurationsRequest.ContinuationToken is not mapped to zod.
   ContinuationToken: tokenSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member ListBucketAnalyticsConfigurationsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListBucketIntelligentTieringConfigurationsOutput is not mapped to zod.
 export const listBucketIntelligentTieringConfigurationsOutputSchema = z.object({
   /**
    * ```xml
@@ -10992,21 +10204,15 @@ export const listBucketIntelligentTieringConfigurationsOutputSchema = z.object({
    * <p>The list of S3 Intelligent-Tiering configurations for a bucket.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListBucketIntelligentTieringConfigurationsOutput.IntelligentTieringConfigurationList is not mapped to zod.
-  // TODO: smithy.api#xmlName ("IntelligentTieringConfiguration") on structure member ListBucketIntelligentTieringConfigurationsOutput.IntelligentTieringConfigurationList is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#IntelligentTieringConfigurationList for ListBucketIntelligentTieringConfigurationsOutput.IntelligentTieringConfigurationList is not generated yet.
-  IntelligentTieringConfigurationList: z.unknown().optional(),
+  IntelligentTieringConfigurationList: intelligentTieringConfigurationListSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListBucketIntelligentTieringConfigurationsRequest is not mapped to zod.
 export const listBucketIntelligentTieringConfigurationsRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListBucketIntelligentTieringConfigurationsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member ListBucketIntelligentTieringConfigurationsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -11014,19 +10220,15 @@ export const listBucketIntelligentTieringConfigurationsRequestSchema = z.object(
    *       begin.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("continuation-token") on structure member ListBucketIntelligentTieringConfigurationsRequest.ContinuationToken is not mapped to zod.
   ContinuationToken: tokenSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member ListBucketIntelligentTieringConfigurationsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListBucketInventoryConfigurationsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListInventoryConfigurationsResult") on structure ListBucketInventoryConfigurationsOutput is not mapped to zod.
 export const listBucketInventoryConfigurationsOutputSchema = z.object({
   /**
    * ```xml
@@ -11040,10 +10242,7 @@ export const listBucketInventoryConfigurationsOutputSchema = z.object({
    * <p>The list of inventory configurations for a bucket.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListBucketInventoryConfigurationsOutput.InventoryConfigurationList is not mapped to zod.
-  // TODO: smithy.api#xmlName ("InventoryConfiguration") on structure member ListBucketInventoryConfigurationsOutput.InventoryConfigurationList is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#InventoryConfigurationList for ListBucketInventoryConfigurationsOutput.InventoryConfigurationList is not generated yet.
-  InventoryConfigurationList: z.unknown().optional(),
+  InventoryConfigurationList: inventoryConfigurationListSchema.optional(),
   /**
    * ```xml
    * <p>Tells whether the returned list of inventory configurations is complete. A value of true indicates
@@ -11061,15 +10260,12 @@ export const listBucketInventoryConfigurationsOutputSchema = z.object({
   NextContinuationToken: nextTokenSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListBucketInventoryConfigurationsRequest is not mapped to zod.
 export const listBucketInventoryConfigurationsRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket containing the inventory configurations to retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListBucketInventoryConfigurationsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member ListBucketInventoryConfigurationsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -11078,19 +10274,15 @@ export const listBucketInventoryConfigurationsRequestSchema = z.object({
    *       The continuation token is an opaque value that Amazon S3 understands.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("continuation-token") on structure member ListBucketInventoryConfigurationsRequest.ContinuationToken is not mapped to zod.
   ContinuationToken: tokenSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member ListBucketInventoryConfigurationsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListBucketMetricsConfigurationsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListMetricsConfigurationsResult") on structure ListBucketMetricsConfigurationsOutput is not mapped to zod.
 export const listBucketMetricsConfigurationsOutputSchema = z.object({
   /**
    * ```xml
@@ -11120,21 +10312,15 @@ export const listBucketMetricsConfigurationsOutputSchema = z.object({
    * <p>The list of metrics configurations for a bucket.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListBucketMetricsConfigurationsOutput.MetricsConfigurationList is not mapped to zod.
-  // TODO: smithy.api#xmlName ("MetricsConfiguration") on structure member ListBucketMetricsConfigurationsOutput.MetricsConfigurationList is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#MetricsConfigurationList for ListBucketMetricsConfigurationsOutput.MetricsConfigurationList is not generated yet.
-  MetricsConfigurationList: z.unknown().optional(),
+  MetricsConfigurationList: metricsConfigurationListSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListBucketMetricsConfigurationsRequest is not mapped to zod.
 export const listBucketMetricsConfigurationsRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket containing the metrics configurations to retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListBucketMetricsConfigurationsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member ListBucketMetricsConfigurationsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -11143,34 +10329,28 @@ export const listBucketMetricsConfigurationsRequestSchema = z.object({
    *       The continuation token is an opaque value that Amazon S3 understands.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("continuation-token") on structure member ListBucketMetricsConfigurationsRequest.ContinuationToken is not mapped to zod.
   ContinuationToken: tokenSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member ListBucketMetricsConfigurationsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListBucketsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListAllMyBucketsResult") on structure ListBucketsOutput is not mapped to zod.
 export const listBucketsOutputSchema = z.object({
   /**
    * ```xml
    * <p>The list of buckets owned by the requester.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Buckets for ListBucketsOutput.Buckets is not generated yet.
-  Buckets: z.unknown().optional(),
+  Buckets: bucketsSchema.optional(),
   /**
    * ```xml
    * <p>The owner of the buckets listed.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Owner for ListBucketsOutput.Owner is not generated yet.
-  Owner: z.unknown().optional(),
+  Owner: z.lazy(() => ownerSchema).optional(),
   /**
    * ```xml
    * <p>
@@ -11190,7 +10370,6 @@ export const listBucketsOutputSchema = z.object({
   Prefix: prefixSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListBucketsRequest is not mapped to zod.
 export const listBucketsRequestSchema = z.object({
   /**
    * ```xml
@@ -11198,7 +10377,6 @@ export const listBucketsRequestSchema = z.object({
    *       buckets that are owned by an Amazon Web Services account, return all the buckets in response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("max-buckets") on structure member ListBucketsRequest.MaxBuckets is not mapped to zod.
   MaxBuckets: maxBucketsSchema.optional(),
   /**
    * ```xml
@@ -11216,14 +10394,12 @@ export const listBucketsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("continuation-token") on structure member ListBucketsRequest.ContinuationToken is not mapped to zod.
   ContinuationToken: tokenSchema.optional(),
   /**
    * ```xml
    * <p>Limits the response to bucket names that begin with the specified bucket name prefix.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("prefix") on structure member ListBucketsRequest.Prefix is not mapped to zod.
   Prefix: prefixSchema.optional(),
   /**
    * ```xml
@@ -11238,20 +10414,16 @@ export const listBucketsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("bucket-region") on structure member ListBucketsRequest.BucketRegion is not mapped to zod.
   BucketRegion: bucketRegionSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListDirectoryBucketsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListAllMyDirectoryBucketsResult") on structure ListDirectoryBucketsOutput is not mapped to zod.
 export const listDirectoryBucketsOutputSchema = z.object({
   /**
    * ```xml
    * <p>The list of buckets owned by the requester. </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Buckets for ListDirectoryBucketsOutput.Buckets is not generated yet.
-  Buckets: z.unknown().optional(),
+  Buckets: bucketsSchema.optional(),
   /**
    * ```xml
    * <p>If <code>ContinuationToken</code> was sent with the request, it is included in the response. You can
@@ -11261,7 +10433,6 @@ export const listDirectoryBucketsOutputSchema = z.object({
   ContinuationToken: directoryBucketTokenSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListDirectoryBucketsRequest is not mapped to zod.
 export const listDirectoryBucketsRequestSchema = z.object({
   /**
    * ```xml
@@ -11271,7 +10442,6 @@ export const listDirectoryBucketsRequestSchema = z.object({
    *       can use this <code>ContinuationToken</code> for the pagination of the list results. </p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("continuation-token") on structure member ListDirectoryBucketsRequest.ContinuationToken is not mapped to zod.
   ContinuationToken: directoryBucketTokenSchema.optional(),
   /**
    * ```xml
@@ -11279,12 +10449,9 @@ export const listDirectoryBucketsRequestSchema = z.object({
    *       buckets that are owned by an Amazon Web Services account, return all the buckets in response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("max-directory-buckets") on structure member ListDirectoryBucketsRequest.MaxDirectoryBuckets is not mapped to zod.
   MaxDirectoryBuckets: maxDirectoryBucketsSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListMultipartUploadsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListMultipartUploadsResult") on structure ListMultipartUploadsOutput is not mapped to zod.
 export const listMultipartUploadsOutputSchema = z.object({
   /**
    * ```xml
@@ -11370,10 +10537,7 @@ export const listMultipartUploadsOutputSchema = z.object({
    *         <code>Upload</code> elements.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListMultipartUploadsOutput.Uploads is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Upload") on structure member ListMultipartUploadsOutput.Uploads is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#MultipartUploadList for ListMultipartUploadsOutput.Uploads is not generated yet.
-  Uploads: z.unknown().optional(),
+  Uploads: multipartUploadListSchema.optional(),
   /**
    * ```xml
    * <p>If you specify a delimiter in the request, then the result returns each distinct key prefix
@@ -11385,9 +10549,7 @@ export const listMultipartUploadsOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListMultipartUploadsOutput.CommonPrefixes is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#CommonPrefixList for ListMultipartUploadsOutput.CommonPrefixes is not generated yet.
-  CommonPrefixes: z.unknown().optional(),
+  CommonPrefixes: commonPrefixListSchema.optional(),
   /**
    * ```xml
    * <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
@@ -11399,11 +10561,9 @@ export const listMultipartUploadsOutputSchema = z.object({
    * ```
    */
   EncodingType: encodingTypeSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member ListMultipartUploadsOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListMultipartUploadsRequest is not mapped to zod.
 export const listMultipartUploadsRequestSchema = z.object({
   /**
    * ```xml
@@ -11426,8 +10586,6 @@ export const listMultipartUploadsRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListMultipartUploadsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member ListMultipartUploadsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -11446,9 +10604,7 @@ export const listMultipartUploadsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("delimiter") on structure member ListMultipartUploadsRequest.Delimiter is not mapped to zod.
   Delimiter: delimiterSchema.optional(),
-  // TODO: smithy.api#httpQuery ("encoding-type") on structure member ListMultipartUploadsRequest.EncodingType is not mapped to zod.
   EncodingType: encodingTypeSchema.optional(),
   /**
    * ```xml
@@ -11482,7 +10638,6 @@ export const listMultipartUploadsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("key-marker") on structure member ListMultipartUploadsRequest.KeyMarker is not mapped to zod.
   KeyMarker: keyMarkerSchema.optional(),
   /**
    * ```xml
@@ -11490,7 +10645,6 @@ export const listMultipartUploadsRequestSchema = z.object({
    *       is the maximum number of uploads that can be returned in a response.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("max-uploads") on structure member ListMultipartUploadsRequest.MaxUploads is not mapped to zod.
   MaxUploads: maxUploadsSchema.optional(),
   /**
    * ```xml
@@ -11503,8 +10657,6 @@ export const listMultipartUploadsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("prefix") on structure member ListMultipartUploadsRequest.Prefix is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Prefix"}) on structure member ListMultipartUploadsRequest.Prefix is not mapped to zod.
   Prefix: prefixSchema.optional(),
   /**
    * ```xml
@@ -11517,21 +10669,16 @@ export const listMultipartUploadsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("upload-id-marker") on structure member ListMultipartUploadsRequest.UploadIdMarker is not mapped to zod.
   UploadIdMarker: uploadIdMarkerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member ListMultipartUploadsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member ListMultipartUploadsRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListObjectVersionsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListVersionsResult") on structure ListObjectVersionsOutput is not mapped to zod.
 export const listObjectVersionsOutputSchema = z.object({
   /**
    * ```xml
@@ -11576,20 +10723,14 @@ export const listObjectVersionsOutputSchema = z.object({
    * <p>Container for version information.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListObjectVersionsOutput.Versions is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Version") on structure member ListObjectVersionsOutput.Versions is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ObjectVersionList for ListObjectVersionsOutput.Versions is not generated yet.
-  Versions: z.unknown().optional(),
+  Versions: objectVersionListSchema.optional(),
   /**
    * ```xml
    * <p>Container for an object that is a delete marker. To learn more about delete markers, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/DeleteMarker.html">Working with delete
    *         markers</a>.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListObjectVersionsOutput.DeleteMarkers is not mapped to zod.
-  // TODO: smithy.api#xmlName ("DeleteMarker") on structure member ListObjectVersionsOutput.DeleteMarkers is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#DeleteMarkers for ListObjectVersionsOutput.DeleteMarkers is not generated yet.
-  DeleteMarkers: z.unknown().optional(),
+  DeleteMarkers: deleteMarkersSchema.optional(),
   /**
    * ```xml
    * <p>The bucket name.</p>
@@ -11624,9 +10765,7 @@ export const listObjectVersionsOutputSchema = z.object({
    *       of returns.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListObjectVersionsOutput.CommonPrefixes is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#CommonPrefixList for ListObjectVersionsOutput.CommonPrefixes is not generated yet.
-  CommonPrefixes: z.unknown().optional(),
+  CommonPrefixes: commonPrefixListSchema.optional(),
   /**
    * ```xml
    * <p> Encoding type used by Amazon S3 to encode object key names in the XML response.</p>
@@ -11637,19 +10776,15 @@ export const listObjectVersionsOutputSchema = z.object({
    * ```
    */
   EncodingType: encodingTypeSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member ListObjectVersionsOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListObjectVersionsRequest is not mapped to zod.
 export const listObjectVersionsRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name that contains the objects. </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListObjectVersionsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member ListObjectVersionsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -11662,16 +10797,13 @@ export const listObjectVersionsRequestSchema = z.object({
    *       the key-marker.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("delimiter") on structure member ListObjectVersionsRequest.Delimiter is not mapped to zod.
   Delimiter: delimiterSchema.optional(),
-  // TODO: smithy.api#httpQuery ("encoding-type") on structure member ListObjectVersionsRequest.EncodingType is not mapped to zod.
   EncodingType: encodingTypeSchema.optional(),
   /**
    * ```xml
    * <p>Specifies the key to start with when listing objects in a bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("key-marker") on structure member ListObjectVersionsRequest.KeyMarker is not mapped to zod.
   KeyMarker: keyMarkerSchema.optional(),
   /**
    * ```xml
@@ -11682,7 +10814,6 @@ export const listObjectVersionsRequestSchema = z.object({
    *         <code>key-marker</code> and <code>version-id-marker</code>.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("max-keys") on structure member ListObjectVersionsRequest.MaxKeys is not mapped to zod.
   MaxKeys: maxKeysSchema.optional(),
   /**
    * ```xml
@@ -11693,24 +10824,19 @@ export const listObjectVersionsRequestSchema = z.object({
    *       under <code>CommonPrefixes</code>. </p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("prefix") on structure member ListObjectVersionsRequest.Prefix is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Prefix"}) on structure member ListObjectVersionsRequest.Prefix is not mapped to zod.
   Prefix: prefixSchema.optional(),
   /**
    * ```xml
    * <p>Specifies the object version you want to start listing from.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("version-id-marker") on structure member ListObjectVersionsRequest.VersionIdMarker is not mapped to zod.
   VersionIdMarker: versionIdMarkerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member ListObjectVersionsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member ListObjectVersionsRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -11718,13 +10844,9 @@ export const listObjectVersionsRequestSchema = z.object({
    *       are not returned.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-optional-object-attributes") on structure member ListObjectVersionsRequest.OptionalObjectAttributes is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#OptionalObjectAttributesList for ListObjectVersionsRequest.OptionalObjectAttributes is not generated yet.
-  OptionalObjectAttributes: z.unknown().optional(),
+  OptionalObjectAttributes: optionalObjectAttributesListSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListObjectsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListBucketResult") on structure ListObjectsOutput is not mapped to zod.
 export const listObjectsOutputSchema = z.object({
   /**
    * ```xml
@@ -11759,9 +10881,7 @@ export const listObjectsOutputSchema = z.object({
    * <p>Metadata about each object returned.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListObjectsOutput.Contents is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ObjectList for ListObjectsOutput.Contents is not generated yet.
-  Contents: z.unknown().optional(),
+  Contents: objectListSchema.optional(),
   /**
    * ```xml
    * <p>The bucket name.</p>
@@ -11805,9 +10925,7 @@ export const listObjectsOutputSchema = z.object({
    *       roll up into a common prefix count as a single return when calculating the number of returns.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListObjectsOutput.CommonPrefixes is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#CommonPrefixList for ListObjectsOutput.CommonPrefixes is not generated yet.
-  CommonPrefixes: z.unknown().optional(),
+  CommonPrefixes: commonPrefixListSchema.optional(),
   /**
    * ```xml
    * <p>Encoding type used by Amazon S3 to encode the <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html">object keys</a> in the response. Responses are
@@ -11824,11 +10942,9 @@ export const listObjectsOutputSchema = z.object({
    * ```
    */
   EncodingType: encodingTypeSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member ListObjectsOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListObjectsRequest is not mapped to zod.
 export const listObjectsRequestSchema = z.object({
   /**
    * ```xml
@@ -11851,8 +10967,6 @@ export const listObjectsRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListObjectsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member ListObjectsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -11862,9 +10976,7 @@ export const listObjectsRequestSchema = z.object({
    *       the key-marker.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("delimiter") on structure member ListObjectsRequest.Delimiter is not mapped to zod.
   Delimiter: delimiterSchema.optional(),
-  // TODO: smithy.api#httpQuery ("encoding-type") on structure member ListObjectsRequest.EncodingType is not mapped to zod.
   EncodingType: encodingTypeSchema.optional(),
   /**
    * ```xml
@@ -11872,7 +10984,6 @@ export const listObjectsRequestSchema = z.object({
    *       key. Marker can be any key in the bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("marker") on structure member ListObjectsRequest.Marker is not mapped to zod.
   Marker: markerSchema.optional(),
   /**
    * ```xml
@@ -11880,15 +10991,12 @@ export const listObjectsRequestSchema = z.object({
    *       key names. The response might contain fewer keys but will never contain more. </p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("max-keys") on structure member ListObjectsRequest.MaxKeys is not mapped to zod.
   MaxKeys: maxKeysSchema.optional(),
   /**
    * ```xml
    * <p>Limits the response to keys that begin with the specified prefix.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("prefix") on structure member ListObjectsRequest.Prefix is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Prefix"}) on structure member ListObjectsRequest.Prefix is not mapped to zod.
   Prefix: prefixSchema.optional(),
   /**
    * ```xml
@@ -11896,14 +11004,12 @@ export const listObjectsRequestSchema = z.object({
    *       Bucket owners need not specify this parameter in their requests.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member ListObjectsRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member ListObjectsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -11911,13 +11017,9 @@ export const listObjectsRequestSchema = z.object({
    *       are not returned.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-optional-object-attributes") on structure member ListObjectsRequest.OptionalObjectAttributes is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#OptionalObjectAttributesList for ListObjectsRequest.OptionalObjectAttributes is not generated yet.
-  OptionalObjectAttributes: z.unknown().optional(),
+  OptionalObjectAttributes: optionalObjectAttributesListSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListObjectsV2Output is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListBucketResult") on structure ListObjectsV2Output is not mapped to zod.
 export const listObjectsV2OutputSchema = z.object({
   /**
    * ```xml
@@ -11932,9 +11034,7 @@ export const listObjectsV2OutputSchema = z.object({
    * <p>Metadata about each object returned.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListObjectsV2Output.Contents is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ObjectList for ListObjectsV2Output.Contents is not generated yet.
-  Contents: z.unknown().optional(),
+  Contents: objectListSchema.optional(),
   /**
    * ```xml
    * <p>The bucket name.</p>
@@ -12003,9 +11103,7 @@ export const listObjectsV2OutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListObjectsV2Output.CommonPrefixes is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#CommonPrefixList for ListObjectsV2Output.CommonPrefixes is not generated yet.
-  CommonPrefixes: z.unknown().optional(),
+  CommonPrefixes: commonPrefixListSchema.optional(),
   /**
    * ```xml
    * <p>Encoding type used by Amazon S3 to encode object key names in the XML response.</p>
@@ -12051,11 +11149,9 @@ export const listObjectsV2OutputSchema = z.object({
    * ```
    */
   StartAfter: startAfterSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member ListObjectsV2Output.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListObjectsV2Request is not mapped to zod.
 export const listObjectsV2RequestSchema = z.object({
   /**
    * ```xml
@@ -12077,8 +11173,6 @@ export const listObjectsV2RequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListObjectsV2Request.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member ListObjectsV2Request.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -12104,7 +11198,6 @@ export const listObjectsV2RequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("delimiter") on structure member ListObjectsV2Request.Delimiter is not mapped to zod.
   Delimiter: delimiterSchema.optional(),
   /**
    * ```xml
@@ -12121,7 +11214,6 @@ export const listObjectsV2RequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("encoding-type") on structure member ListObjectsV2Request.EncodingType is not mapped to zod.
   EncodingType: encodingTypeSchema.optional(),
   /**
    * ```xml
@@ -12129,7 +11221,6 @@ export const listObjectsV2RequestSchema = z.object({
    *       key names. The response might contain fewer keys but will never contain more.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("max-keys") on structure member ListObjectsV2Request.MaxKeys is not mapped to zod.
   MaxKeys: maxKeysSchema.optional(),
   /**
    * ```xml
@@ -12140,8 +11231,6 @@ export const listObjectsV2RequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("prefix") on structure member ListObjectsV2Request.Prefix is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Prefix"}) on structure member ListObjectsV2Request.Prefix is not mapped to zod.
   Prefix: prefixSchema.optional(),
   /**
    * ```xml
@@ -12151,7 +11240,6 @@ export const listObjectsV2RequestSchema = z.object({
    *         <code>ContinuationToken</code> for pagination of the list results. </p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("continuation-token") on structure member ListObjectsV2Request.ContinuationToken is not mapped to zod.
   ContinuationToken: tokenSchema.optional(),
   /**
    * ```xml
@@ -12165,7 +11253,6 @@ export const listObjectsV2RequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("fetch-owner") on structure member ListObjectsV2Request.FetchOwner is not mapped to zod.
   FetchOwner: fetchOwnerSchema.optional(),
   /**
    * ```xml
@@ -12176,7 +11263,6 @@ export const listObjectsV2RequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("start-after") on structure member ListObjectsV2Request.StartAfter is not mapped to zod.
   StartAfter: startAfterSchema.optional(),
   /**
    * ```xml
@@ -12187,14 +11273,12 @@ export const listObjectsV2RequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member ListObjectsV2Request.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member ListObjectsV2Request.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -12205,13 +11289,9 @@ export const listObjectsV2RequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-optional-object-attributes") on structure member ListObjectsV2Request.OptionalObjectAttributes is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#OptionalObjectAttributesList for ListObjectsV2Request.OptionalObjectAttributes is not generated yet.
-  OptionalObjectAttributes: z.unknown().optional(),
+  OptionalObjectAttributes: optionalObjectAttributesListSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure ListPartsOutput is not mapped to zod.
-// TODO: smithy.api#xmlName ("ListPartsResult") on structure ListPartsOutput is not mapped to zod.
 export const listPartsOutputSchema = z.object({
   /**
    * ```xml
@@ -12227,7 +11307,6 @@ export const listPartsOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-abort-date") on structure member ListPartsOutput.AbortDate is not mapped to zod.
   AbortDate: abortDateSchema.optional(),
   /**
    * ```xml
@@ -12239,7 +11318,6 @@ export const listPartsOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-abort-rule-id") on structure member ListPartsOutput.AbortRuleId is not mapped to zod.
   AbortRuleId: abortRuleIdSchema.optional(),
   /**
    * ```xml
@@ -12294,10 +11372,7 @@ export const listPartsOutputSchema = z.object({
    *         <code>Part</code> elements.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ListPartsOutput.Parts is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Part") on structure member ListPartsOutput.Parts is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Parts for ListPartsOutput.Parts is not generated yet.
-  Parts: z.unknown().optional(),
+  Parts: partsSchema.optional(),
   /**
    * ```xml
    * <p>Container element that identifies who initiated the multipart upload. If the initiator is an
@@ -12305,7 +11380,7 @@ export const listPartsOutputSchema = z.object({
    *       initiator is an IAM User, this element provides the user ARN.</p>
    * ```
    */
-  Initiator: initiatorSchema.optional(),
+  Initiator: z.lazy(() => initiatorSchema).optional(),
   /**
    * ```xml
    * <p>Container element that identifies the object owner, after the object is created. If multipart upload
@@ -12317,8 +11392,7 @@ export const listPartsOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Owner for ListPartsOutput.Owner is not generated yet.
-  Owner: z.unknown().optional(),
+  Owner: z.lazy(() => ownerSchema).optional(),
   /**
    * ```xml
    * <p>The class of storage used to store the uploaded object.</p>
@@ -12330,7 +11404,6 @@ export const listPartsOutputSchema = z.object({
    * ```
    */
   StorageClass: storageClassSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member ListPartsOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
   /**
    * ```xml
@@ -12350,7 +11423,6 @@ export const listPartsOutputSchema = z.object({
   ChecksumType: checksumTypeSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure ListPartsRequest is not mapped to zod.
 export const listPartsRequestSchema = z.object({
   /**
    * ```xml
@@ -12373,23 +11445,18 @@ export const listPartsRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListPartsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member ListPartsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Object key for which the multipart upload was initiated.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member ListPartsRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member ListPartsRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>Sets the maximum number of parts to return.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("max-parts") on structure member ListPartsRequest.MaxParts is not mapped to zod.
   MaxParts: maxPartsSchema.optional(),
   /**
    * ```xml
@@ -12397,23 +11464,19 @@ export const listPartsRequestSchema = z.object({
    *       listed.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("part-number-marker") on structure member ListPartsRequest.PartNumberMarker is not mapped to zod.
   PartNumberMarker: partNumberMarkerSchema.optional(),
   /**
    * ```xml
    * <p>Upload ID identifying the multipart upload whose parts are being listed.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("uploadId") on structure member ListPartsRequest.UploadId is not mapped to zod.
   UploadId: multipartUploadIdSchema,
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member ListPartsRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member ListPartsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -12426,7 +11489,6 @@ export const listPartsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member ListPartsRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -12439,7 +11501,6 @@ export const listPartsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member ListPartsRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -12452,7 +11513,6 @@ export const listPartsRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member ListPartsRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
 });
 
@@ -12510,8 +11570,7 @@ export const loggingEnabledSchema = z.object({
    *       <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#TargetGrants for LoggingEnabled.TargetGrants is not generated yet.
-  TargetGrants: z.unknown().optional(),
+  TargetGrants: targetGrantsSchema.optional(),
   /**
    * ```xml
    * <p>A prefix for all log object keys. If you store log files from multiple Amazon S3 buckets in a single
@@ -12524,8 +11583,7 @@ export const loggingEnabledSchema = z.object({
    * <p>Amazon S3 key format for log objects.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#TargetObjectKeyFormat for LoggingEnabled.TargetObjectKeyFormat is not generated yet.
-  TargetObjectKeyFormat: z.unknown().optional(),
+  TargetObjectKeyFormat: z.lazy(() => targetObjectKeyFormatSchema).optional(),
 });
 
 /**
@@ -12543,7 +11601,7 @@ export const metadataConfigurationSchema = z.object({
    *     </p>
    * ```
    */
-  JournalTableConfiguration: journalTableConfigurationSchema,
+  JournalTableConfiguration: z.lazy(() => journalTableConfigurationSchema),
   /**
    * ```xml
    * <p>
@@ -12551,7 +11609,7 @@ export const metadataConfigurationSchema = z.object({
    *     </p>
    * ```
    */
-  InventoryTableConfiguration: inventoryTableConfigurationSchema.optional(),
+  InventoryTableConfiguration: z.lazy(() => inventoryTableConfigurationSchema).optional(),
 });
 
 /**
@@ -12569,7 +11627,7 @@ export const metadataConfigurationResultSchema = z.object({
    *     </p>
    * ```
    */
-  DestinationResult: destinationResultSchema,
+  DestinationResult: z.lazy(() => destinationResultSchema),
   /**
    * ```xml
    * <p>
@@ -12577,7 +11635,7 @@ export const metadataConfigurationResultSchema = z.object({
    *     </p>
    * ```
    */
-  JournalTableConfigurationResult: journalTableConfigurationResultSchema.optional(),
+  JournalTableConfigurationResult: z.lazy(() => journalTableConfigurationResultSchema).optional(),
   /**
    * ```xml
    * <p>
@@ -12585,7 +11643,7 @@ export const metadataConfigurationResultSchema = z.object({
    *     </p>
    * ```
    */
-  InventoryTableConfigurationResult: inventoryTableConfigurationResultSchema.optional(),
+  InventoryTableConfigurationResult: z.lazy(() => inventoryTableConfigurationResultSchema).optional(),
 });
 
 /**
@@ -12627,8 +11685,7 @@ export const metadataTableConfigurationSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#S3TablesDestination for MetadataTableConfiguration.S3TablesDestination is not generated yet.
-  S3TablesDestination: z.unknown(),
+  S3TablesDestination: z.lazy(() => s3TablesDestinationSchema),
 });
 
 /**
@@ -12653,8 +11710,7 @@ export const metadataTableConfigurationResultSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#S3TablesDestinationResult for MetadataTableConfigurationResult.S3TablesDestinationResult is not generated yet.
-  S3TablesDestinationResult: z.unknown(),
+  S3TablesDestinationResult: z.lazy(() => s3TablesDestinationResultSchema),
 });
 
 /**
@@ -12707,8 +11763,7 @@ export const metricsSchema = z.object({
    *         <code>s3:Replication:OperationMissedThreshold</code> event. </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#ReplicationTimeValue for Metrics.EventThreshold is not generated yet.
-  EventThreshold: z.unknown().optional(),
+  EventThreshold: z.lazy(() => replicationTimeValueSchema).optional(),
 });
 
 /**
@@ -12730,10 +11785,7 @@ export const metricsAndOperatorSchema = z.object({
    * <p>The list of tags used when evaluating an AND predicate.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member MetricsAndOperator.Tags is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Tag") on structure member MetricsAndOperator.Tags is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#TagSet for MetricsAndOperator.Tags is not generated yet.
-  Tags: z.unknown().optional(),
+  Tags: tagSetSchema.optional(),
   /**
    * ```xml
    * <p>The access point ARN used when evaluating an <code>AND</code> predicate.</p>
@@ -12765,8 +11817,7 @@ export const metricsConfigurationSchema = z.object({
    *       conjunction (MetricsAndOperator).</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#MetricsFilter for MetricsConfiguration.Filter is not generated yet.
-  Filter: z.unknown().optional(),
+  Filter: metricsFilterSchema.optional(),
 });
 
 /**
@@ -12814,14 +11865,13 @@ export const multipartUploadSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Owner for MultipartUpload.Owner is not generated yet.
-  Owner: z.unknown().optional(),
+  Owner: z.lazy(() => ownerSchema).optional(),
   /**
    * ```xml
    * <p>Identifies who initiated the multipart upload.</p>
    * ```
    */
-  Initiator: initiatorSchema.optional(),
+  Initiator: z.lazy(() => initiatorSchema).optional(),
   /**
    * ```xml
    * <p>The algorithm that was used to create a checksum of the object.</p>
@@ -12843,8 +11893,6 @@ export const multipartUploadSchema = z.object({
  * <p>The specified bucket does not exist.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure NoSuchBucket is not mapped to zod.
-// TODO: smithy.api#httpError (404) on structure NoSuchBucket is not mapped to zod.
 export const noSuchBucketSchema = z.object({});
 
 /**
@@ -12852,8 +11900,6 @@ export const noSuchBucketSchema = z.object({});
  * <p>The specified key does not exist.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure NoSuchKey is not mapped to zod.
-// TODO: smithy.api#httpError (404) on structure NoSuchKey is not mapped to zod.
 export const noSuchKeySchema = z.object({});
 
 /**
@@ -12861,8 +11907,6 @@ export const noSuchKeySchema = z.object({});
  * <p>The specified multipart upload does not exist.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure NoSuchUpload is not mapped to zod.
-// TODO: smithy.api#httpError (404) on structure NoSuchUpload is not mapped to zod.
 export const noSuchUploadSchema = z.object({});
 
 /**
@@ -12949,7 +11993,6 @@ export const noncurrentVersionTransitionSchema = z.object({
  * <p>The specified content does not exist.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure NotFound is not mapped to zod.
 export const notFoundSchema = z.object({});
 
 /**
@@ -12965,35 +12008,26 @@ export const notificationConfigurationSchema = z.object({
    *       generated.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member NotificationConfiguration.TopicConfigurations is not mapped to zod.
-  // TODO: smithy.api#xmlName ("TopicConfiguration") on structure member NotificationConfiguration.TopicConfigurations is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#TopicConfigurationList for NotificationConfiguration.TopicConfigurations is not generated yet.
-  TopicConfigurations: z.unknown().optional(),
+  TopicConfigurations: topicConfigurationListSchema.optional(),
   /**
    * ```xml
    * <p>The Amazon Simple Queue Service queues to publish messages to and the events for which to publish
    *       messages.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member NotificationConfiguration.QueueConfigurations is not mapped to zod.
-  // TODO: smithy.api#xmlName ("QueueConfiguration") on structure member NotificationConfiguration.QueueConfigurations is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#QueueConfigurationList for NotificationConfiguration.QueueConfigurations is not generated yet.
-  QueueConfigurations: z.unknown().optional(),
+  QueueConfigurations: queueConfigurationListSchema.optional(),
   /**
    * ```xml
    * <p>Describes the Lambda functions to invoke and the events for which to invoke them.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member NotificationConfiguration.LambdaFunctionConfigurations is not mapped to zod.
-  // TODO: smithy.api#xmlName ("CloudFunctionConfiguration") on structure member NotificationConfiguration.LambdaFunctionConfigurations is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#LambdaFunctionConfigurationList for NotificationConfiguration.LambdaFunctionConfigurations is not generated yet.
-  LambdaFunctionConfigurations: z.unknown().optional(),
+  LambdaFunctionConfigurations: lambdaFunctionConfigurationListSchema.optional(),
   /**
    * ```xml
    * <p>Enables delivery of events to Amazon EventBridge.</p>
    * ```
    */
-  EventBridgeConfiguration: eventBridgeConfigurationSchema.optional(),
+  EventBridgeConfiguration: z.lazy(() => eventBridgeConfigurationSchema).optional(),
 });
 
 /**
@@ -13003,11 +12037,7 @@ export const notificationConfigurationSchema = z.object({
  *         <i>Amazon S3 User Guide</i>.</p>
  * ```
  */
-export const notificationConfigurationFilterSchema = z.object({
-  // TODO: smithy.api#xmlName ("S3Key") on structure member NotificationConfigurationFilter.Key is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#S3KeyFilter for NotificationConfigurationFilter.Key is not generated yet.
-  Key: z.unknown().optional(),
-});
+export const notificationConfigurationFilterSchema = z.object({ Key: z.lazy(() => s3KeyFilterSchema).optional() });
 
 /**
  * ```xml
@@ -13062,9 +12092,7 @@ export const objectSchema = z.object({
    * <p>The algorithm that was used to create a checksum of the object.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member Object.ChecksumAlgorithm is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ChecksumAlgorithmList for Object.ChecksumAlgorithm is not generated yet.
-  ChecksumAlgorithm: z.unknown().optional(),
+  ChecksumAlgorithm: checksumAlgorithmListSchema.optional(),
   /**
    * ```xml
    * <p>The checksum type that is used to calculate the object’s checksum value. For more information, see
@@ -13100,8 +12128,7 @@ export const objectSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Owner for Object.Owner is not generated yet.
-  Owner: z.unknown().optional(),
+  Owner: z.lazy(() => ownerSchema).optional(),
   /**
    * ```xml
    * <p>Specifies the restoration status of an object. Objects in certain storage classes must be restored
@@ -13113,8 +12140,7 @@ export const objectSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#RestoreStatus for Object.RestoreStatus is not generated yet.
-  RestoreStatus: z.unknown().optional(),
+  RestoreStatus: z.lazy(() => restoreStatusSchema).optional(),
 });
 
 /**
@@ -13122,8 +12148,6 @@ export const objectSchema = z.object({
  * <p>This action is not allowed against this storage tier.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure ObjectAlreadyInActiveTierError is not mapped to zod.
-// TODO: smithy.api#httpError (403) on structure ObjectAlreadyInActiveTierError is not mapped to zod.
 export const objectAlreadyInActiveTierErrorSchema = z.object({});
 
 /**
@@ -13206,8 +12230,7 @@ export const objectLockConfigurationSchema = z.object({
    *       specify <code>Days</code> and <code>Years</code> at the same time.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#ObjectLockRule for ObjectLockConfiguration.Rule is not generated yet.
-  Rule: z.unknown().optional(),
+  Rule: z.lazy(() => objectLockRuleSchema).optional(),
 });
 
 /**
@@ -13258,7 +12281,7 @@ export const objectLockRuleSchema = z.object({
    *       and <code>Years</code> at the same time.</p>
    * ```
    */
-  DefaultRetention: defaultRetentionSchema.optional(),
+  DefaultRetention: z.lazy(() => defaultRetentionSchema).optional(),
 });
 
 /**
@@ -13267,8 +12290,6 @@ export const objectLockRuleSchema = z.object({
  *       Glacier.</p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure ObjectNotInActiveTierError is not mapped to zod.
-// TODO: smithy.api#httpError (403) on structure ObjectNotInActiveTierError is not mapped to zod.
 export const objectNotInActiveTierErrorSchema = z.object({});
 
 /**
@@ -13354,9 +12375,7 @@ export const objectVersionSchema = z.object({
    * <p>The algorithm that was used to create a checksum of the object.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ObjectVersion.ChecksumAlgorithm is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ChecksumAlgorithmList for ObjectVersion.ChecksumAlgorithm is not generated yet.
-  ChecksumAlgorithm: z.unknown().optional(),
+  ChecksumAlgorithm: checksumAlgorithmListSchema.optional(),
   /**
    * ```xml
    * <p>The checksum type that is used to calculate the object’s checksum value. For more information, see
@@ -13406,8 +12425,7 @@ export const objectVersionSchema = z.object({
    * <p>Specifies the owner of the object.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Owner for ObjectVersion.Owner is not generated yet.
-  Owner: z.unknown().optional(),
+  Owner: z.lazy(() => ownerSchema).optional(),
   /**
    * ```xml
    * <p>Specifies the restoration status of an object. Objects in certain storage classes must be restored
@@ -13416,8 +12434,7 @@ export const objectVersionSchema = z.object({
    *         Working with archived objects</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#RestoreStatus for ObjectVersion.RestoreStatus is not generated yet.
-  RestoreStatus: z.unknown().optional(),
+  RestoreStatus: z.lazy(() => restoreStatusSchema).optional(),
 });
 
 /**
@@ -13431,8 +12448,7 @@ export const outputLocationSchema = z.object({
    * <p>Describes an S3 location that will receive the results of the restore request.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#S3Location for OutputLocation.S3 is not generated yet.
-  S3: z.unknown().optional(),
+  S3: z.lazy(() => s3LocationSchema).optional(),
 });
 
 /**
@@ -13446,13 +12462,13 @@ export const outputSerializationSchema = z.object({
    * <p>Describes the serialization of CSV-encoded Select results.</p>
    * ```
    */
-  CSV: csvOutputSchema.optional(),
+  CSV: z.lazy(() => csvOutputSchema).optional(),
   /**
    * ```xml
    * <p>Specifies JSON as request's output serialization format.</p>
    * ```
    */
-  JSON: jsonOutputSchema.optional(),
+  JSON: z.lazy(() => jsonOutputSchema).optional(),
 });
 
 /**
@@ -13486,10 +12502,7 @@ export const ownershipControlsSchema = z.object({
    * <p>The container element for an ownership control rule.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member OwnershipControls.Rules is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Rule") on structure member OwnershipControls.Rules is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#OwnershipControlsRules for OwnershipControls.Rules is not generated yet.
-  Rules: z.unknown(),
+  Rules: ownershipControlsRulesSchema,
 });
 
 /**
@@ -13590,7 +12603,6 @@ export const partSchema = z.object({
  *          <p>PartitionedPrefix defaults to EventTime delivery when server access logs are delivered.</p>
  * ```
  */
-// TODO: smithy.api#xmlName ("PartitionedPrefix") on structure PartitionedPrefix is not mapped to zod.
 export const partitionedPrefixSchema = z.object({
   /**
    * ```xml
@@ -13618,7 +12630,6 @@ export const policyStatusSchema = z.object({
    *         <code>FALSE</code> indicates that the bucket is not public.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("IsPublic") on structure member PolicyStatus.IsPublic is not mapped to zod.
   IsPublic: isPublicSchema.optional(),
 });
 
@@ -13659,8 +12670,7 @@ export const progressEventSchema = z.object({
    * <p>The Progress event details.</p>
    * ```
    */
-  // TODO: smithy.api#eventPayload ({}) on structure member ProgressEvent.Details is not mapped to zod.
-  Details: progressSchema.optional(),
+  Details: z.lazy(() => progressSchema).optional(),
 });
 
 /**
@@ -13690,7 +12700,6 @@ export const publicAccessBlockConfigurationSchema = z.object({
    *          <p>Enabling this setting doesn't affect existing policies or ACLs.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("BlockPublicAcls") on structure member PublicAccessBlockConfiguration.BlockPublicAcls is not mapped to zod.
   BlockPublicAcls: settingSchema.optional(),
   /**
    * ```xml
@@ -13701,7 +12710,6 @@ export const publicAccessBlockConfigurationSchema = z.object({
    *       public ACLs from being set.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("IgnorePublicAcls") on structure member PublicAccessBlockConfiguration.IgnorePublicAcls is not mapped to zod.
   IgnorePublicAcls: settingSchema.optional(),
   /**
    * ```xml
@@ -13711,7 +12719,6 @@ export const publicAccessBlockConfigurationSchema = z.object({
    *          <p>Enabling this setting doesn't affect existing bucket policies.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("BlockPublicPolicy") on structure member PublicAccessBlockConfiguration.BlockPublicPolicy is not mapped to zod.
   BlockPublicPolicy: settingSchema.optional(),
   /**
    * ```xml
@@ -13723,19 +12730,15 @@ export const publicAccessBlockConfigurationSchema = z.object({
    *       accounts, is blocked.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("RestrictPublicBuckets") on structure member PublicAccessBlockConfiguration.RestrictPublicBuckets is not mapped to zod.
   RestrictPublicBuckets: settingSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketAbacRequest is not mapped to zod.
 export const putBucketAbacRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the general purpose bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketAbacRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketAbacRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -13743,7 +12746,6 @@ export const putBucketAbacRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketAbacRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -13751,49 +12753,39 @@ export const putBucketAbacRequestSchema = z.object({
    *          information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html"> Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketAbacRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>The Amazon Web Services account ID of the general purpose bucket's owner. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketAbacRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
    * <p>The ABAC status of the general purpose bucket. When ABAC is enabled for the general purpose bucket, you can use tags to manage access to the general purpose buckets as well as for cost tracking purposes. When ABAC is disabled for the general purpose buckets, you can only use tags for cost tracking purposes. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/buckets-tagging.html">Using tags with S3 general purpose buckets</a>. </p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketAbacRequest.AbacStatus is not mapped to zod.
-  // TODO: smithy.api#xmlName ("AbacStatus") on structure member PutBucketAbacRequest.AbacStatus is not mapped to zod.
-  AbacStatus: abacStatusSchema,
+  AbacStatus: z.lazy(() => abacStatusSchema),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketAccelerateConfigurationRequest is not mapped to zod.
 export const putBucketAccelerateConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket for which the accelerate configuration is set.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketAccelerateConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketAccelerateConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Container for setting the transfer acceleration state.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketAccelerateConfigurationRequest.AccelerateConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("AccelerateConfiguration") on structure member PutBucketAccelerateConfigurationRequest.AccelerateConfiguration is not mapped to zod.
-  AccelerateConfiguration: accelerateConfigurationSchema,
+  AccelerateConfiguration: z.lazy(() => accelerateConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketAccelerateConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -13806,34 +12798,27 @@ export const putBucketAccelerateConfigurationRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketAccelerateConfigurationRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketAclRequest is not mapped to zod.
 export const putBucketAclRequestSchema = z.object({
   /**
    * ```xml
    * <p>The canned ACL to apply to the bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-acl") on structure member PutBucketAclRequest.ACL is not mapped to zod.
   ACL: bucketCannedAclSchema.optional(),
   /**
    * ```xml
    * <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketAclRequest.AccessControlPolicy is not mapped to zod.
-  // TODO: smithy.api#xmlName ("AccessControlPolicy") on structure member PutBucketAclRequest.AccessControlPolicy is not mapped to zod.
-  AccessControlPolicy: accessControlPolicySchema.optional(),
+  AccessControlPolicy: z.lazy(() => accessControlPolicySchema).optional(),
   /**
    * ```xml
    * <p>The bucket to which to apply the ACL.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketAclRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketAclRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -13844,7 +12829,6 @@ export const putBucketAclRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketAclRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -13857,28 +12841,24 @@ export const putBucketAclRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketAclRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-full-control") on structure member PutBucketAclRequest.GrantFullControl is not mapped to zod.
   GrantFullControl: grantFullControlSchema.optional(),
   /**
    * ```xml
    * <p>Allows grantee to list the objects in the bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read") on structure member PutBucketAclRequest.GrantRead is not mapped to zod.
   GrantRead: grantReadSchema.optional(),
   /**
    * ```xml
    * <p>Allows grantee to read the bucket ACL.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read-acp") on structure member PutBucketAclRequest.GrantReadACP is not mapped to zod.
   GrantReadACP: grantReadAcpSchema.optional(),
   /**
    * ```xml
@@ -13887,67 +12867,54 @@ export const putBucketAclRequestSchema = z.object({
    *       objects.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-write") on structure member PutBucketAclRequest.GrantWrite is not mapped to zod.
   GrantWrite: grantWriteSchema.optional(),
   /**
    * ```xml
    * <p>Allows grantee to write the ACL for the applicable bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-write-acp") on structure member PutBucketAclRequest.GrantWriteACP is not mapped to zod.
   GrantWriteACP: grantWriteAcpSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketAclRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketAnalyticsConfigurationRequest is not mapped to zod.
 export const putBucketAnalyticsConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket to which an analytics configuration is stored.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketAnalyticsConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketAnalyticsConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The ID that identifies the analytics configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member PutBucketAnalyticsConfigurationRequest.Id is not mapped to zod.
   Id: analyticsIdSchema,
   /**
    * ```xml
    * <p>The configuration and any analyses for the analytics filter.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketAnalyticsConfigurationRequest.AnalyticsConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("AnalyticsConfiguration") on structure member PutBucketAnalyticsConfigurationRequest.AnalyticsConfiguration is not mapped to zod.
-  AnalyticsConfiguration: analyticsConfigurationSchema,
+  AnalyticsConfiguration: z.lazy(() => analyticsConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketAnalyticsConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketCorsRequest is not mapped to zod.
 export const putBucketCorsRequestSchema = z.object({
   /**
    * ```xml
    * <p>Specifies the bucket impacted by the <code>cors</code>configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketCorsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketCorsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -13956,9 +12923,7 @@ export const putBucketCorsRequestSchema = z.object({
    *         Sharing</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketCorsRequest.CORSConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("CORSConfiguration") on structure member PutBucketCorsRequest.CORSConfiguration is not mapped to zod.
-  CORSConfiguration: corsConfigurationSchema,
+  CORSConfiguration: z.lazy(() => corsConfigurationSchema),
   /**
    * ```xml
    * <p>The Base64 encoded 128-bit <code>MD5</code> digest of the data. This header must be used as a
@@ -13968,7 +12933,6 @@ export const putBucketCorsRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketCorsRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -13981,18 +12945,15 @@ export const putBucketCorsRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketCorsRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketCorsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketEncryptionRequest is not mapped to zod.
 export const putBucketEncryptionRequestSchema = z.object({
   /**
    * ```xml
@@ -14006,8 +12967,6 @@ export const putBucketEncryptionRequestSchema = z.object({
    *          </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketEncryptionRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketEncryptionRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14019,7 +12978,6 @@ export const putBucketEncryptionRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketEncryptionRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14035,12 +12993,8 @@ export const putBucketEncryptionRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketEncryptionRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketEncryptionRequest.ServerSideEncryptionConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("ServerSideEncryptionConfiguration") on structure member PutBucketEncryptionRequest.ServerSideEncryptionConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ServerSideEncryptionConfiguration for PutBucketEncryptionRequest.ServerSideEncryptionConfiguration is not generated yet.
-  ServerSideEncryptionConfiguration: z.unknown(),
+  ServerSideEncryptionConfiguration: z.lazy(() => serverSideEncryptionConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
@@ -14050,79 +13004,63 @@ export const putBucketEncryptionRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketEncryptionRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketIntelligentTieringConfigurationRequest is not mapped to zod.
 export const putBucketIntelligentTieringConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the Amazon S3 bucket whose configuration you want to modify or retrieve.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketIntelligentTieringConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketIntelligentTieringConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The ID used to identify the S3 Intelligent-Tiering configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member PutBucketIntelligentTieringConfigurationRequest.Id is not mapped to zod.
   Id: intelligentTieringIdSchema,
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketIntelligentTieringConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
    * <p>Container for S3 Intelligent-Tiering configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketIntelligentTieringConfigurationRequest.IntelligentTieringConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("IntelligentTieringConfiguration") on structure member PutBucketIntelligentTieringConfigurationRequest.IntelligentTieringConfiguration is not mapped to zod.
-  IntelligentTieringConfiguration: intelligentTieringConfigurationSchema,
+  IntelligentTieringConfiguration: z.lazy(() => intelligentTieringConfigurationSchema),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketInventoryConfigurationRequest is not mapped to zod.
 export const putBucketInventoryConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket where the inventory configuration will be stored.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketInventoryConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketInventoryConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The ID used to identify the inventory configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member PutBucketInventoryConfigurationRequest.Id is not mapped to zod.
   Id: inventoryIdSchema,
   /**
    * ```xml
    * <p>Specifies the inventory configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketInventoryConfigurationRequest.InventoryConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("InventoryConfiguration") on structure member PutBucketInventoryConfigurationRequest.InventoryConfiguration is not mapped to zod.
-  InventoryConfiguration: inventoryConfigurationSchema,
+  InventoryConfiguration: z.lazy(() => inventoryConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketInventoryConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure PutBucketLifecycleConfigurationOutput is not mapped to zod.
 export const putBucketLifecycleConfigurationOutputSchema = z.object({
   /**
    * ```xml
@@ -14150,19 +13088,15 @@ export const putBucketLifecycleConfigurationOutputSchema = z.object({
    *       rule. Custom filters always take precedence over the default transition behavior.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-transition-default-minimum-object-size") on structure member PutBucketLifecycleConfigurationOutput.TransitionDefaultMinimumObjectSize is not mapped to zod.
   TransitionDefaultMinimumObjectSize: transitionDefaultMinimumObjectSizeSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketLifecycleConfigurationRequest is not mapped to zod.
 export const putBucketLifecycleConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket for which to set the configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketLifecycleConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketLifecycleConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14175,16 +13109,13 @@ export const putBucketLifecycleConfigurationRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketLifecycleConfigurationRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>Container for lifecycle rules. You can add as many as 1,000 rules.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketLifecycleConfigurationRequest.LifecycleConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("LifecycleConfiguration") on structure member PutBucketLifecycleConfigurationRequest.LifecycleConfiguration is not mapped to zod.
-  LifecycleConfiguration: bucketLifecycleConfigurationSchema.optional(),
+  LifecycleConfiguration: z.lazy(() => bucketLifecycleConfigurationSchema).optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
@@ -14194,7 +13125,6 @@ export const putBucketLifecycleConfigurationRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketLifecycleConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -14222,35 +13152,28 @@ export const putBucketLifecycleConfigurationRequestSchema = z.object({
    *       rule. Custom filters always take precedence over the default transition behavior.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-transition-default-minimum-object-size") on structure member PutBucketLifecycleConfigurationRequest.TransitionDefaultMinimumObjectSize is not mapped to zod.
   TransitionDefaultMinimumObjectSize: transitionDefaultMinimumObjectSizeSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketLoggingRequest is not mapped to zod.
 export const putBucketLoggingRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket for which to set the logging parameters.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketLoggingRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketLoggingRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Container for logging status information.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketLoggingRequest.BucketLoggingStatus is not mapped to zod.
-  // TODO: smithy.api#xmlName ("BucketLoggingStatus") on structure member PutBucketLoggingRequest.BucketLoggingStatus is not mapped to zod.
-  BucketLoggingStatus: bucketLoggingStatusSchema,
+  BucketLoggingStatus: z.lazy(() => bucketLoggingStatusSchema),
   /**
    * ```xml
    * <p>The MD5 hash of the <code>PutBucketLogging</code> request body.</p>
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketLoggingRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14263,26 +13186,21 @@ export const putBucketLoggingRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketLoggingRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketLoggingRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketMetricsConfigurationRequest is not mapped to zod.
 export const putBucketMetricsConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket for which the metrics configuration is set.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketMetricsConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketMetricsConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14290,44 +13208,34 @@ export const putBucketMetricsConfigurationRequestSchema = z.object({
    *       contain letters, numbers, periods, dashes, and underscores.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("id") on structure member PutBucketMetricsConfigurationRequest.Id is not mapped to zod.
   Id: metricsIdSchema,
   /**
    * ```xml
    * <p>Specifies the metrics configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketMetricsConfigurationRequest.MetricsConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("MetricsConfiguration") on structure member PutBucketMetricsConfigurationRequest.MetricsConfiguration is not mapped to zod.
-  MetricsConfiguration: metricsConfigurationSchema,
+  MetricsConfiguration: z.lazy(() => metricsConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketMetricsConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketNotificationConfigurationRequest is not mapped to zod.
 export const putBucketNotificationConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketNotificationConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketNotificationConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketNotificationConfigurationRequest.NotificationConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("NotificationConfiguration") on structure member PutBucketNotificationConfigurationRequest.NotificationConfiguration is not mapped to zod.
-  NotificationConfiguration: notificationConfigurationSchema,
+  NotificationConfiguration: z.lazy(() => notificationConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketNotificationConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -14335,19 +13243,15 @@ export const putBucketNotificationConfigurationRequestSchema = z.object({
    *       True or false value.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-skip-destination-validation") on structure member PutBucketNotificationConfigurationRequest.SkipDestinationValidation is not mapped to zod.
   SkipDestinationValidation: skipValidationSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketOwnershipControlsRequest is not mapped to zod.
 export const putBucketOwnershipControlsRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the Amazon S3 bucket whose <code>OwnershipControls</code> you want to set.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketOwnershipControlsRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketOwnershipControlsRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14355,14 +13259,12 @@ export const putBucketOwnershipControlsRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketOwnershipControlsRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketOwnershipControlsRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -14370,9 +13272,7 @@ export const putBucketOwnershipControlsRequestSchema = z.object({
    *       you want to apply to this Amazon S3 bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketOwnershipControlsRequest.OwnershipControls is not mapped to zod.
-  // TODO: smithy.api#xmlName ("OwnershipControls") on structure member PutBucketOwnershipControlsRequest.OwnershipControls is not mapped to zod.
-  OwnershipControls: ownershipControlsSchema,
+  OwnershipControls: z.lazy(() => ownershipControlsSchema),
   /**
    * ```xml
    * <p> Indicates the algorithm used to create the checksum for the object when you use the SDK. This
@@ -14386,11 +13286,9 @@ export const putBucketOwnershipControlsRequestSchema = z.object({
    *       parameter. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketOwnershipControlsRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketPolicyRequest is not mapped to zod.
 export const putBucketPolicyRequestSchema = z.object({
   /**
    * ```xml
@@ -14403,8 +13301,6 @@ export const putBucketPolicyRequestSchema = z.object({
    *          </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketPolicyRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketPolicyRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14415,7 +13311,6 @@ export const putBucketPolicyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketPolicyRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14464,7 +13359,6 @@ export const putBucketPolicyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketPolicyRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -14475,7 +13369,6 @@ export const putBucketPolicyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-confirm-remove-self-bucket-access") on structure member PutBucketPolicyRequest.ConfirmRemoveSelfBucketAccess is not mapped to zod.
   ConfirmRemoveSelfBucketAccess: confirmRemoveSelfBucketAccessSchema.optional(),
   /**
    * ```xml
@@ -14484,7 +13377,6 @@ export const putBucketPolicyRequestSchema = z.object({
    *         <code>s3express:CreateSession</code>.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketPolicyRequest.Policy is not mapped to zod.
   Policy: policySchema,
   /**
    * ```xml
@@ -14495,19 +13387,15 @@ export const putBucketPolicyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketPolicyRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketReplicationRequest is not mapped to zod.
 export const putBucketReplicationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The name of the bucket</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketReplicationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketReplicationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14517,7 +13405,6 @@ export const putBucketReplicationRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketReplicationRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14530,37 +13417,28 @@ export const putBucketReplicationRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketReplicationRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketReplicationRequest.ReplicationConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("ReplicationConfiguration") on structure member PutBucketReplicationRequest.ReplicationConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ReplicationConfiguration for PutBucketReplicationRequest.ReplicationConfiguration is not generated yet.
-  ReplicationConfiguration: z.unknown(),
+  ReplicationConfiguration: z.lazy(() => replicationConfigurationSchema),
   /**
    * ```xml
    * <p>A token to allow Object Lock to be enabled for an existing bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bucket-object-lock-token") on structure member PutBucketReplicationRequest.Token is not mapped to zod.
   Token: objectLockTokenSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketReplicationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketRequestPaymentRequest is not mapped to zod.
 export const putBucketRequestPaymentRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketRequestPaymentRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketRequestPaymentRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14570,7 +13448,6 @@ export const putBucketRequestPaymentRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketRequestPaymentRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14583,35 +13460,27 @@ export const putBucketRequestPaymentRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketRequestPaymentRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>Container for Payer.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketRequestPaymentRequest.RequestPaymentConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("RequestPaymentConfiguration") on structure member PutBucketRequestPaymentRequest.RequestPaymentConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#RequestPaymentConfiguration for PutBucketRequestPaymentRequest.RequestPaymentConfiguration is not generated yet.
-  RequestPaymentConfiguration: z.unknown(),
+  RequestPaymentConfiguration: z.lazy(() => requestPaymentConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketRequestPaymentRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketTaggingRequest is not mapped to zod.
 export const putBucketTaggingRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketTaggingRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketTaggingRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14621,7 +13490,6 @@ export const putBucketTaggingRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketTaggingRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14634,35 +13502,27 @@ export const putBucketTaggingRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketTaggingRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>Container for the <code>TagSet</code> and <code>Tag</code> elements.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketTaggingRequest.Tagging is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Tagging") on structure member PutBucketTaggingRequest.Tagging is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Tagging for PutBucketTaggingRequest.Tagging is not generated yet.
-  Tagging: z.unknown(),
+  Tagging: z.lazy(() => taggingSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketTaggingRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketVersioningRequest is not mapped to zod.
 export const putBucketVersioningRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketVersioningRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketVersioningRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14672,7 +13532,6 @@ export const putBucketVersioningRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketVersioningRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14685,42 +13544,33 @@ export const putBucketVersioningRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketVersioningRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device. The serial number is the number that uniquely identifies the MFA device. For physical MFA devices, this is the unique serial number that's provided with the device. For virtual MFA devices, the serial number is the device ARN. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/manage-versioning-examples.html">Enabling versioning on buckets</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/MultiFactorAuthenticationDelete.html">Configuring MFA delete</a> in the <i>Amazon Simple Storage Service User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-mfa") on structure member PutBucketVersioningRequest.MFA is not mapped to zod.
   MFA: mfaSchema.optional(),
   /**
    * ```xml
    * <p>Container for setting the versioning state.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketVersioningRequest.VersioningConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("VersioningConfiguration") on structure member PutBucketVersioningRequest.VersioningConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#VersioningConfiguration for PutBucketVersioningRequest.VersioningConfiguration is not generated yet.
-  VersioningConfiguration: z.unknown(),
+  VersioningConfiguration: z.lazy(() => versioningConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketVersioningRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutBucketWebsiteRequest is not mapped to zod.
 export const putBucketWebsiteRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket name.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutBucketWebsiteRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutBucketWebsiteRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14730,7 +13580,6 @@ export const putBucketWebsiteRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutBucketWebsiteRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14743,49 +13592,36 @@ export const putBucketWebsiteRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutBucketWebsiteRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>Container for the request.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutBucketWebsiteRequest.WebsiteConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("WebsiteConfiguration") on structure member PutBucketWebsiteRequest.WebsiteConfiguration is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#WebsiteConfiguration for PutBucketWebsiteRequest.WebsiteConfiguration is not generated yet.
-  WebsiteConfiguration: z.unknown(),
+  WebsiteConfiguration: z.lazy(() => websiteConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutBucketWebsiteRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure PutObjectAclOutput is not mapped to zod.
-export const putObjectAclOutputSchema = z.object({
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member PutObjectAclOutput.RequestCharged is not mapped to zod.
-  RequestCharged: requestChargedSchema.optional(),
-});
+export const putObjectAclOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
 
-// TODO: smithy.api#input ({}) on structure PutObjectAclRequest is not mapped to zod.
 export const putObjectAclRequestSchema = z.object({
   /**
    * ```xml
    * <p>The canned ACL to apply to the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL">Canned ACL</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-acl") on structure member PutObjectAclRequest.ACL is not mapped to zod.
   ACL: objectCannedAclSchema.optional(),
   /**
    * ```xml
    * <p>Contains the elements that set the ACL permissions for an object per grantee.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutObjectAclRequest.AccessControlPolicy is not mapped to zod.
-  // TODO: smithy.api#xmlName ("AccessControlPolicy") on structure member PutObjectAclRequest.AccessControlPolicy is not mapped to zod.
-  AccessControlPolicy: accessControlPolicySchema.optional(),
+  AccessControlPolicy: z.lazy(() => accessControlPolicySchema).optional(),
   /**
    * ```xml
    * <p>The bucket name that contains the object to which you want to attach the ACL. </p>
@@ -14797,8 +13633,6 @@ export const putObjectAclRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectAclRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutObjectAclRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -14809,7 +13643,6 @@ export const putObjectAclRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutObjectAclRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14822,7 +13655,6 @@ export const putObjectAclRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutObjectAclRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -14830,7 +13662,6 @@ export const putObjectAclRequestSchema = z.object({
    *          <p>This functionality is not supported for Amazon S3 on Outposts.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-full-control") on structure member PutObjectAclRequest.GrantFullControl is not mapped to zod.
   GrantFullControl: grantFullControlSchema.optional(),
   /**
    * ```xml
@@ -14838,7 +13669,6 @@ export const putObjectAclRequestSchema = z.object({
    *          <p>This functionality is not supported for Amazon S3 on Outposts.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read") on structure member PutObjectAclRequest.GrantRead is not mapped to zod.
   GrantRead: grantReadSchema.optional(),
   /**
    * ```xml
@@ -14846,7 +13676,6 @@ export const putObjectAclRequestSchema = z.object({
    *          <p>This functionality is not supported for Amazon S3 on Outposts.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read-acp") on structure member PutObjectAclRequest.GrantReadACP is not mapped to zod.
   GrantReadACP: grantReadAcpSchema.optional(),
   /**
    * ```xml
@@ -14855,7 +13684,6 @@ export const putObjectAclRequestSchema = z.object({
    *       objects.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-write") on structure member PutObjectAclRequest.GrantWrite is not mapped to zod.
   GrantWrite: grantWriteSchema.optional(),
   /**
    * ```xml
@@ -14863,17 +13691,13 @@ export const putObjectAclRequestSchema = z.object({
    *          <p>This functionality is not supported for Amazon S3 on Outposts.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-write-acp") on structure member PutObjectAclRequest.GrantWriteACP is not mapped to zod.
   GrantWriteACP: grantWriteAcpSchema.optional(),
   /**
    * ```xml
    * <p>Key for which the PUT action was initiated.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectAclRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member PutObjectAclRequest.Key is not mapped to zod.
   Key: objectKeySchema,
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member PutObjectAclRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -14883,24 +13707,17 @@ export const putObjectAclRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member PutObjectAclRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutObjectAclRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure PutObjectLegalHoldOutput is not mapped to zod.
-export const putObjectLegalHoldOutputSchema = z.object({
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member PutObjectLegalHoldOutput.RequestCharged is not mapped to zod.
-  RequestCharged: requestChargedSchema.optional(),
-});
+export const putObjectLegalHoldOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
 
-// TODO: smithy.api#input ({}) on structure PutObjectLegalHoldRequest is not mapped to zod.
 export const putObjectLegalHoldRequestSchema = z.object({
   /**
    * ```xml
@@ -14909,32 +13726,25 @@ export const putObjectLegalHoldRequestSchema = z.object({
    *             <b>Access points</b> - When you use this action with an access point for general purpose buckets, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When you use this action with an access point for directory buckets, you must provide the access point name in place of the bucket name. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectLegalHoldRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutObjectLegalHoldRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The key name for the object that you want to place a legal hold on.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectLegalHoldRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>Container element for the legal hold configuration you want to apply to the specified object.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutObjectLegalHoldRequest.LegalHold is not mapped to zod.
-  // TODO: smithy.api#xmlName ("LegalHold") on structure member PutObjectLegalHoldRequest.LegalHold is not mapped to zod.
-  LegalHold: objectLockLegalHoldSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member PutObjectLegalHoldRequest.RequestPayer is not mapped to zod.
+  LegalHold: z.lazy(() => objectLockLegalHoldSchema).optional(),
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The version ID of the object that you want to place a legal hold on.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member PutObjectLegalHoldRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
@@ -14942,7 +13752,6 @@ export const putObjectLegalHoldRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutObjectLegalHoldRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -14955,49 +13764,36 @@ export const putObjectLegalHoldRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutObjectLegalHoldRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutObjectLegalHoldRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure PutObjectLockConfigurationOutput is not mapped to zod.
-export const putObjectLockConfigurationOutputSchema = z.object({
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member PutObjectLockConfigurationOutput.RequestCharged is not mapped to zod.
-  RequestCharged: requestChargedSchema.optional(),
-});
+export const putObjectLockConfigurationOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
 
-// TODO: smithy.api#input ({}) on structure PutObjectLockConfigurationRequest is not mapped to zod.
 export const putObjectLockConfigurationRequestSchema = z.object({
   /**
    * ```xml
    * <p>The bucket whose Object Lock configuration you want to create or replace.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectLockConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutObjectLockConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The Object Lock configuration that you want to apply to the specified bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutObjectLockConfigurationRequest.ObjectLockConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("ObjectLockConfiguration") on structure member PutObjectLockConfigurationRequest.ObjectLockConfiguration is not mapped to zod.
-  ObjectLockConfiguration: objectLockConfigurationSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member PutObjectLockConfigurationRequest.RequestPayer is not mapped to zod.
+  ObjectLockConfiguration: z.lazy(() => objectLockConfigurationSchema).optional(),
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>A token to allow Object Lock to be enabled for an existing bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bucket-object-lock-token") on structure member PutObjectLockConfigurationRequest.Token is not mapped to zod.
   Token: objectLockTokenSchema.optional(),
   /**
    * ```xml
@@ -15005,7 +13801,6 @@ export const putObjectLockConfigurationRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutObjectLockConfigurationRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -15018,18 +13813,15 @@ export const putObjectLockConfigurationRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutObjectLockConfigurationRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutObjectLockConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure PutObjectOutput is not mapped to zod.
 export const putObjectOutputSchema = z.object({
   /**
    * ```xml
@@ -15043,7 +13835,6 @@ export const putObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expiration") on structure member PutObjectOutput.Expiration is not mapped to zod.
   Expiration: expirationSchema.optional(),
   /**
    * ```xml
@@ -15058,7 +13849,6 @@ export const putObjectOutputSchema = z.object({
    *       directory bucket isn't the MD5 digest of the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("ETag") on structure member PutObjectOutput.ETag is not mapped to zod.
   ETag: eTagSchema.optional(),
   /**
    * ```xml
@@ -15068,7 +13858,6 @@ export const putObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32") on structure member PutObjectOutput.ChecksumCRC32 is not mapped to zod.
   ChecksumCRC32: checksumCrc32Schema.optional(),
   /**
    * ```xml
@@ -15078,7 +13867,6 @@ export const putObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32c") on structure member PutObjectOutput.ChecksumCRC32C is not mapped to zod.
   ChecksumCRC32C: checksumCrc32CSchema.optional(),
   /**
    * ```xml
@@ -15089,7 +13877,6 @@ export const putObjectOutputSchema = z.object({
    *         integrity in the Amazon S3 User Guide</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc64nvme") on structure member PutObjectOutput.ChecksumCRC64NVME is not mapped to zod.
   ChecksumCRC64NVME: checksumCrc64NvmeSchema.optional(),
   /**
    * ```xml
@@ -15099,7 +13886,6 @@ export const putObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha1") on structure member PutObjectOutput.ChecksumSHA1 is not mapped to zod.
   ChecksumSHA1: checksumSha1Schema.optional(),
   /**
    * ```xml
@@ -15109,7 +13895,6 @@ export const putObjectOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha256") on structure member PutObjectOutput.ChecksumSHA256 is not mapped to zod.
   ChecksumSHA256: checksumSha256Schema.optional(),
   /**
    * ```xml
@@ -15121,7 +13906,6 @@ export const putObjectOutputSchema = z.object({
    *       the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-type") on structure member PutObjectOutput.ChecksumType is not mapped to zod.
   ChecksumType: checksumTypeSchema.optional(),
   /**
    * ```xml
@@ -15132,7 +13916,6 @@ export const putObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member PutObjectOutput.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -15148,7 +13931,6 @@ export const putObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member PutObjectOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
@@ -15159,7 +13941,6 @@ export const putObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member PutObjectOutput.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -15171,14 +13952,12 @@ export const putObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member PutObjectOutput.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
    * <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member PutObjectOutput.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -15189,7 +13968,6 @@ export const putObjectOutputSchema = z.object({
    *          operations on this object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-context") on structure member PutObjectOutput.SSEKMSEncryptionContext is not mapped to zod.
   SSEKMSEncryptionContext: ssekmsEncryptionContextSchema.optional(),
   /**
    * ```xml
@@ -15197,7 +13975,6 @@ export const putObjectOutputSchema = z.object({
    *       Key Management Service (KMS) keys (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member PutObjectOutput.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
   /**
    * ```xml
@@ -15208,13 +13985,10 @@ export const putObjectOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-size") on structure member PutObjectOutput.Size is not mapped to zod.
   Size: sizeSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member PutObjectOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutObjectRequest is not mapped to zod.
 export const putObjectRequestSchema = z.object({
   /**
    * ```xml
@@ -15246,14 +14020,12 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-acl") on structure member PutObjectRequest.ACL is not mapped to zod.
   ACL: objectCannedAclSchema.optional(),
   /**
    * ```xml
    * <p>Object data.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutObjectRequest.Body is not mapped to zod.
   Body: streamingBlobSchema.optional().default(new Uint8Array([])),
   /**
    * ```xml
@@ -15276,8 +14048,6 @@ export const putObjectRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutObjectRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -15285,14 +14055,12 @@ export const putObjectRequestSchema = z.object({
    *         <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9">http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Cache-Control") on structure member PutObjectRequest.CacheControl is not mapped to zod.
   CacheControl: cacheControlSchema.optional(),
   /**
    * ```xml
    * <p>Specifies presentational information for the object. For more information, see <a href="https://www.rfc-editor.org/rfc/rfc6266#section-4">https://www.rfc-editor.org/rfc/rfc6266#section-4</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Disposition") on structure member PutObjectRequest.ContentDisposition is not mapped to zod.
   ContentDisposition: contentDispositionSchema.optional(),
   /**
    * ```xml
@@ -15301,14 +14069,12 @@ export const putObjectRequestSchema = z.object({
    *       information, see <a href="https://www.rfc-editor.org/rfc/rfc9110.html#field.content-encoding">https://www.rfc-editor.org/rfc/rfc9110.html#field.content-encoding</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Encoding") on structure member PutObjectRequest.ContentEncoding is not mapped to zod.
   ContentEncoding: contentEncodingSchema.optional(),
   /**
    * ```xml
    * <p>The language the content is in.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Language") on structure member PutObjectRequest.ContentLanguage is not mapped to zod.
   ContentLanguage: contentLanguageSchema.optional(),
   /**
    * ```xml
@@ -15316,7 +14082,6 @@ export const putObjectRequestSchema = z.object({
    *       automatically. For more information, see <a href="https://www.rfc-editor.org/rfc/rfc9110.html#name-content-length">https://www.rfc-editor.org/rfc/rfc9110.html#name-content-length</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Length") on structure member PutObjectRequest.ContentLength is not mapped to zod.
   ContentLength: contentLengthSchema.optional(),
   /**
    * ```xml
@@ -15336,14 +14101,12 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutObjectRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
    * <p>A standard MIME type describing the format of the contents. For more information, see <a href="https://www.rfc-editor.org/rfc/rfc9110.html#name-content-type">https://www.rfc-editor.org/rfc/rfc9110.html#name-content-type</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Type") on structure member PutObjectRequest.ContentType is not mapped to zod.
   ContentType: contentTypeSchema.optional(),
   /**
    * ```xml
@@ -15396,7 +14159,6 @@ export const putObjectRequestSchema = z.object({
    *          <p>For directory buckets, when you use Amazon Web Services SDKs, <code>CRC32</code> is the default checksum algorithm that's used for performance.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutObjectRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -15406,7 +14168,6 @@ export const putObjectRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32") on structure member PutObjectRequest.ChecksumCRC32 is not mapped to zod.
   ChecksumCRC32: checksumCrc32Schema.optional(),
   /**
    * ```xml
@@ -15416,7 +14177,6 @@ export const putObjectRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32c") on structure member PutObjectRequest.ChecksumCRC32C is not mapped to zod.
   ChecksumCRC32C: checksumCrc32CSchema.optional(),
   /**
    * ```xml
@@ -15427,7 +14187,6 @@ export const putObjectRequestSchema = z.object({
    *         User Guide</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc64nvme") on structure member PutObjectRequest.ChecksumCRC64NVME is not mapped to zod.
   ChecksumCRC64NVME: checksumCrc64NvmeSchema.optional(),
   /**
    * ```xml
@@ -15437,7 +14196,6 @@ export const putObjectRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha1") on structure member PutObjectRequest.ChecksumSHA1 is not mapped to zod.
   ChecksumSHA1: checksumSha1Schema.optional(),
   /**
    * ```xml
@@ -15447,14 +14205,12 @@ export const putObjectRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha256") on structure member PutObjectRequest.ChecksumSHA256 is not mapped to zod.
   ChecksumSHA256: checksumSha256Schema.optional(),
   /**
    * ```xml
    * <p>The date and time at which the object is no longer cacheable. For more information, see <a href="https://www.rfc-editor.org/rfc/rfc7234#section-5.3">https://www.rfc-editor.org/rfc/rfc7234#section-5.3</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Expires") on structure member PutObjectRequest.Expires is not mapped to zod.
   Expires: expiresSchema.optional(),
   /**
    * ```xml
@@ -15469,7 +14225,6 @@ export const putObjectRequestSchema = z.object({
    *         <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Match") on structure member PutObjectRequest.IfMatch is not mapped to zod.
   IfMatch: ifMatchSchema.optional(),
   /**
    * ```xml
@@ -15482,7 +14237,6 @@ export const putObjectRequestSchema = z.object({
    *         <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-None-Match") on structure member PutObjectRequest.IfNoneMatch is not mapped to zod.
   IfNoneMatch: ifNoneMatchSchema.optional(),
   /**
    * ```xml
@@ -15499,7 +14253,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-full-control") on structure member PutObjectRequest.GrantFullControl is not mapped to zod.
   GrantFullControl: grantFullControlSchema.optional(),
   /**
    * ```xml
@@ -15516,7 +14269,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read") on structure member PutObjectRequest.GrantRead is not mapped to zod.
   GrantRead: grantReadSchema.optional(),
   /**
    * ```xml
@@ -15533,7 +14285,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-read-acp") on structure member PutObjectRequest.GrantReadACP is not mapped to zod.
   GrantReadACP: grantReadAcpSchema.optional(),
   /**
    * ```xml
@@ -15550,15 +14301,12 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-grant-write-acp") on structure member PutObjectRequest.GrantWriteACP is not mapped to zod.
   GrantWriteACP: grantWriteAcpSchema.optional(),
   /**
    * ```xml
    * <p>Object key for which the PUT action was initiated.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member PutObjectRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
@@ -15571,16 +14319,13 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-write-offset-bytes") on structure member PutObjectRequest.WriteOffsetBytes is not mapped to zod.
   WriteOffsetBytes: writeOffsetBytesSchema.optional(),
   /**
    * ```xml
    * <p>A map of metadata to store with the object in S3.</p>
    * ```
    */
-  // TODO: smithy.api#httpPrefixHeaders ("x-amz-meta-") on structure member PutObjectRequest.Metadata is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Metadata for PutObjectRequest.Metadata is not generated yet.
-  Metadata: z.unknown().optional(),
+  Metadata: metadataSchema.optional(),
   /**
    * ```xml
    * <p>The server-side encryption algorithm that was used when you store this object in Amazon S3 or
@@ -15629,7 +14374,6 @@ export const putObjectRequestSchema = z.object({
    *          </ul>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member PutObjectRequest.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -15651,7 +14395,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-storage-class") on structure member PutObjectRequest.StorageClass is not mapped to zod.
   StorageClass: storageClassSchema.optional(),
   /**
    * ```xml
@@ -15675,7 +14418,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-website-redirect-location") on structure member PutObjectRequest.WebsiteRedirectLocation is not mapped to zod.
   WebsiteRedirectLocation: websiteRedirectLocationSchema.optional(),
   /**
    * ```xml
@@ -15685,7 +14427,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member PutObjectRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -15698,7 +14439,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member PutObjectRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -15709,7 +14449,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member PutObjectRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
@@ -15731,7 +14470,6 @@ export const putObjectRequestSchema = z.object({
    *  Incorrect key specification results in an HTTP <code>400 Bad Request</code> error. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member PutObjectRequest.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -15746,7 +14484,6 @@ export const putObjectRequestSchema = z.object({
    *             <b>Directory buckets</b> - You can optionally provide an explicit encryption context value. The value must match the default encryption context - the bucket Amazon Resource Name (ARN). An additional encryption context value is not supported. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-context") on structure member PutObjectRequest.SSEKMSEncryptionContext is not mapped to zod.
   SSEKMSEncryptionContext: ssekmsEncryptionContextSchema.optional(),
   /**
    * ```xml
@@ -15763,9 +14500,7 @@ export const putObjectRequestSchema = z.object({
    *                             <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-import-job">the import jobs</a>. In this case, Amazon S3 makes a call to KMS every time a copy request is made for a KMS-encrypted object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member PutObjectRequest.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member PutObjectRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -15776,7 +14511,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-tagging") on structure member PutObjectRequest.Tagging is not mapped to zod.
   Tagging: taggingHeaderSchema.optional(),
   /**
    * ```xml
@@ -15786,7 +14520,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-mode") on structure member PutObjectRequest.ObjectLockMode is not mapped to zod.
   ObjectLockMode: objectLockModeSchema.optional(),
   /**
    * ```xml
@@ -15797,7 +14530,6 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-retain-until-date") on structure member PutObjectRequest.ObjectLockRetainUntilDate is not mapped to zod.
   ObjectLockRetainUntilDate: objectLockRetainUntilDateSchema.optional(),
   /**
    * ```xml
@@ -15809,24 +14541,17 @@ export const putObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-object-lock-legal-hold") on structure member PutObjectRequest.ObjectLockLegalHoldStatus is not mapped to zod.
   ObjectLockLegalHoldStatus: objectLockLegalHoldStatusSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutObjectRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure PutObjectRetentionOutput is not mapped to zod.
-export const putObjectRetentionOutputSchema = z.object({
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member PutObjectRetentionOutput.RequestCharged is not mapped to zod.
-  RequestCharged: requestChargedSchema.optional(),
-});
+export const putObjectRetentionOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
 
-// TODO: smithy.api#input ({}) on structure PutObjectRetentionRequest is not mapped to zod.
 export const putObjectRetentionRequestSchema = z.object({
   /**
    * ```xml
@@ -15835,39 +14560,31 @@ export const putObjectRetentionRequestSchema = z.object({
    *             <b>Access points</b> - When you use this action with an access point for general purpose buckets, you must provide the alias of the access point in place of the bucket name or specify the access point ARN. When you use this action with an access point for directory buckets, you must provide the access point name in place of the bucket name. When using the access point ARN, you must direct requests to the access point hostname. The access point hostname takes the form <i>AccessPointName</i>-<i>AccountId</i>.s3-accesspoint.<i>Region</i>.amazonaws.com. When using this action with an access point through the Amazon Web Services SDKs, you provide the access point ARN in place of the bucket name. For more information about access point ARNs, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-access-points.html">Using access points</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectRetentionRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutObjectRetentionRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The key name for the object that you want to apply this Object Retention configuration to.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectRetentionRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>The container element for the Object Retention configuration.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutObjectRetentionRequest.Retention is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Retention") on structure member PutObjectRetentionRequest.Retention is not mapped to zod.
-  Retention: objectLockRetentionSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member PutObjectRetentionRequest.RequestPayer is not mapped to zod.
+  Retention: z.lazy(() => objectLockRetentionSchema).optional(),
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The version ID for the object that you want to apply this Object Retention configuration to.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member PutObjectRetentionRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
    * <p>Indicates whether this action should bypass Governance-mode restrictions.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-bypass-governance-retention") on structure member PutObjectRetentionRequest.BypassGovernanceRetention is not mapped to zod.
   BypassGovernanceRetention: bypassGovernanceRetentionSchema.optional(),
   /**
    * ```xml
@@ -15875,7 +14592,6 @@ export const putObjectRetentionRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutObjectRetentionRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -15888,29 +14604,24 @@ export const putObjectRetentionRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutObjectRetentionRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutObjectRetentionRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure PutObjectTaggingOutput is not mapped to zod.
 export const putObjectTaggingOutputSchema = z.object({
   /**
    * ```xml
    * <p>The versionId of the object the tag-set was added to.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-version-id") on structure member PutObjectTaggingOutput.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutObjectTaggingRequest is not mapped to zod.
 export const putObjectTaggingRequestSchema = z.object({
   /**
    * ```xml
@@ -15923,22 +14634,18 @@ export const putObjectTaggingRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectTaggingRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutObjectTaggingRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Name of the object key.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutObjectTaggingRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>The versionId of the object that the tag-set will be added to.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member PutObjectTaggingRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
@@ -15946,7 +14653,6 @@ export const putObjectTaggingRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutObjectTaggingRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -15959,23 +14665,18 @@ export const putObjectTaggingRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutObjectTaggingRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>Container for the <code>TagSet</code> and <code>Tag</code> elements</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutObjectTaggingRequest.Tagging is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Tagging") on structure member PutObjectTaggingRequest.Tagging is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Tagging for PutObjectTaggingRequest.Tagging is not generated yet.
-  Tagging: z.unknown(),
+  Tagging: z.lazy(() => taggingSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutObjectTaggingRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -15983,11 +14684,9 @@ export const putObjectTaggingRequestSchema = z.object({
    *       request. Bucket owners need not specify this parameter in their requests.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member PutObjectTaggingRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure PutPublicAccessBlockRequest is not mapped to zod.
 export const putPublicAccessBlockRequestSchema = z.object({
   /**
    * ```xml
@@ -15995,8 +14694,6 @@ export const putPublicAccessBlockRequestSchema = z.object({
    *       set.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member PutPublicAccessBlockRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member PutPublicAccessBlockRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -16004,7 +14701,6 @@ export const putPublicAccessBlockRequestSchema = z.object({
    *          <p>For requests made using the Amazon Web Services Command Line Interface (CLI) or Amazon Web Services SDKs, this field is calculated automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member PutPublicAccessBlockRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -16017,7 +14713,6 @@ export const putPublicAccessBlockRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member PutPublicAccessBlockRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -16026,15 +14721,12 @@ export const putPublicAccessBlockRequestSchema = z.object({
    *       about when Amazon S3 considers a bucket or object public, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status">The Meaning of "Public"</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member PutPublicAccessBlockRequest.PublicAccessBlockConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("PublicAccessBlockConfiguration") on structure member PutPublicAccessBlockRequest.PublicAccessBlockConfiguration is not mapped to zod.
-  PublicAccessBlockConfiguration: publicAccessBlockConfigurationSchema,
+  PublicAccessBlockConfiguration: z.lazy(() => publicAccessBlockConfigurationSchema),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member PutPublicAccessBlockRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
@@ -16052,18 +14744,14 @@ export const queueConfigurationSchema = z.object({
    *       detects events of the specified type.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("Queue") on structure member QueueConfiguration.QueueArn is not mapped to zod.
   QueueArn: queueArnSchema,
   /**
    * ```xml
    * <p>A collection of bucket events for which to send notifications</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member QueueConfiguration.Events is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Event") on structure member QueueConfiguration.Events is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#EventList for QueueConfiguration.Events is not generated yet.
-  Events: z.unknown(),
-  Filter: notificationConfigurationFilterSchema.optional(),
+  Events: eventListSchema,
+  Filter: z.lazy(() => notificationConfigurationFilterSchema).optional(),
 });
 
 /**
@@ -16112,7 +14800,6 @@ export const recordsEventSchema = z.object({
    *       response.</p>
    * ```
    */
-  // TODO: smithy.api#eventPayload ({}) on structure member RecordsEvent.Payload is not mapped to zod.
   Payload: bodySchema.optional(),
 });
 
@@ -16195,10 +14882,8 @@ export const redirectAllRequestsToSchema = z.object({
   Protocol: protocolSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure RenameObjectOutput is not mapped to zod.
 export const renameObjectOutputSchema = z.object({});
 
-// TODO: smithy.api#input ({}) on structure RenameObjectRequest is not mapped to zod.
 export const renameObjectRequestSchema = z.object({
   /**
    * ```xml
@@ -16211,23 +14896,18 @@ export const renameObjectRequestSchema = z.object({
    *         <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-bucket-naming-rules.html">Directory bucket naming rules</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member RenameObjectRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member RenameObjectRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Key name of the object to rename.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member RenameObjectRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member RenameObjectRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>Specifies the source for the rename operation. The value must be URL encoded.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-rename-source") on structure member RenameObjectRequest.RenameSource is not mapped to zod.
   RenameSource: renameSourceSchema,
   /**
    * ```xml
@@ -16238,7 +14918,6 @@ export const renameObjectRequestSchema = z.object({
    *          <p>Expects the ETag value as a string.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Match") on structure member RenameObjectRequest.DestinationIfMatch is not mapped to zod.
   DestinationIfMatch: ifMatchSchema.optional(),
   /**
    * ```xml
@@ -16250,7 +14929,6 @@ export const renameObjectRequestSchema = z.object({
    *          <p> Expects the <code>*</code> character (asterisk).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-None-Match") on structure member RenameObjectRequest.DestinationIfNoneMatch is not mapped to zod.
   DestinationIfNoneMatch: ifNoneMatchSchema.optional(),
   /**
    * ```xml
@@ -16258,14 +14936,12 @@ export const renameObjectRequestSchema = z.object({
    *       time.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Modified-Since") on structure member RenameObjectRequest.DestinationIfModifiedSince is not mapped to zod.
   DestinationIfModifiedSince: ifModifiedSinceSchema.optional(),
   /**
    * ```xml
    * <p>Renames the object if it hasn't been modified since the specified time.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("If-Unmodified-Since") on structure member RenameObjectRequest.DestinationIfUnmodifiedSince is not mapped to zod.
   DestinationIfUnmodifiedSince: ifUnmodifiedSinceSchema.optional(),
   /**
    * ```xml
@@ -16273,7 +14949,6 @@ export const renameObjectRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-rename-source-if-match") on structure member RenameObjectRequest.SourceIfMatch is not mapped to zod.
   SourceIfMatch: renameSourceIfMatchSchema.optional(),
   /**
    * ```xml
@@ -16282,21 +14957,18 @@ export const renameObjectRequestSchema = z.object({
    *         <code>412 Precondition Failed</code> error. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-rename-source-if-none-match") on structure member RenameObjectRequest.SourceIfNoneMatch is not mapped to zod.
   SourceIfNoneMatch: renameSourceIfNoneMatchSchema.optional(),
   /**
    * ```xml
    * <p>Renames the object if the source exists and if it has been modified since the specified time.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-rename-source-if-modified-since") on structure member RenameObjectRequest.SourceIfModifiedSince is not mapped to zod.
   SourceIfModifiedSince: renameSourceIfModifiedSinceSchema.optional(),
   /**
    * ```xml
    * <p>Renames the object if the source exists and hasn't been modified since the specified time.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-rename-source-if-unmodified-since") on structure member RenameObjectRequest.SourceIfUnmodifiedSince is not mapped to zod.
   SourceIfUnmodifiedSince: renameSourceIfUnmodifiedSinceSchema.optional(),
   /**
    * ```xml
@@ -16312,8 +14984,6 @@ export const renameObjectRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-client-token") on structure member RenameObjectRequest.ClientToken is not mapped to zod.
-  // TODO: smithy.api#idempotencyToken ({}) on structure member RenameObjectRequest.ClientToken is not mapped to zod.
   ClientToken: clientTokenSchema.optional(),
 });
 
@@ -16359,10 +15029,7 @@ export const replicationConfigurationSchema = z.object({
    *       rule and can contain a maximum of 1,000 rules. </p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ReplicationConfiguration.Rules is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Rule") on structure member ReplicationConfiguration.Rules is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ReplicationRules for ReplicationConfiguration.Rules is not generated yet.
-  Rules: z.unknown(),
+  Rules: replicationRulesSchema,
 });
 
 /**
@@ -16400,8 +15067,7 @@ export const replicationRuleSchema = z.object({
    * ```
    */
   Prefix: prefixSchema.optional(),
-  // TODO: structure member target com.amazonaws.s3#ReplicationRuleFilter for ReplicationRule.Filter is not generated yet.
-  Filter: z.unknown().optional(),
+  Filter: z.lazy(() => replicationRuleFilterSchema).optional(),
   /**
    * ```xml
    * <p>Specifies whether the rule is enabled.</p>
@@ -16416,8 +15082,7 @@ export const replicationRuleSchema = z.object({
    *       customer managed key stored in Amazon Web Services Key Management Service (SSE-KMS).</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#SourceSelectionCriteria for ReplicationRule.SourceSelectionCriteria is not generated yet.
-  SourceSelectionCriteria: z.unknown().optional(),
+  SourceSelectionCriteria: z.lazy(() => sourceSelectionCriteriaSchema).optional(),
   /**
    * ```xml
    * <p>Optional configuration to replicate existing source bucket objects. </p>
@@ -16428,15 +15093,15 @@ export const replicationRuleSchema = z.object({
    *          </note>
    * ```
    */
-  ExistingObjectReplication: existingObjectReplicationSchema.optional(),
+  ExistingObjectReplication: z.lazy(() => existingObjectReplicationSchema).optional(),
   /**
    * ```xml
    * <p>A container for information about the replication destination and its configurations including
    *       enabling the S3 Replication Time Control (S3 RTC).</p>
    * ```
    */
-  Destination: destinationSchema,
-  DeleteMarkerReplication: deleteMarkerReplicationSchema.optional(),
+  Destination: z.lazy(() => destinationSchema),
+  DeleteMarkerReplication: z.lazy(() => deleteMarkerReplicationSchema).optional(),
 });
 
 /**
@@ -16468,10 +15133,7 @@ export const replicationRuleAndOperatorSchema = z.object({
    * <p>An array of tags containing key and value pairs.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ReplicationRuleAndOperator.Tags is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Tag") on structure member ReplicationRuleAndOperator.Tags is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#TagSet for ReplicationRuleAndOperator.Tags is not generated yet.
-  Tags: z.unknown().optional(),
+  Tags: tagSetSchema.optional(),
 });
 
 /**
@@ -16499,8 +15161,7 @@ export const replicationRuleFilterSchema = z.object({
    *          <p>The rule applies only to objects that have the tag in their tag set.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Tag for ReplicationRuleFilter.Tag is not generated yet.
-  Tag: z.unknown().optional(),
+  Tag: z.lazy(() => tagSchema).optional(),
   /**
    * ```xml
    * <p>A container for specifying rule filters. The filters determine the subset of objects to which the
@@ -16517,7 +15178,7 @@ export const replicationRuleFilterSchema = z.object({
    *          </ul>
    * ```
    */
-  And: replicationRuleAndOperatorSchema.optional(),
+  And: z.lazy(() => replicationRuleAndOperatorSchema).optional(),
 });
 
 /**
@@ -16540,8 +15201,7 @@ export const replicationTimeSchema = z.object({
    *       operations on objects. </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#ReplicationTimeValue for ReplicationTime.Time is not generated yet.
-  Time: z.unknown(),
+  Time: z.lazy(() => replicationTimeValueSchema),
 });
 
 /**
@@ -16589,9 +15249,7 @@ export const requestProgressSchema = z.object({
   Enabled: enableRequestProgressSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure RestoreObjectOutput is not mapped to zod.
 export const restoreObjectOutputSchema = z.object({
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member RestoreObjectOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
   /**
    * ```xml
@@ -16599,11 +15257,9 @@ export const restoreObjectOutputSchema = z.object({
    *       to.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-restore-output-path") on structure member RestoreObjectOutput.RestoreOutputPath is not mapped to zod.
   RestoreOutputPath: restoreOutputPathSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure RestoreObjectRequest is not mapped to zod.
 export const restoreObjectRequestSchema = z.object({
   /**
    * ```xml
@@ -16616,28 +15272,20 @@ export const restoreObjectRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member RestoreObjectRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member RestoreObjectRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>Object key for which the action was initiated.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member RestoreObjectRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>VersionId used to reference a specific version of the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member RestoreObjectRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
-  // TODO: smithy.api#httpPayload ({}) on structure member RestoreObjectRequest.RestoreRequest is not mapped to zod.
-  // TODO: smithy.api#xmlName ("RestoreRequest") on structure member RestoreObjectRequest.RestoreRequest is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#RestoreRequest for RestoreObjectRequest.RestoreRequest is not generated yet.
-  RestoreRequest: z.unknown().optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member RestoreObjectRequest.RequestPayer is not mapped to zod.
+  RestoreRequest: z.lazy(() => restoreRequestSchema).optional(),
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -16650,14 +15298,12 @@ export const restoreObjectRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member RestoreObjectRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member RestoreObjectRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
@@ -16682,7 +15328,7 @@ export const restoreRequestSchema = z.object({
    *         <code>OutputLocation</code>.</p>
    * ```
    */
-  GlacierJobParameters: glacierJobParametersSchema.optional(),
+  GlacierJobParameters: z.lazy(() => glacierJobParametersSchema).optional(),
   /**
    * ```xml
    * <important>
@@ -16716,14 +15362,13 @@ export const restoreRequestSchema = z.object({
    *          <p>Describes the parameters for Select job types.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#SelectParameters for RestoreRequest.SelectParameters is not generated yet.
-  SelectParameters: z.unknown().optional(),
+  SelectParameters: z.lazy(() => selectParametersSchema).optional(),
   /**
    * ```xml
    * <p>Describes the location where the restore job's output is stored.</p>
    * ```
    */
-  OutputLocation: outputLocationSchema.optional(),
+  OutputLocation: z.lazy(() => outputLocationSchema).optional(),
 });
 
 /**
@@ -16784,7 +15429,7 @@ export const routingRuleSchema = z.object({
    *       host where you might process the error.</p>
    * ```
    */
-  Condition: conditionSchema.optional(),
+  Condition: z.lazy(() => conditionSchema).optional(),
   /**
    * ```xml
    * <p>Container for redirect information. You can redirect requests to another host, to another page, or
@@ -16792,7 +15437,7 @@ export const routingRuleSchema = z.object({
    *       return.</p>
    * ```
    */
-  Redirect: redirectSchema,
+  Redirect: z.lazy(() => redirectSchema),
 });
 
 /**
@@ -16800,12 +15445,7 @@ export const routingRuleSchema = z.object({
  * <p>A container for object key name prefix and suffix filtering rules.</p>
  * ```
  */
-export const s3KeyFilterSchema = z.object({
-  // TODO: smithy.api#xmlFlattened ({}) on structure member S3KeyFilter.FilterRules is not mapped to zod.
-  // TODO: smithy.api#xmlName ("FilterRule") on structure member S3KeyFilter.FilterRules is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#FilterRuleList for S3KeyFilter.FilterRules is not generated yet.
-  FilterRules: z.unknown().optional(),
-});
+export const s3KeyFilterSchema = z.object({ FilterRules: filterRuleListSchema.optional() });
 
 /**
  * ```xml
@@ -16825,7 +15465,7 @@ export const s3LocationSchema = z.object({
    * ```
    */
   Prefix: locationPrefixSchema,
-  Encryption: encryptionSchema.optional(),
+  Encryption: z.lazy(() => encryptionSchema).optional(),
   /**
    * ```xml
    * <p>The canned ACL to apply to the restore results.</p>
@@ -16837,22 +15477,19 @@ export const s3LocationSchema = z.object({
    * <p>A list of grants that control access to the staged results.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Grants for S3Location.AccessControlList is not generated yet.
-  AccessControlList: z.unknown().optional(),
+  AccessControlList: grantsSchema.optional(),
   /**
    * ```xml
    * <p>The tag-set that is applied to the restore results.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#Tagging for S3Location.Tagging is not generated yet.
-  Tagging: z.unknown().optional(),
+  Tagging: z.lazy(() => taggingSchema).optional(),
   /**
    * ```xml
    * <p>A list of metadata to store with the restore results in S3.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#UserMetadata for S3Location.UserMetadata is not generated yet.
-  UserMetadata: z.unknown().optional(),
+  UserMetadata: userMetadataSchema.optional(),
   /**
    * ```xml
    * <p>The class of storage used to store the restore results.</p>
@@ -16945,7 +15582,6 @@ export const s3TablesDestinationResultSchema = z.object({
  * <p>Specifies the use of SSE-KMS to encrypt delivered inventory reports.</p>
  * ```
  */
-// TODO: smithy.api#xmlName ("SSE-KMS") on structure SSEKMS is not mapped to zod.
 export const ssekmsSchema = z.object({
   /**
    * ```xml
@@ -16965,7 +15601,6 @@ export const ssekmsSchema = z.object({
  *     </p>
  * ```
  */
-// TODO: smithy.api#xmlName ("SSE-KMS") on structure SSEKMSEncryption is not mapped to zod.
 export const ssekmsEncryptionSchema = z.object({
   /**
    * ```xml
@@ -17003,7 +15638,6 @@ export const ssekmsEncryptionSchema = z.object({
  * <p>Specifies the use of SSE-S3 to encrypt delivered inventory reports.</p>
  * ```
  */
-// TODO: smithy.api#xmlName ("SSE-S3") on structure SSES3 is not mapped to zod.
 export const sses3Schema = z.object({});
 
 /**
@@ -17036,16 +15670,13 @@ export const scanRangeSchema = z.object({
   End: endSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure SelectObjectContentOutput is not mapped to zod.
 export const selectObjectContentOutputSchema = z.object({
   /**
    * ```xml
    * <p>The array of results.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member SelectObjectContentOutput.Payload is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#SelectObjectContentEventStream for SelectObjectContentOutput.Payload is not generated yet.
-  Payload: z.unknown().optional(),
+  Payload: selectObjectContentEventStreamSchema.optional(),
 });
 
 /**
@@ -17062,22 +15693,18 @@ export const selectObjectContentOutputSchema = z.object({
  *       response. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
  * ```
  */
-// TODO: smithy.api#input ({}) on structure SelectObjectContentRequest is not mapped to zod.
 export const selectObjectContentRequestSchema = z.object({
   /**
    * ```xml
    * <p>The S3 bucket.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member SelectObjectContentRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member SelectObjectContentRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
    * <p>The object key.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member SelectObjectContentRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
@@ -17087,7 +15714,6 @@ export const selectObjectContentRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member SelectObjectContentRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -17097,7 +15723,6 @@ export const selectObjectContentRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member SelectObjectContentRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -17107,7 +15732,6 @@ export const selectObjectContentRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member SelectObjectContentRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
@@ -17126,19 +15750,19 @@ export const selectObjectContentRequestSchema = z.object({
    * <p>Specifies if periodic request progress information should be enabled.</p>
    * ```
    */
-  RequestProgress: requestProgressSchema.optional(),
+  RequestProgress: z.lazy(() => requestProgressSchema).optional(),
   /**
    * ```xml
    * <p>Describes the format of the data in the object that is being queried.</p>
    * ```
    */
-  InputSerialization: inputSerializationSchema,
+  InputSerialization: z.lazy(() => inputSerializationSchema),
   /**
    * ```xml
    * <p>Describes the format of the data that you want Amazon S3 to return in response.</p>
    * ```
    */
-  OutputSerialization: outputSerializationSchema,
+  OutputSerialization: z.lazy(() => outputSerializationSchema),
   /**
    * ```xml
    * <p>Specifies the byte range of the object to get the records from. A record is processed when its first
@@ -17166,13 +15790,12 @@ export const selectObjectContentRequestSchema = z.object({
    *          </ul>
    * ```
    */
-  ScanRange: scanRangeSchema.optional(),
+  ScanRange: z.lazy(() => scanRangeSchema).optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member SelectObjectContentRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
@@ -17195,7 +15818,7 @@ export const selectParametersSchema = z.object({
    * <p>Describes the serialization format of the object.</p>
    * ```
    */
-  InputSerialization: inputSerializationSchema,
+  InputSerialization: z.lazy(() => inputSerializationSchema),
   /**
    * ```xml
    * <p>The type of the provided expression (for example, SQL).</p>
@@ -17218,7 +15841,7 @@ export const selectParametersSchema = z.object({
    * <p>Describes how the results of the Select job are serialized.</p>
    * ```
    */
-  OutputSerialization: outputSerializationSchema,
+  OutputSerialization: z.lazy(() => outputSerializationSchema),
 });
 
 /**
@@ -17336,10 +15959,7 @@ export const serverSideEncryptionConfigurationSchema = z.object({
    * <p>Container for information about a particular server-side encryption configuration rule.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member ServerSideEncryptionConfiguration.Rules is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Rule") on structure member ServerSideEncryptionConfiguration.Rules is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ServerSideEncryptionRules for ServerSideEncryptionConfiguration.Rules is not generated yet.
-  Rules: z.unknown(),
+  Rules: serverSideEncryptionRulesSchema,
 });
 
 /**
@@ -17371,7 +15991,7 @@ export const serverSideEncryptionRuleSchema = z.object({
    *       request doesn't specify any server-side encryption, this default encryption will be applied.</p>
    * ```
    */
-  ApplyServerSideEncryptionByDefault: serverSideEncryptionByDefaultSchema.optional(),
+  ApplyServerSideEncryptionByDefault: z.lazy(() => serverSideEncryptionByDefaultSchema).optional(),
   /**
    * ```xml
    * <p>Specifies whether Amazon S3 should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS)
@@ -17405,7 +16025,7 @@ export const serverSideEncryptionRuleSchema = z.object({
    *          </note>
    * ```
    */
-  BlockedEncryptionTypes: blockedEncryptionTypesSchema.optional(),
+  BlockedEncryptionTypes: z.lazy(() => blockedEncryptionTypesSchema).optional(),
 });
 
 /**
@@ -17425,7 +16045,6 @@ export const sessionCredentialsSchema = z.object({
    *       access key are used together to sign programmatic Amazon Web Services requests cryptographically. </p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("AccessKeyId") on structure member SessionCredentials.AccessKeyId is not mapped to zod.
   AccessKeyId: accessKeyIdValueSchema,
   /**
    * ```xml
@@ -17433,7 +16052,6 @@ export const sessionCredentialsSchema = z.object({
    *       Signing a request identifies the sender and prevents the request from being altered. </p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("SecretAccessKey") on structure member SessionCredentials.SecretAccessKey is not mapped to zod.
   SecretAccessKey: sessionCredentialValueSchema,
   /**
    * ```xml
@@ -17443,7 +16061,6 @@ export const sessionCredentialsSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("SessionToken") on structure member SessionCredentials.SessionToken is not mapped to zod.
   SessionToken: sessionCredentialValueSchema,
   /**
    * ```xml
@@ -17453,7 +16070,6 @@ export const sessionCredentialsSchema = z.object({
    *       specified interval.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("Expiration") on structure member SessionCredentials.Expiration is not mapped to zod.
   Expiration: sessionExpirationSchema,
 });
 
@@ -17465,7 +16081,6 @@ export const sessionCredentialsSchema = z.object({
  *          </p>
  * ```
  */
-// TODO: smithy.api#xmlName ("SimplePrefix") on structure SimplePrefix is not mapped to zod.
 export const simplePrefixSchema = z.object({});
 
 /**
@@ -17484,8 +16099,7 @@ export const sourceSelectionCriteriaSchema = z.object({
    *       required. </p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#SseKmsEncryptedObjects for SourceSelectionCriteria.SseKmsEncryptedObjects is not generated yet.
-  SseKmsEncryptedObjects: z.unknown().optional(),
+  SseKmsEncryptedObjects: z.lazy(() => sseKmsEncryptedObjectsSchema).optional(),
   /**
    * ```xml
    * <p>A filter that you can specify for selections for modifications on replicas. Amazon S3 doesn't replicate
@@ -17498,7 +16112,7 @@ export const sourceSelectionCriteriaSchema = z.object({
    *          </note>
    * ```
    */
-  ReplicaModifications: replicaModificationsSchema.optional(),
+  ReplicaModifications: z.lazy(() => replicaModificationsSchema).optional(),
 });
 
 /**
@@ -17553,8 +16167,7 @@ export const statsEventSchema = z.object({
    * <p>The Stats event details.</p>
    * ```
    */
-  // TODO: smithy.api#eventPayload ({}) on structure member StatsEvent.Details is not mapped to zod.
-  Details: statsSchema.optional(),
+  Details: z.lazy(() => statsSchema).optional(),
 });
 
 /**
@@ -17570,8 +16183,7 @@ export const storageClassAnalysisSchema = z.object({
    *       exported.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#StorageClassAnalysisDataExport for StorageClassAnalysis.DataExport is not generated yet.
-  DataExport: z.unknown().optional(),
+  DataExport: z.lazy(() => storageClassAnalysisDataExportSchema).optional(),
 });
 
 /**
@@ -17591,7 +16203,7 @@ export const storageClassAnalysisDataExportSchema = z.object({
    * <p>The place to store the data for an analysis.</p>
    * ```
    */
-  Destination: analyticsExportDestinationSchema,
+  Destination: z.lazy(() => analyticsExportDestinationSchema),
 });
 
 /**
@@ -17625,8 +16237,7 @@ export const taggingSchema = z.object({
    * <p>A collection for a set of tags</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#TagSet for Tagging.TagSet is not generated yet.
-  TagSet: z.unknown(),
+  TagSet: tagSetSchema,
 });
 
 /**
@@ -17642,8 +16253,7 @@ export const targetGrantSchema = z.object({
    * <p>Container for the person being granted permissions.</p>
    * ```
    */
-  // TODO: smithy.api#xmlNamespace ({"prefix":"xsi","uri":"http://www.w3.org/2001/XMLSchema-instance"}) on structure member TargetGrant.Grantee is not mapped to zod.
-  Grantee: granteeSchema.optional(),
+  Grantee: z.lazy(() => granteeSchema).optional(),
   /**
    * ```xml
    * <p>Logging permissions assigned to the grantee for the bucket.</p>
@@ -17665,15 +16275,13 @@ export const targetObjectKeyFormatSchema = z.object({
    *       SimplePrefix to {}.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("SimplePrefix") on structure member TargetObjectKeyFormat.SimplePrefix is not mapped to zod.
-  SimplePrefix: simplePrefixSchema.optional(),
+  SimplePrefix: z.lazy(() => simplePrefixSchema).optional(),
   /**
    * ```xml
    * <p>Partitioned S3 key for log objects.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("PartitionedPrefix") on structure member TargetObjectKeyFormat.PartitionedPrefix is not mapped to zod.
-  PartitionedPrefix: partitionedPrefixSchema.optional(),
+  PartitionedPrefix: z.lazy(() => partitionedPrefixSchema).optional(),
 });
 
 /**
@@ -17710,8 +16318,6 @@ export const tieringSchema = z.object({
  *       copied object. </p>
  * ```
  */
-// TODO: smithy.api#error ("client") on structure TooManyParts is not mapped to zod.
-// TODO: smithy.api#httpError (400) on structure TooManyParts is not mapped to zod.
 export const tooManyPartsSchema = z.object({});
 
 /**
@@ -17728,7 +16334,6 @@ export const topicConfigurationSchema = z.object({
    *       detects events of the specified type.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("Topic") on structure member TopicConfiguration.TopicArn is not mapped to zod.
   TopicArn: topicArnSchema,
   /**
    * ```xml
@@ -17736,11 +16341,8 @@ export const topicConfigurationSchema = z.object({
    *       the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#xmlFlattened ({}) on structure member TopicConfiguration.Events is not mapped to zod.
-  // TODO: smithy.api#xmlName ("Event") on structure member TopicConfiguration.Events is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#EventList for TopicConfiguration.Events is not generated yet.
-  Events: z.unknown(),
-  Filter: notificationConfigurationFilterSchema.optional(),
+  Events: eventListSchema,
+  Filter: z.lazy(() => notificationConfigurationFilterSchema).optional(),
 });
 
 /**
@@ -17779,7 +16381,6 @@ export const transitionSchema = z.object({
   StorageClass: transitionStorageClassSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure UpdateBucketMetadataInventoryTableConfigurationRequest is not mapped to zod.
 export const updateBucketMetadataInventoryTableConfigurationRequestSchema = z.object({
   /**
    * ```xml
@@ -17789,8 +16390,6 @@ export const updateBucketMetadataInventoryTableConfigurationRequestSchema = z.ob
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member UpdateBucketMetadataInventoryTableConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member UpdateBucketMetadataInventoryTableConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -17799,7 +16398,6 @@ export const updateBucketMetadataInventoryTableConfigurationRequestSchema = z.ob
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member UpdateBucketMetadataInventoryTableConfigurationRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -17808,7 +16406,6 @@ export const updateBucketMetadataInventoryTableConfigurationRequestSchema = z.ob
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member UpdateBucketMetadataInventoryTableConfigurationRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -17817,9 +16414,7 @@ export const updateBucketMetadataInventoryTableConfigurationRequestSchema = z.ob
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member UpdateBucketMetadataInventoryTableConfigurationRequest.InventoryTableConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("InventoryTableConfiguration") on structure member UpdateBucketMetadataInventoryTableConfigurationRequest.InventoryTableConfiguration is not mapped to zod.
-  InventoryTableConfiguration: inventoryTableConfigurationUpdatesSchema,
+  InventoryTableConfiguration: z.lazy(() => inventoryTableConfigurationUpdatesSchema),
   /**
    * ```xml
    * <p>
@@ -17828,11 +16423,9 @@ export const updateBucketMetadataInventoryTableConfigurationRequestSchema = z.ob
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member UpdateBucketMetadataInventoryTableConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure UpdateBucketMetadataJournalTableConfigurationRequest is not mapped to zod.
 export const updateBucketMetadataJournalTableConfigurationRequestSchema = z.object({
   /**
    * ```xml
@@ -17842,8 +16435,6 @@ export const updateBucketMetadataJournalTableConfigurationRequestSchema = z.obje
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member UpdateBucketMetadataJournalTableConfigurationRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member UpdateBucketMetadataJournalTableConfigurationRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -17852,7 +16443,6 @@ export const updateBucketMetadataJournalTableConfigurationRequestSchema = z.obje
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member UpdateBucketMetadataJournalTableConfigurationRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -17861,7 +16451,6 @@ export const updateBucketMetadataJournalTableConfigurationRequestSchema = z.obje
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member UpdateBucketMetadataJournalTableConfigurationRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -17870,9 +16459,7 @@ export const updateBucketMetadataJournalTableConfigurationRequestSchema = z.obje
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member UpdateBucketMetadataJournalTableConfigurationRequest.JournalTableConfiguration is not mapped to zod.
-  // TODO: smithy.api#xmlName ("JournalTableConfiguration") on structure member UpdateBucketMetadataJournalTableConfigurationRequest.JournalTableConfiguration is not mapped to zod.
-  JournalTableConfiguration: journalTableConfigurationUpdatesSchema,
+  JournalTableConfiguration: z.lazy(() => journalTableConfigurationUpdatesSchema),
   /**
    * ```xml
    * <p>
@@ -17881,11 +16468,9 @@ export const updateBucketMetadataJournalTableConfigurationRequestSchema = z.obje
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member UpdateBucketMetadataJournalTableConfigurationRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure UpdateObjectEncryptionRequest is not mapped to zod.
 export const updateObjectEncryptionRequestSchema = z.object({
   /**
    * ```xml
@@ -17904,8 +16489,6 @@ export const updateObjectEncryptionRequestSchema = z.object({
    *         Referencing access points</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member UpdateObjectEncryptionRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member UpdateObjectEncryptionRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -17914,7 +16497,6 @@ export const updateObjectEncryptionRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member UpdateObjectEncryptionRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
@@ -17923,7 +16505,6 @@ export const updateObjectEncryptionRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("versionId") on structure member UpdateObjectEncryptionRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
@@ -17935,10 +16516,7 @@ export const updateObjectEncryptionRequestSchema = z.object({
    *          </p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member UpdateObjectEncryptionRequest.ObjectEncryption is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#ObjectEncryption for UpdateObjectEncryptionRequest.ObjectEncryption is not generated yet.
-  ObjectEncryption: z.unknown(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member UpdateObjectEncryptionRequest.RequestPayer is not mapped to zod.
+  ObjectEncryption: objectEncryptionSchema,
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
@@ -17949,7 +16527,6 @@ export const updateObjectEncryptionRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member UpdateObjectEncryptionRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
@@ -17958,7 +16535,6 @@ export const updateObjectEncryptionRequestSchema = z.object({
    *    </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member UpdateObjectEncryptionRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -17974,17 +16550,11 @@ export const updateObjectEncryptionRequestSchema = z.object({
    *       parameter.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member UpdateObjectEncryptionRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure UpdateObjectEncryptionResponse is not mapped to zod.
-export const updateObjectEncryptionResponseSchema = z.object({
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member UpdateObjectEncryptionResponse.RequestCharged is not mapped to zod.
-  RequestCharged: requestChargedSchema.optional(),
-});
+export const updateObjectEncryptionResponseSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
 
-// TODO: smithy.api#output ({}) on structure UploadPartCopyOutput is not mapped to zod.
 export const uploadPartCopyOutputSchema = z.object({
   /**
    * ```xml
@@ -17995,15 +16565,13 @@ export const uploadPartCopyOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-version-id") on structure member UploadPartCopyOutput.CopySourceVersionId is not mapped to zod.
   CopySourceVersionId: copySourceVersionIdSchema.optional(),
   /**
    * ```xml
    * <p>Container for all response elements.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member UploadPartCopyOutput.CopyPartResult is not mapped to zod.
-  CopyPartResult: copyPartResultSchema.optional(),
+  CopyPartResult: z.lazy(() => copyPartResultSchema).optional(),
   /**
    * ```xml
    * <p>The server-side encryption algorithm used when you store this object in Amazon S3 or Amazon FSx.</p>
@@ -18013,7 +16581,6 @@ export const uploadPartCopyOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member UploadPartCopyOutput.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -18024,7 +16591,6 @@ export const uploadPartCopyOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member UploadPartCopyOutput.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -18036,14 +16602,12 @@ export const uploadPartCopyOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member UploadPartCopyOutput.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
    * <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member UploadPartCopyOutput.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -18051,13 +16615,10 @@ export const uploadPartCopyOutputSchema = z.object({
    *       Key Management Service (KMS) keys (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member UploadPartCopyOutput.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member UploadPartCopyOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure UploadPartCopyRequest is not mapped to zod.
 export const uploadPartCopyRequestSchema = z.object({
   /**
    * ```xml
@@ -18086,8 +16647,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member UploadPartCopyRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member UploadPartCopyRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -18131,7 +16690,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source") on structure member UploadPartCopyRequest.CopySource is not mapped to zod.
   CopySource: copySourceSchema,
   /**
    * ```xml
@@ -18147,7 +16705,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *       </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-if-match") on structure member UploadPartCopyRequest.CopySourceIfMatch is not mapped to zod.
   CopySourceIfMatch: copySourceIfMatchSchema.optional(),
   /**
    * ```xml
@@ -18162,7 +16719,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *       </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-if-modified-since") on structure member UploadPartCopyRequest.CopySourceIfModifiedSince is not mapped to zod.
   CopySourceIfModifiedSince: copySourceIfModifiedSinceSchema.optional(),
   /**
    * ```xml
@@ -18177,7 +16733,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *       </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-if-none-match") on structure member UploadPartCopyRequest.CopySourceIfNoneMatch is not mapped to zod.
   CopySourceIfNoneMatch: copySourceIfNoneMatchSchema.optional(),
   /**
    * ```xml
@@ -18193,7 +16748,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *       </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-if-unmodified-since") on structure member UploadPartCopyRequest.CopySourceIfUnmodifiedSince is not mapped to zod.
   CopySourceIfUnmodifiedSince: copySourceIfUnmodifiedSinceSchema.optional(),
   /**
    * ```xml
@@ -18203,28 +16757,24 @@ export const uploadPartCopyRequestSchema = z.object({
    *       the source object is greater than 5 MB.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-range") on structure member UploadPartCopyRequest.CopySourceRange is not mapped to zod.
   CopySourceRange: copySourceRangeSchema.optional(),
   /**
    * ```xml
    * <p>Object key for which the multipart upload was initiated.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member UploadPartCopyRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>Part number of part being copied. This is a positive integer between 1 and 10,000.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("partNumber") on structure member UploadPartCopyRequest.PartNumber is not mapped to zod.
   PartNumber: partNumberSchema,
   /**
    * ```xml
    * <p>Upload ID identifying the multipart upload whose part is being copied.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("uploadId") on structure member UploadPartCopyRequest.UploadId is not mapped to zod.
   UploadId: multipartUploadIdSchema,
   /**
    * ```xml
@@ -18234,7 +16784,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member UploadPartCopyRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -18248,7 +16797,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member UploadPartCopyRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -18259,7 +16807,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member UploadPartCopyRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
@@ -18270,7 +16817,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-server-side-encryption-customer-algorithm") on structure member UploadPartCopyRequest.CopySourceSSECustomerAlgorithm is not mapped to zod.
   CopySourceSSECustomerAlgorithm: copySourceSseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -18282,7 +16828,6 @@ export const uploadPartCopyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-server-side-encryption-customer-key") on structure member UploadPartCopyRequest.CopySourceSSECustomerKey is not mapped to zod.
   CopySourceSSECustomerKey: copySourceSseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -18293,27 +16838,22 @@ export const uploadPartCopyRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-copy-source-server-side-encryption-customer-key-MD5") on structure member UploadPartCopyRequest.CopySourceSSECustomerKeyMD5 is not mapped to zod.
   CopySourceSSECustomerKeyMD5: copySourceSseCustomerKeyMd5Schema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member UploadPartCopyRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected destination bucket owner. If the account ID that you provide does not match the actual owner of the destination bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member UploadPartCopyRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected source bucket owner. If the account ID that you provide does not match the actual owner of the source bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-source-expected-bucket-owner") on structure member UploadPartCopyRequest.ExpectedSourceBucketOwner is not mapped to zod.
   ExpectedSourceBucketOwner: accountIdSchema.optional(),
 });
 
-// TODO: smithy.api#output ({}) on structure UploadPartOutput is not mapped to zod.
 export const uploadPartOutputSchema = z.object({
   /**
    * ```xml
@@ -18324,14 +16864,12 @@ export const uploadPartOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption") on structure member UploadPartOutput.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
    * <p>Entity tag for the uploaded object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("ETag") on structure member UploadPartOutput.ETag is not mapped to zod.
   ETag: eTagSchema.optional(),
   /**
    * ```xml
@@ -18341,7 +16879,6 @@ export const uploadPartOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32") on structure member UploadPartOutput.ChecksumCRC32 is not mapped to zod.
   ChecksumCRC32: checksumCrc32Schema.optional(),
   /**
    * ```xml
@@ -18351,7 +16888,6 @@ export const uploadPartOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32c") on structure member UploadPartOutput.ChecksumCRC32C is not mapped to zod.
   ChecksumCRC32C: checksumCrc32CSchema.optional(),
   /**
    * ```xml
@@ -18361,7 +16897,6 @@ export const uploadPartOutputSchema = z.object({
    *       the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc64nvme") on structure member UploadPartOutput.ChecksumCRC64NVME is not mapped to zod.
   ChecksumCRC64NVME: checksumCrc64NvmeSchema.optional(),
   /**
    * ```xml
@@ -18371,7 +16906,6 @@ export const uploadPartOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha1") on structure member UploadPartOutput.ChecksumSHA1 is not mapped to zod.
   ChecksumSHA1: checksumSha1Schema.optional(),
   /**
    * ```xml
@@ -18381,7 +16915,6 @@ export const uploadPartOutputSchema = z.object({
    *     Checking object integrity</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha256") on structure member UploadPartOutput.ChecksumSHA256 is not mapped to zod.
   ChecksumSHA256: checksumSha256Schema.optional(),
   /**
    * ```xml
@@ -18392,7 +16925,6 @@ export const uploadPartOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member UploadPartOutput.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -18404,14 +16936,12 @@ export const uploadPartOutputSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member UploadPartOutput.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
    * <p>If present, indicates the ID of the KMS key that was used for object encryption.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-aws-kms-key-id") on structure member UploadPartOutput.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -18419,20 +16949,16 @@ export const uploadPartOutputSchema = z.object({
    *       Key Management Service (KMS) keys (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-bucket-key-enabled") on structure member UploadPartOutput.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-charged") on structure member UploadPartOutput.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure UploadPartRequest is not mapped to zod.
 export const uploadPartRequestSchema = z.object({
   /**
    * ```xml
    * <p>Object data.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member UploadPartRequest.Body is not mapped to zod.
   Body: streamingBlobSchema.optional().default(new Uint8Array([])),
   /**
    * ```xml
@@ -18455,8 +16981,6 @@ export const uploadPartRequestSchema = z.object({
    *                <i>AccessPointName</i>-<i>AccountId</i>.<i>outpostID</i>.s3-outposts.<i>Region</i>.amazonaws.com</code>. When you use this action with S3 on Outposts, the destination bucket must be the Outposts access point ARN or the access point alias. For more information about S3 on Outposts, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/S3onOutposts.html">What is S3 on Outposts?</a> in the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member UploadPartRequest.Bucket is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Bucket"}) on structure member UploadPartRequest.Bucket is not mapped to zod.
   Bucket: bucketNameSchema,
   /**
    * ```xml
@@ -18464,7 +16988,6 @@ export const uploadPartRequestSchema = z.object({
    *       automatically.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Length") on structure member UploadPartRequest.ContentLength is not mapped to zod.
   ContentLength: contentLengthSchema.optional(),
   /**
    * ```xml
@@ -18475,7 +16998,6 @@ export const uploadPartRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-MD5") on structure member UploadPartRequest.ContentMD5 is not mapped to zod.
   ContentMD5: contentMd5Schema.optional(),
   /**
    * ```xml
@@ -18490,7 +17012,6 @@ export const uploadPartRequestSchema = z.object({
    *       the <code>CreateMultipartUpload</code> request.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-sdk-checksum-algorithm") on structure member UploadPartRequest.ChecksumAlgorithm is not mapped to zod.
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -18500,7 +17021,6 @@ export const uploadPartRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32") on structure member UploadPartRequest.ChecksumCRC32 is not mapped to zod.
   ChecksumCRC32: checksumCrc32Schema.optional(),
   /**
    * ```xml
@@ -18510,7 +17030,6 @@ export const uploadPartRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc32c") on structure member UploadPartRequest.ChecksumCRC32C is not mapped to zod.
   ChecksumCRC32C: checksumCrc32CSchema.optional(),
   /**
    * ```xml
@@ -18520,7 +17039,6 @@ export const uploadPartRequestSchema = z.object({
    *       the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-crc64nvme") on structure member UploadPartRequest.ChecksumCRC64NVME is not mapped to zod.
   ChecksumCRC64NVME: checksumCrc64NvmeSchema.optional(),
   /**
    * ```xml
@@ -18530,7 +17048,6 @@ export const uploadPartRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha1") on structure member UploadPartRequest.ChecksumSHA1 is not mapped to zod.
   ChecksumSHA1: checksumSha1Schema.optional(),
   /**
    * ```xml
@@ -18540,29 +17057,24 @@ export const uploadPartRequestSchema = z.object({
    *     <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-checksum-sha256") on structure member UploadPartRequest.ChecksumSHA256 is not mapped to zod.
   ChecksumSHA256: checksumSha256Schema.optional(),
   /**
    * ```xml
    * <p>Object key for which the multipart upload was initiated.</p>
    * ```
    */
-  // TODO: smithy.api#httpLabel ({}) on structure member UploadPartRequest.Key is not mapped to zod.
-  // TODO: smithy.rules#contextParam ({"name":"Key"}) on structure member UploadPartRequest.Key is not mapped to zod.
   Key: objectKeySchema,
   /**
    * ```xml
    * <p>Part number of part being uploaded. This is a positive integer between 1 and 10,000.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("partNumber") on structure member UploadPartRequest.PartNumber is not mapped to zod.
   PartNumber: partNumberSchema,
   /**
    * ```xml
    * <p>Upload ID identifying the multipart upload whose part is being uploaded.</p>
    * ```
    */
-  // TODO: smithy.api#httpQuery ("uploadId") on structure member UploadPartRequest.UploadId is not mapped to zod.
   UploadId: multipartUploadIdSchema,
   /**
    * ```xml
@@ -18572,7 +17084,6 @@ export const uploadPartRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-algorithm") on structure member UploadPartRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -18586,7 +17097,6 @@ export const uploadPartRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key") on structure member UploadPartRequest.SSECustomerKey is not mapped to zod.
   SSECustomerKey: sseCustomerKeySchema.optional(),
   /**
    * ```xml
@@ -18597,16 +17107,13 @@ export const uploadPartRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-server-side-encryption-customer-key-MD5") on structure member UploadPartRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-request-payer") on structure member UploadPartRequest.RequestPayer is not mapped to zod.
   RequestPayer: requestPayerSchema.optional(),
   /**
    * ```xml
    * <p>The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code <code>403 Forbidden</code> (access denied).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-expected-bucket-owner") on structure member UploadPartRequest.ExpectedBucketOwner is not mapped to zod.
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
 
@@ -18624,7 +17131,6 @@ export const versioningConfigurationSchema = z.object({
    *       this element is not returned.</p>
    * ```
    */
-  // TODO: smithy.api#xmlName ("MfaDelete") on structure member VersioningConfiguration.MFADelete is not mapped to zod.
   MFADelete: mfaDeleteSchema.optional(),
   /**
    * ```xml
@@ -18645,13 +17151,13 @@ export const websiteConfigurationSchema = z.object({
    * <p>The name of the error document for the website.</p>
    * ```
    */
-  ErrorDocument: errorDocumentSchema.optional(),
+  ErrorDocument: z.lazy(() => errorDocumentSchema).optional(),
   /**
    * ```xml
    * <p>The name of the index document for the website.</p>
    * ```
    */
-  IndexDocument: indexDocumentSchema.optional(),
+  IndexDocument: z.lazy(() => indexDocumentSchema).optional(),
   /**
    * ```xml
    * <p>The redirect behavior for every request to this bucket's website endpoint.</p>
@@ -18660,25 +17166,21 @@ export const websiteConfigurationSchema = z.object({
    *          </important>
    * ```
    */
-  RedirectAllRequestsTo: redirectAllRequestsToSchema.optional(),
+  RedirectAllRequestsTo: z.lazy(() => redirectAllRequestsToSchema).optional(),
   /**
    * ```xml
    * <p>Rules that define when a redirect is applied and the redirect behavior.</p>
    * ```
    */
-  // TODO: structure member target com.amazonaws.s3#RoutingRules for WebsiteConfiguration.RoutingRules is not generated yet.
-  RoutingRules: z.unknown().optional(),
+  RoutingRules: routingRulesSchema.optional(),
 });
 
-// TODO: smithy.api#input ({}) on structure WriteGetObjectResponseRequest is not mapped to zod.
 export const writeGetObjectResponseRequestSchema = z.object({
   /**
    * ```xml
    * <p>Route prefix to the HTTP URL generated.</p>
    * ```
    */
-  // TODO: smithy.api#hostLabel ({}) on structure member WriteGetObjectResponseRequest.RequestRoute is not mapped to zod.
-  // TODO: smithy.api#httpHeader ("x-amz-request-route") on structure member WriteGetObjectResponseRequest.RequestRoute is not mapped to zod.
   RequestRoute: requestRouteSchema,
   /**
    * ```xml
@@ -18686,14 +17188,12 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *         <code>GetObject</code> request.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-request-token") on structure member WriteGetObjectResponseRequest.RequestToken is not mapped to zod.
   RequestToken: requestTokenSchema,
   /**
    * ```xml
    * <p>The object data.</p>
    * ```
    */
-  // TODO: smithy.api#httpPayload ({}) on structure member WriteGetObjectResponseRequest.Body is not mapped to zod.
   Body: streamingBlobSchema.optional().default(new Uint8Array([])),
   /**
    * ```xml
@@ -18773,7 +17273,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *          </ul>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-status") on structure member WriteGetObjectResponseRequest.StatusCode is not mapped to zod.
   StatusCode: getObjectResponseStatusCodeSchema.optional(),
   /**
    * ```xml
@@ -18784,7 +17283,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       <code>"^[A-Z][a-zA-Z]+$"</code>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-error-code") on structure member WriteGetObjectResponseRequest.ErrorCode is not mapped to zod.
   ErrorCode: errorCodeSchema.optional(),
   /**
    * ```xml
@@ -18793,28 +17291,24 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *         <code>StatusCode</code> header or when the transformed object is provided in body.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-error-message") on structure member WriteGetObjectResponseRequest.ErrorMessage is not mapped to zod.
   ErrorMessage: errorMessageSchema.optional(),
   /**
    * ```xml
    * <p>Indicates that a range of bytes was specified.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-accept-ranges") on structure member WriteGetObjectResponseRequest.AcceptRanges is not mapped to zod.
   AcceptRanges: acceptRangesSchema.optional(),
   /**
    * ```xml
    * <p>Specifies caching behavior along the request/reply chain.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-Cache-Control") on structure member WriteGetObjectResponseRequest.CacheControl is not mapped to zod.
   CacheControl: cacheControlSchema.optional(),
   /**
    * ```xml
    * <p>Specifies presentational information for the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-Content-Disposition") on structure member WriteGetObjectResponseRequest.ContentDisposition is not mapped to zod.
   ContentDisposition: contentDispositionSchema.optional(),
   /**
    * ```xml
@@ -18822,35 +17316,30 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       must be applied to obtain the media-type referenced by the Content-Type header field.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-Content-Encoding") on structure member WriteGetObjectResponseRequest.ContentEncoding is not mapped to zod.
   ContentEncoding: contentEncodingSchema.optional(),
   /**
    * ```xml
    * <p>The language the content is in.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-Content-Language") on structure member WriteGetObjectResponseRequest.ContentLanguage is not mapped to zod.
   ContentLanguage: contentLanguageSchema.optional(),
   /**
    * ```xml
    * <p>The size of the content body in bytes.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("Content-Length") on structure member WriteGetObjectResponseRequest.ContentLength is not mapped to zod.
   ContentLength: contentLengthSchema.optional(),
   /**
    * ```xml
    * <p>The portion of the object returned in the response.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-Content-Range") on structure member WriteGetObjectResponseRequest.ContentRange is not mapped to zod.
   ContentRange: contentRangeSchema.optional(),
   /**
    * ```xml
    * <p>A standard MIME type describing the format of the object data.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-Content-Type") on structure member WriteGetObjectResponseRequest.ContentType is not mapped to zod.
   ContentType: contentTypeSchema.optional(),
   /**
    * ```xml
@@ -18865,7 +17354,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *          <p></p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-checksum-crc32") on structure member WriteGetObjectResponseRequest.ChecksumCRC32 is not mapped to zod.
   ChecksumCRC32: checksumCrc32Schema.optional(),
   /**
    * ```xml
@@ -18879,7 +17367,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       request will fail.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-checksum-crc32c") on structure member WriteGetObjectResponseRequest.ChecksumCRC32C is not mapped to zod.
   ChecksumCRC32C: checksumCrc32CSchema.optional(),
   /**
    * ```xml
@@ -18889,7 +17376,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       the <i>Amazon S3 User Guide</i>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-checksum-crc64nvme") on structure member WriteGetObjectResponseRequest.ChecksumCRC64NVME is not mapped to zod.
   ChecksumCRC64NVME: checksumCrc64NvmeSchema.optional(),
   /**
    * ```xml
@@ -18903,7 +17389,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       request will fail.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-checksum-sha1") on structure member WriteGetObjectResponseRequest.ChecksumSHA1 is not mapped to zod.
   ChecksumSHA1: checksumSha1Schema.optional(),
   /**
    * ```xml
@@ -18917,7 +17402,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       request will fail.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-checksum-sha256") on structure member WriteGetObjectResponseRequest.ChecksumSHA256 is not mapped to zod.
   ChecksumSHA256: checksumSha256Schema.optional(),
   /**
    * ```xml
@@ -18925,7 +17409,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       delete marker. To learn more about delete markers, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/DeleteMarker.html">Working with delete markers</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-delete-marker") on structure member WriteGetObjectResponseRequest.DeleteMarker is not mapped to zod.
   DeleteMarker: deleteMarkerSchema.optional(),
   /**
    * ```xml
@@ -18933,14 +17416,12 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *     </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-ETag") on structure member WriteGetObjectResponseRequest.ETag is not mapped to zod.
   ETag: eTagSchema.optional(),
   /**
    * ```xml
    * <p>The date and time at which the object is no longer cacheable.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-Expires") on structure member WriteGetObjectResponseRequest.Expires is not mapped to zod.
   Expires: expiresSchema.optional(),
   /**
    * ```xml
@@ -18949,14 +17430,12 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       the object expiration information. The value of the <code>rule-id</code> is URL-encoded. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-expiration") on structure member WriteGetObjectResponseRequest.Expiration is not mapped to zod.
   Expiration: expirationSchema.optional(),
   /**
    * ```xml
    * <p>The date and time that the object was last modified.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-Last-Modified") on structure member WriteGetObjectResponseRequest.LastModified is not mapped to zod.
   LastModified: lastModifiedSchema.optional(),
   /**
    * ```xml
@@ -18965,16 +17444,13 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-missing-meta") on structure member WriteGetObjectResponseRequest.MissingMeta is not mapped to zod.
   MissingMeta: missingMetaSchema.optional(),
   /**
    * ```xml
    * <p>A map of metadata to store with the object in S3.</p>
    * ```
    */
-  // TODO: smithy.api#httpPrefixHeaders ("x-amz-meta-") on structure member WriteGetObjectResponseRequest.Metadata is not mapped to zod.
-  // TODO: structure member target com.amazonaws.s3#Metadata for WriteGetObjectResponseRequest.Metadata is not generated yet.
-  Metadata: z.unknown().optional(),
+  Metadata: metadataSchema.optional(),
   /**
    * ```xml
    * <p>Indicates whether an object stored in Amazon S3 has Object Lock enabled. For more information about S3
@@ -18982,28 +17458,24 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *         Lock</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-object-lock-mode") on structure member WriteGetObjectResponseRequest.ObjectLockMode is not mapped to zod.
   ObjectLockMode: objectLockModeSchema.optional(),
   /**
    * ```xml
    * <p>Indicates whether an object stored in Amazon S3 has an active legal hold.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-object-lock-legal-hold") on structure member WriteGetObjectResponseRequest.ObjectLockLegalHoldStatus is not mapped to zod.
   ObjectLockLegalHoldStatus: objectLockLegalHoldStatusSchema.optional(),
   /**
    * ```xml
    * <p>The date and time when Object Lock is configured to expire.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-object-lock-retain-until-date") on structure member WriteGetObjectResponseRequest.ObjectLockRetainUntilDate is not mapped to zod.
   ObjectLockRetainUntilDate: objectLockRetainUntilDateSchema.optional(),
   /**
    * ```xml
    * <p>The count of parts this object has.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-mp-parts-count") on structure member WriteGetObjectResponseRequest.PartsCount is not mapped to zod.
   PartsCount: partsCountSchema.optional(),
   /**
    * ```xml
@@ -19011,9 +17483,7 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       For more information about S3 Replication, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/replication.html">Replication</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-replication-status") on structure member WriteGetObjectResponseRequest.ReplicationStatus is not mapped to zod.
   ReplicationStatus: replicationStatusSchema.optional(),
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-request-charged") on structure member WriteGetObjectResponseRequest.RequestCharged is not mapped to zod.
   RequestCharged: requestChargedSchema.optional(),
   /**
    * ```xml
@@ -19021,7 +17491,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       copy.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-restore") on structure member WriteGetObjectResponseRequest.Restore is not mapped to zod.
   Restore: restoreSchema.optional(),
   /**
    * ```xml
@@ -19032,7 +17501,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *          </note>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-server-side-encryption") on structure member WriteGetObjectResponseRequest.ServerSideEncryption is not mapped to zod.
   ServerSideEncryption: serverSideEncryptionSchema.optional(),
   /**
    * ```xml
@@ -19040,7 +17508,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       specified for object stored in Amazon S3.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-server-side-encryption-customer-algorithm") on structure member WriteGetObjectResponseRequest.SSECustomerAlgorithm is not mapped to zod.
   SSECustomerAlgorithm: sseCustomerAlgorithmSchema.optional(),
   /**
    * ```xml
@@ -19048,7 +17515,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       (Amazon Web Services KMS) symmetric encryption customer managed key that was used for stored in Amazon S3 object. </p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-server-side-encryption-aws-kms-key-id") on structure member WriteGetObjectResponseRequest.SSEKMSKeyId is not mapped to zod.
   SSEKMSKeyId: ssekmsKeyIdSchema.optional(),
   /**
    * ```xml
@@ -19057,7 +17523,6 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *         server-side encryption with customer-provided encryption keys (SSE-C)</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-server-side-encryption-customer-key-MD5") on structure member WriteGetObjectResponseRequest.SSECustomerKeyMD5 is not mapped to zod.
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
   /**
    * ```xml
@@ -19066,21 +17531,18 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *          <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/storage-class-intro.html">Storage Classes</a>.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-storage-class") on structure member WriteGetObjectResponseRequest.StorageClass is not mapped to zod.
   StorageClass: storageClassSchema.optional(),
   /**
    * ```xml
    * <p>The number of tags, if any, on the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-tagging-count") on structure member WriteGetObjectResponseRequest.TagCount is not mapped to zod.
   TagCount: tagCountSchema.optional(),
   /**
    * ```xml
    * <p>An ID used to reference a specific version of the object.</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-version-id") on structure member WriteGetObjectResponseRequest.VersionId is not mapped to zod.
   VersionId: objectVersionIdSchema.optional(),
   /**
    * ```xml
@@ -19088,6 +17550,5 @@ export const writeGetObjectResponseRequestSchema = z.object({
    *       Amazon Web Services KMS (SSE-KMS).</p>
    * ```
    */
-  // TODO: smithy.api#httpHeader ("x-amz-fwd-header-x-amz-server-side-encryption-bucket-key-enabled") on structure member WriteGetObjectResponseRequest.BucketKeyEnabled is not mapped to zod.
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
 });

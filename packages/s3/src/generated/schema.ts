@@ -481,15 +481,14 @@ export const restoreExpiryDateSchema = rfc3339DateTimeTimestampSchema;
 
 export const sessionExpirationSchema = rfc3339DateTimeTimestampSchema;
 
-export const allowedHeadersSchema = z.array(allowedHeaderSchema);
+export const allowedHeadersSchema = z.array(z.lazy(() => allowedHeaderSchema));
 
-export const allowedMethodsSchema = z.array(allowedMethodSchema);
+export const allowedMethodsSchema = z.array(z.lazy(() => allowedMethodSchema));
 
-export const allowedOriginsSchema = z.array(allowedOriginSchema);
+export const allowedOriginsSchema = z.array(z.lazy(() => allowedOriginSchema));
 
 export const analyticsConfigurationListSchema = z.array(analyticsConfigurationSchema);
 
-// TODO: smithy.api#xmlName ("Bucket") on list member is not mapped to zod.
 export const bucketsSchema = z.array(bucketSchema);
 
 export const corsRulesSchema = z.array(corsRuleSchema);
@@ -504,14 +503,13 @@ export const deleteMarkersSchema = z.array(deleteMarkerEntrySchema);
 
 export const deletedObjectsSchema = z.array(deletedObjectSchema);
 
-// TODO: smithy.api#xmlName ("EncryptionType") on list member is not mapped to zod.
 export const encryptionTypeListSchema = z.array(encryptionTypeSchema);
 
 export const errorsSchema = z.array(errorSchema);
 
 export const eventListSchema = z.array(eventSchema);
 
-export const exposeHeadersSchema = z.array(exposeHeaderSchema);
+export const exposeHeadersSchema = z.array(z.lazy(() => exposeHeaderSchema));
 
 /**
  * ```xml
@@ -520,14 +518,12 @@ export const exposeHeadersSchema = z.array(exposeHeaderSchema);
  */
 export const filterRuleListSchema = z.array(filterRuleSchema);
 
-// TODO: smithy.api#xmlName ("Grant") on list member is not mapped to zod.
 export const grantsSchema = z.array(grantSchema);
 
 export const intelligentTieringConfigurationListSchema = z.array(intelligentTieringConfigurationSchema);
 
 export const inventoryConfigurationListSchema = z.array(inventoryConfigurationSchema);
 
-// TODO: smithy.api#xmlName ("Field") on list member is not mapped to zod.
 export const inventoryOptionalFieldsSchema = z.array(inventoryOptionalFieldSchema);
 
 export const lambdaFunctionConfigurationListSchema = z.array(lambdaFunctionConfigurationSchema);
@@ -560,15 +556,12 @@ export const queueConfigurationListSchema = z.array(queueConfigurationSchema);
 
 export const replicationRulesSchema = z.array(replicationRuleSchema);
 
-// TODO: smithy.api#xmlName ("RoutingRule") on list member is not mapped to zod.
 export const routingRulesSchema = z.array(routingRuleSchema);
 
 export const serverSideEncryptionRulesSchema = z.array(serverSideEncryptionRuleSchema);
 
-// TODO: smithy.api#xmlName ("Tag") on list member is not mapped to zod.
 export const tagSetSchema = z.array(tagSchema);
 
-// TODO: smithy.api#xmlName ("Grant") on list member is not mapped to zod.
 export const targetGrantsSchema = z.array(targetGrantSchema);
 
 export const tieringListSchema = z.array(tieringSchema);
@@ -577,14 +570,18 @@ export const topicConfigurationListSchema = z.array(topicConfigurationSchema);
 
 export const transitionListSchema = z.array(transitionSchema);
 
-// TODO: smithy.api#xmlName ("MetadataEntry") on list member is not mapped to zod.
 export const userMetadataSchema = z.array(metadataEntrySchema);
 
-export const metadataSchema = z.record(metadataKeySchema, metadataValueSchema);
+export const metadataSchema = z.record(z.lazy(() => metadataKeySchema), z.lazy(() => metadataValueSchema));
 
-export const analyticsFilterSchema = z.union([prefixSchema, tagSchema, analyticsAndOperatorSchema]);
+export const analyticsFilterSchema = z.union([z.lazy(() => prefixSchema), tagSchema, analyticsAndOperatorSchema]);
 
-export const metricsFilterSchema = z.union([prefixSchema, tagSchema, accessPointArnSchema, metricsAndOperatorSchema]);
+export const metricsFilterSchema = z.union([
+  z.lazy(() => prefixSchema),
+  tagSchema,
+  z.lazy(() => accessPointArnSchema),
+  metricsAndOperatorSchema,
+]);
 
 export const objectEncryptionSchema = z.union([ssekmsEncryptionSchema]);
 

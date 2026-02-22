@@ -143,7 +143,7 @@ describe("CodeGenContext service shape generation", () => {
     );
   });
 
-  it("emits unresolved target TODO comments after operation tsdoc", () => {
+  it("keeps unresolved operation signatures typed as unknown after tsdoc", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#KnownInput": {
@@ -170,14 +170,13 @@ describe("CodeGenContext service shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
     const tsDocIndex = output.indexOf(" * Retrieves an object from S3.");
-    const todoIndex = output.indexOf(
-      "// TODO: operation GetObject references unresolved target(s): com.amazonaws.s3#MissingOutput.",
-    );
     const methodIndex = output.indexOf("getObject(input:");
 
     expect(tsDocIndex).toBeGreaterThan(-1);
-    expect(todoIndex).toBeGreaterThan(tsDocIndex);
-    expect(methodIndex).toBeGreaterThan(todoIndex);
+    expect(methodIndex).toBeGreaterThan(tsDocIndex);
+    expect(output).toContain(
+      "getObject(input: z.infer<typeof knownInputSchema>): unknown;",
+    );
   });
 
   it("imports cross-namespace operation input and output types", () => {
@@ -231,9 +230,6 @@ describe("CodeGenContext service shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
-    expect(output).toContain(
-      "// TODO: operation target com.amazonaws.s3#MissingOperation is not generated.",
-    );
     expect(output).toContain("missingOperation(input: unknown): unknown;");
   });
 

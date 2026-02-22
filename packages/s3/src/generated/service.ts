@@ -910,7 +910,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation CreateBucketMetadataConfiguration references unresolved target(s): smithy.api#Unit.
   createBucketMetadataConfiguration(input: z.infer<typeof createBucketMetadataConfigurationRequestSchema>): unknown;
 
   /**
@@ -990,7 +989,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation CreateBucketMetadataTableConfiguration references unresolved target(s): smithy.api#Unit.
   createBucketMetadataTableConfiguration(
     input: z.infer<typeof createBucketMetadataTableConfigurationRequestSchema>,
   ): unknown;
@@ -1431,7 +1429,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucket references unresolved target(s): smithy.api#Unit.
   deleteBucket(input: z.infer<typeof deleteBucketRequestSchema>): unknown;
 
   /**
@@ -1470,7 +1467,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketAnalyticsConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketAnalyticsConfiguration(input: z.infer<typeof deleteBucketAnalyticsConfigurationRequestSchema>): unknown;
 
   /**
@@ -1503,7 +1499,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketCors references unresolved target(s): smithy.api#Unit.
   deleteBucketCors(input: z.infer<typeof deleteBucketCorsRequestSchema>): unknown;
 
   /**
@@ -1572,7 +1567,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketEncryption references unresolved target(s): smithy.api#Unit.
   deleteBucketEncryption(input: z.infer<typeof deleteBucketEncryptionRequestSchema>): unknown;
 
   /**
@@ -1607,7 +1601,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketIntelligentTieringConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketIntelligentTieringConfiguration(
     input: z.infer<typeof deleteBucketIntelligentTieringConfigurationRequestSchema>,
   ): unknown;
@@ -1646,7 +1639,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketInventoryConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketInventoryConfiguration(input: z.infer<typeof deleteBucketInventoryConfigurationRequestSchema>): unknown;
 
   /**
@@ -1721,7 +1713,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketLifecycle references unresolved target(s): smithy.api#Unit.
   deleteBucketLifecycle(input: z.infer<typeof deleteBucketLifecycleRequestSchema>): unknown;
 
   /**
@@ -1775,7 +1766,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketMetadataConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketMetadataConfiguration(input: z.infer<typeof deleteBucketMetadataConfigurationRequestSchema>): unknown;
 
   /**
@@ -1829,7 +1819,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketMetadataTableConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketMetadataTableConfiguration(
     input: z.infer<typeof deleteBucketMetadataTableConfigurationRequestSchema>,
   ): unknown;
@@ -1875,7 +1864,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketMetricsConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketMetricsConfiguration(input: z.infer<typeof deleteBucketMetricsConfigurationRequestSchema>): unknown;
 
   /**
@@ -1906,7 +1894,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketOwnershipControls references unresolved target(s): smithy.api#Unit.
   deleteBucketOwnershipControls(input: z.infer<typeof deleteBucketOwnershipControlsRequestSchema>): unknown;
 
   /**
@@ -1980,7 +1967,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketPolicy references unresolved target(s): smithy.api#Unit.
   deleteBucketPolicy(input: z.infer<typeof deleteBucketPolicyRequestSchema>): unknown;
 
   /**
@@ -2016,7 +2002,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketReplication references unresolved target(s): smithy.api#Unit.
   deleteBucketReplication(input: z.infer<typeof deleteBucketReplicationRequestSchema>): unknown;
 
   /**
@@ -2046,7 +2031,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketTagging references unresolved target(s): smithy.api#Unit.
   deleteBucketTagging(input: z.infer<typeof deleteBucketTaggingRequestSchema>): unknown;
 
   /**
@@ -2082,7 +2066,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeleteBucketWebsite references unresolved target(s): smithy.api#Unit.
   deleteBucketWebsite(input: z.infer<typeof deleteBucketWebsiteRequestSchema>): unknown;
 
   /**
@@ -2434,7 +2417,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation DeletePublicAccessBlock references unresolved target(s): smithy.api#Unit.
   deletePublicAccessBlock(input: z.infer<typeof deletePublicAccessBlockRequestSchema>): unknown;
 
   /**
@@ -5021,7 +5003,6 @@ export interface AmazonS3Service {
    * <p>Sets the attribute-based access control (ABAC) property of the general purpose bucket. You must have <code>s3:PutBucketABAC</code> permission to perform this action. When you enable ABAC, you can use tags for access control on your buckets. Additionally, when ABAC is enabled, you must use the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_TagResource.html">TagResource</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_UntagResource.html">UntagResource</a> actions to manage tags on your buckets. You can nolonger use the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html">PutBucketTagging</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html">DeleteBucketTagging</a> actions to tag your bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/buckets-tagging-enable-abac.html">Enabling ABAC in general purpose buckets</a>. </p>
    * ```
    */
-  // TODO: operation PutBucketAbac references unresolved target(s): smithy.api#Unit.
   putBucketAbac(input: z.infer<typeof putBucketAbacRequestSchema>): unknown;
 
   /**
@@ -5069,7 +5050,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketAccelerateConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketAccelerateConfiguration(input: z.infer<typeof putBucketAccelerateConfigurationRequestSchema>): unknown;
 
   /**
@@ -5277,7 +5257,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketAcl references unresolved target(s): smithy.api#Unit.
   putBucketAcl(input: z.infer<typeof putBucketAclRequestSchema>): unknown;
 
   /**
@@ -5391,7 +5370,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketAnalyticsConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketAnalyticsConfiguration(input: z.infer<typeof putBucketAnalyticsConfigurationRequestSchema>): unknown;
 
   /**
@@ -5454,7 +5432,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketCors references unresolved target(s): smithy.api#Unit.
   putBucketCors(input: z.infer<typeof putBucketCorsRequestSchema>): unknown;
 
   /**
@@ -5583,7 +5560,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketEncryption references unresolved target(s): smithy.api#Unit.
   putBucketEncryption(input: z.infer<typeof putBucketEncryptionRequestSchema>): unknown;
 
   /**
@@ -5650,7 +5626,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketIntelligentTieringConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketIntelligentTieringConfiguration(
     input: z.infer<typeof putBucketIntelligentTieringConfigurationRequestSchema>,
   ): unknown;
@@ -5745,7 +5720,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketInventoryConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketInventoryConfiguration(input: z.infer<typeof putBucketInventoryConfigurationRequestSchema>): unknown;
 
   /**
@@ -5980,7 +5954,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketLogging references unresolved target(s): smithy.api#Unit.
   putBucketLogging(input: z.infer<typeof putBucketLoggingRequestSchema>): unknown;
 
   /**
@@ -6038,7 +6011,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketMetricsConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketMetricsConfiguration(input: z.infer<typeof putBucketMetricsConfigurationRequestSchema>): unknown;
 
   /**
@@ -6097,7 +6069,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketNotificationConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketNotificationConfiguration(input: z.infer<typeof putBucketNotificationConfigurationRequestSchema>): unknown;
 
   /**
@@ -6127,7 +6098,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketOwnershipControls references unresolved target(s): smithy.api#Unit.
   putBucketOwnershipControls(input: z.infer<typeof putBucketOwnershipControlsRequestSchema>): unknown;
 
   /**
@@ -6209,7 +6179,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketPolicy references unresolved target(s): smithy.api#Unit.
   putBucketPolicy(input: z.infer<typeof putBucketPolicyRequestSchema>): unknown;
 
   /**
@@ -6285,7 +6254,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketReplication references unresolved target(s): smithy.api#Unit.
   putBucketReplication(input: z.infer<typeof putBucketReplicationRequestSchema>): unknown;
 
   /**
@@ -6315,7 +6283,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketRequestPayment references unresolved target(s): smithy.api#Unit.
   putBucketRequestPayment(input: z.infer<typeof putBucketRequestPaymentRequestSchema>): unknown;
 
   /**
@@ -6380,7 +6347,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketTagging references unresolved target(s): smithy.api#Unit.
   putBucketTagging(input: z.infer<typeof putBucketTaggingRequestSchema>): unknown;
 
   /**
@@ -6439,7 +6405,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketVersioning references unresolved target(s): smithy.api#Unit.
   putBucketVersioning(input: z.infer<typeof putBucketVersioningRequestSchema>): unknown;
 
   /**
@@ -6576,7 +6541,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutBucketWebsite references unresolved target(s): smithy.api#Unit.
   putBucketWebsite(input: z.infer<typeof putBucketWebsiteRequestSchema>): unknown;
 
   /**
@@ -7149,7 +7113,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation PutPublicAccessBlock references unresolved target(s): smithy.api#Unit.
   putPublicAccessBlock(input: z.infer<typeof putPublicAccessBlockRequestSchema>): unknown;
 
   /**
@@ -7637,7 +7600,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation UpdateBucketMetadataInventoryTableConfiguration references unresolved target(s): smithy.api#Unit.
   updateBucketMetadataInventoryTableConfiguration(
     input: z.infer<typeof updateBucketMetadataInventoryTableConfigurationRequestSchema>,
   ): unknown;
@@ -7684,7 +7646,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation UpdateBucketMetadataJournalTableConfiguration references unresolved target(s): smithy.api#Unit.
   updateBucketMetadataJournalTableConfiguration(
     input: z.infer<typeof updateBucketMetadataJournalTableConfigurationRequestSchema>,
   ): unknown;
@@ -8320,6 +8281,5 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
-  // TODO: operation WriteGetObjectResponse references unresolved target(s): smithy.api#Unit.
   writeGetObjectResponse(input: z.infer<typeof writeGetObjectResponseRequestSchema>): unknown;
 }
