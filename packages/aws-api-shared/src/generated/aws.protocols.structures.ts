@@ -24,6 +24,7 @@ export const httpConfigurationSchema = z.object({
    */
   eventStreamHttp: stringListSchema.optional(),
 });
+export type HttpConfiguration = z.infer<typeof httpConfigurationSchema>;
 
 /**
  * ```xml
@@ -32,6 +33,7 @@ export const httpConfigurationSchema = z.object({
  * ```
  */
 export const awsJson10Schema = z.object({});
+export type AwsJson10 = z.infer<typeof awsJson10Schema>;
 
 /**
  * ```xml
@@ -40,6 +42,7 @@ export const awsJson10Schema = z.object({});
  * ```
  */
 export const awsJson11Schema = z.object({});
+export type AwsJson11 = z.infer<typeof awsJson11Schema>;
 
 /**
  * ```xml
@@ -49,6 +52,7 @@ export const awsJson11Schema = z.object({});
  * ```
  */
 export const awsQuerySchema = z.object({});
+export type AwsQuery = z.infer<typeof awsQuerySchema>;
 
 /**
  * ```xml
@@ -57,6 +61,7 @@ export const awsQuerySchema = z.object({});
  * ```
  */
 export const awsQueryCompatibleSchema = z.object({});
+export type AwsQueryCompatible = z.infer<typeof awsQueryCompatibleSchema>;
 
 /**
  * ```xml
@@ -78,6 +83,7 @@ export const awsQueryErrorSchema = z.object({
    */
   httpResponseCode: z.number(),
 });
+export type AwsQueryError = z.infer<typeof awsQueryErrorSchema>;
 
 /**
  * ```xml
@@ -87,6 +93,7 @@ export const awsQueryErrorSchema = z.object({
  * ```
  */
 export const ec2QuerySchema = z.object({});
+export type Ec2Query = z.infer<typeof ec2QuerySchema>;
 
 /**
  * ```xml
@@ -122,6 +129,7 @@ export const httpChecksumSchema = z.object({
    */
   responseAlgorithms: checksumAlgorithmSetSchema.optional(),
 });
+export type HttpChecksum = z.infer<typeof httpChecksumSchema>;
 
 /**
  * ```xml
@@ -129,6 +137,7 @@ export const httpChecksumSchema = z.object({
  * ```
  */
 export const restJson1Schema = z.object({});
+export type RestJson1 = z.infer<typeof restJson1Schema>;
 
 /**
  * ```xml
@@ -144,3 +153,4 @@ export const restXmlSchema = z.object({
    */
   noErrorWrapping: z.boolean().optional(),
 });
+export type RestXml = z.infer<typeof restXmlSchema>;

@@ -121,6 +121,7 @@ describe("CodeGenContext structure shape generation", () => {
     expect(output).toContain("   * Tag key\n   * ```");
     expect(output).toContain("Key: tagKeySchema,");
     expect(output).toContain('Value: tagKeySchema.optional().default("none"),');
+    expect(output).toContain("export type Tag = z.infer<typeof tagSchema>;");
   });
 
   it("renders blob defaults as Uint8Array literals", () => {
@@ -148,6 +149,9 @@ describe("CodeGenContext structure shape generation", () => {
     expect(output).toContain(
       "Body: streamingBlobSchema.optional().default(new Uint8Array([]))",
     );
+    expect(output).toContain(
+      "export type GetObjectOutput = z.infer<typeof getObjectOutputSchema>;",
+    );
   });
 
   it("falls back to z.unknown when a structure member target is unresolved", () => {
@@ -168,6 +172,7 @@ describe("CodeGenContext structure shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
     expect(output).toContain("Key: z.unknown().optional()");
+    expect(output).toContain("export type Tag = z.infer<typeof tagSchema>;");
   });
 
   it("resolves forward references between structure shapes", () => {
@@ -192,6 +197,12 @@ describe("CodeGenContext structure shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
 
     expect(output).toContain("Child: z.lazy(() => childSchema).optional()");
+    expect(output).toContain(
+      "export type Parent = z.infer<typeof parentSchema>;",
+    );
+    expect(output).toContain(
+      "export type Child = z.infer<typeof childSchema>;",
+    );
   });
 
   it("generates structure shapes before list shapes", () => {
@@ -225,5 +236,27 @@ describe("CodeGenContext structure shape generation", () => {
       "export const tagListSchema = z.array(tagSchema);",
     );
     expect(structuresOutput).toContain("export const tagSchema = z.object({");
+    expect(structuresOutput).toContain(
+      "export type Tag = z.infer<typeof tagSchema>;",
+    );
+  });
+
+  it("uses PascalCase names for exported structure types", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#get_object_output": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:structures") ?? "";
+
+    expect(output).toContain(
+      "export type GetObjectOutput = z.infer<typeof getObjectOutputSchema>;",
+    );
   });
 });

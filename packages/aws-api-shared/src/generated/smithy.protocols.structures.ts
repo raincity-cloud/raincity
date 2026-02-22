@@ -22,3 +22,4 @@ export const rpcv2CborSchema = z.object({
    */
   eventStreamHttp: stringListSchema.optional(),
 });
+export type Rpcv2Cbor = z.infer<typeof rpcv2CborSchema>;

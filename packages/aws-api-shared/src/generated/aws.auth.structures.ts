@@ -16,6 +16,7 @@ export const cognitoUserPoolsSchema = z.object({
    */
   providerArns: stringListSchema,
 });
+export type CognitoUserPools = z.infer<typeof cognitoUserPoolsSchema>;
 
 /**
  * ```xml
@@ -43,6 +44,7 @@ export const sigv4Schema = z.object({
     }
   }),
 });
+export type Sigv4 = z.infer<typeof sigv4Schema>;
 
 /**
  * ```xml
@@ -69,6 +71,7 @@ export const sigv4ASchema = z.object({
     }
   }),
 });
+export type Sigv4A = z.infer<typeof sigv4ASchema>;
 
 /**
  * ```xml
@@ -77,3 +80,4 @@ export const sigv4ASchema = z.object({
  * ```
  */
 export const unsignedPayloadSchema = z.object({});
+export type UnsignedPayload = z.infer<typeof unsignedPayloadSchema>;

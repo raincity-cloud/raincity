@@ -38,6 +38,7 @@ export const partitionEndpointSpecialCaseSchema = z.object({
    */
   fips: z.boolean().optional(),
 });
+export type PartitionEndpointSpecialCase = z.infer<typeof partitionEndpointSpecialCaseSchema>;
 
 /**
  * ```xml
@@ -64,6 +65,7 @@ export const partitionSpecialCaseSchema = z.object({
    */
   fips: z.boolean().optional(),
 });
+export type PartitionSpecialCase = z.infer<typeof partitionSpecialCaseSchema>;
 
 /**
  * ```xml
@@ -96,6 +98,7 @@ export const regionSpecialCaseSchema = z.object({
    */
   signingRegion: z.string().optional(),
 });
+export type RegionSpecialCase = z.infer<typeof regionSpecialCaseSchema>;
 
 /**
  * ```xml
@@ -103,6 +106,7 @@ export const regionSpecialCaseSchema = z.object({
  * ```
  */
 export const dualStackOnlyEndpointsSchema = z.object({});
+export type DualStackOnlyEndpoints = z.infer<typeof dualStackOnlyEndpointsSchema>;
 
 /**
  * ```xml
@@ -113,6 +117,7 @@ export const dualStackOnlyEndpointsSchema = z.object({});
  * ```
  */
 export const endpointsModifierSchema = z.object({});
+export type EndpointsModifier = z.infer<typeof endpointsModifierSchema>;
 
 /**
  * ```xml
@@ -120,6 +125,7 @@ export const endpointsModifierSchema = z.object({});
  * ```
  */
 export const rulesBasedEndpointsSchema = z.object({});
+export type RulesBasedEndpoints = z.infer<typeof rulesBasedEndpointsSchema>;
 
 /**
  * ```xml
@@ -143,6 +149,7 @@ export const standardPartitionalEndpointsSchema = z.object({
    */
   partitionEndpointSpecialCases: partitionEndpointSpecialCaseMapSchema.optional(),
 });
+export type StandardPartitionalEndpoints = z.infer<typeof standardPartitionalEndpointsSchema>;
 
 /**
  * ```xml
@@ -166,3 +173,4 @@ export const standardRegionalEndpointsSchema = z.object({
    */
   regionSpecialCases: regionSpecialCaseMapSchema.optional(),
 });
+export type StandardRegionalEndpoints = z.infer<typeof standardRegionalEndpointsSchema>;

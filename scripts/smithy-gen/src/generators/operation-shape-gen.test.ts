@@ -33,6 +33,8 @@ describe("CodeGenContext operation shape generation", () => {
     const method = ctx.getOperationMethod("com.amazonaws.s3#GetObject");
 
     expect(method?.methodName).toBe("getObject");
+    expect(method?.inputTypeExpr).toBeDefined();
+    expect(method?.outputTypeExpr).toBeDefined();
     expect(method?.tsDoc).toBeUndefined();
   });
 

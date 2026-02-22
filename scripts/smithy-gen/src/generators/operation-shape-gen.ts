@@ -1,4 +1,4 @@
-import { camelCase } from "lodash-es";
+import { camelCase, upperFirst } from "lodash-es";
 import { code, imp } from "ts-poet";
 import type {
   CodeGenContext,
@@ -27,6 +27,10 @@ interface ThrowsEntry {
   description: string;
 }
 
+function pascalCase(value: string): string {
+  return upperFirst(camelCase(value));
+}
+
 function resolveTypeReference(
   ctx: CodeGenContext,
   target: string,
@@ -40,6 +44,19 @@ function resolveTypeReference(
   }
 
   const { name: targetName } = ctx.parseShapeKey(target);
+  if (ctx.getShapeType(target) === "structure") {
+    const typeName = pascalCase(targetName);
+    const targetFileKey = ctx.getOutputFile(target);
+
+    return {
+      typeExpr:
+        targetFileKey === fileKey
+          ? typeName
+          : imp(`t:${typeName}@${ctx.getImportPath(targetFileKey)}`),
+      typeName,
+    };
+  }
+
   const schemaRef = ctx.resolveSchemaReference(target, fileKey).expr;
 
   return {

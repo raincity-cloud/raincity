@@ -1,4 +1,4 @@
-import { camelCase } from "lodash-es";
+import { camelCase, upperFirst } from "lodash-es";
 import { code, def, imp, joinCode } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { StructureShape } from "../shapes/structure-shape.js";
@@ -24,6 +24,10 @@ function buildObjectPropertyName(memberName: string): string {
     return memberName;
   }
   return JSON.stringify(memberName);
+}
+
+function pascalCase(value: string): string {
+  return upperFirst(camelCase(value));
 }
 
 function indentBlock(block: string, indent: string): string {
@@ -204,6 +208,7 @@ export function generateStructureShapes(
     const { name } = ctx.parseShapeKey(key);
     const fileKey = ctx.getOutputFile(key);
     const schemaName = `${camelCase(name)}Schema`;
+    const typeName = pascalCase(name);
 
     const shapeCommentLines: string[] = [];
     const shapeDocumentation = buildSchemaDocumentationComment(
@@ -257,8 +262,10 @@ export function generateStructureShapes(
       memberEntries.length > 0
         ? code`${shapeCommentPrefix}export const ${def(schemaName)} = ${zImp}.object({
 ${joinCode(memberEntries, { on: "\n" })}
-});`
-        : code`${shapeCommentPrefix}export const ${def(schemaName)} = ${zImp}.object({});`;
+});
+export type ${def(typeName)} = ${zImp}.infer<typeof ${schemaName}>;`
+        : code`${shapeCommentPrefix}export const ${def(schemaName)} = ${zImp}.object({});
+export type ${def(typeName)} = ${zImp}.infer<typeof ${schemaName}>;`;
 
     ctx.addCode(fileKey, schemaCode);
   }

@@ -36,6 +36,7 @@ export const taggableApiConfigSchema = z.object({
    */
   listTagsApi: tagOperationReferenceSchema,
 });
+export type TaggableApiConfig = z.infer<typeof taggableApiConfigSchema>;
 
 /**
  * ```xml
@@ -100,6 +101,7 @@ export const arnSchema = z.object({
    */
   reusable: z.boolean().optional(),
 });
+export type Arn = z.infer<typeof arnSchema>;
 
 /**
  * ```xml
@@ -135,6 +137,7 @@ export const arnReferenceSchema = z.object({
    */
   service: z.string().optional(),
 });
+export type ArnReference = z.infer<typeof arnReferenceSchema>;
 
 /**
  * ```xml
@@ -154,6 +157,7 @@ export const clientDiscoveredEndpointSchema = z.object({
    */
   required: z.boolean(),
 });
+export type ClientDiscoveredEndpoint = z.infer<typeof clientDiscoveredEndpointSchema>;
 
 /**
  * ```xml
@@ -178,6 +182,7 @@ export const clientEndpointDiscoverySchema = z.object({
    */
   error: z.string().optional(),
 });
+export type ClientEndpointDiscovery = z.infer<typeof clientEndpointDiscoverySchema>;
 
 /**
  * ```xml
@@ -186,6 +191,7 @@ export const clientEndpointDiscoverySchema = z.object({
  * ```
  */
 export const clientEndpointDiscoveryIdSchema = z.object({});
+export type ClientEndpointDiscoveryId = z.infer<typeof clientEndpointDiscoveryIdSchema>;
 
 /**
  * ```xml
@@ -193,6 +199,7 @@ export const clientEndpointDiscoveryIdSchema = z.object({});
  * ```
  */
 export const controlPlaneSchema = z.object({});
+export type ControlPlane = z.infer<typeof controlPlaneSchema>;
 
 /**
  * ```xml
@@ -200,6 +207,7 @@ export const controlPlaneSchema = z.object({});
  * ```
  */
 export const dataPlaneSchema = z.object({});
+export type DataPlane = z.infer<typeof dataPlaneSchema>;
 
 /**
  * ```xml
@@ -279,6 +287,7 @@ export const serviceSchema = z.object({
    */
   cloudWatchNamespace: cloudWatchMetricNamespaceSchema.optional(),
 });
+export type Service = z.infer<typeof serviceSchema>;
 
 /**
  * ```xml
@@ -296,6 +305,7 @@ export const tagEnabledSchema = z.object({
    */
   disableDefaultOperations: z.boolean().optional(),
 });
+export type TagEnabled = z.infer<typeof tagEnabledSchema>;
 
 /**
  * ```xml
@@ -327,3 +337,4 @@ export const taggableSchema = z.object({
    */
   disableSystemTags: z.boolean().optional(),
 });
+export type Taggable = z.infer<typeof taggableSchema>;

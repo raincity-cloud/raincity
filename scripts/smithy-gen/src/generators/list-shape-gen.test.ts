@@ -82,7 +82,9 @@ describe("CodeGenContext list shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("* Unique tag keys.\n * ```");
-    expect(output).toContain(".array(z.lazy(() => tagKeySchema)).min(1).max(10)");
+    expect(output).toContain(
+      ".array(z.lazy(() => tagKeySchema)).min(1).max(10)",
+    );
     expect(output).toContain("Duplicate items are not allowed.");
   });
 

@@ -39,7 +39,7 @@ describe("CodeGenContext service shape generation", () => {
 
     expect(output).toContain("export interface AmazonS3Service {");
     expect(output).toContain(
-      "getObject(input: z.infer<typeof getObjectRequestSchema>): z.infer<typeof getObjectOutputSchema>;",
+      "getObject(input: GetObjectRequest): GetObjectOutput;",
     );
   });
 
@@ -139,7 +139,7 @@ describe("CodeGenContext service shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
     expect(output).toContain(
-      "getObject(input: z.infer<typeof getObjectRequestSchema>): z.infer<typeof getObjectOutputSchema>;\n\n  putObject(input: z.infer<typeof putObjectRequestSchema>): z.infer<typeof putObjectOutputSchema>;",
+      "getObject(input: GetObjectRequest): GetObjectOutput;\n\n  putObject(input: PutObjectRequest): PutObjectOutput;",
     );
   });
 
@@ -174,9 +174,7 @@ describe("CodeGenContext service shape generation", () => {
 
     expect(tsDocIndex).toBeGreaterThan(-1);
     expect(methodIndex).toBeGreaterThan(tsDocIndex);
-    expect(output).toContain(
-      "getObject(input: z.infer<typeof knownInputSchema>): unknown;",
-    );
+    expect(output).toContain("getObject(input: KnownInput): unknown;");
   });
 
   it("imports cross-namespace operation input and output types", () => {
@@ -209,10 +207,10 @@ describe("CodeGenContext service shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
 
     expect(output).toContain(
-      'import { sharedInputSchema, sharedOutputSchema } from "./com.amazonaws.shared.structures.js";',
+      'import type { SharedInput, SharedOutput } from "./com.amazonaws.shared.structures.js";',
     );
     expect(output).toContain(
-      "crossNamespaceOperation(input: z.infer<typeof sharedInputSchema>): z.infer<typeof sharedOutputSchema>;",
+      "crossNamespaceOperation(input: SharedInput): SharedOutput;",
     );
   });
 

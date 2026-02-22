@@ -8,6 +8,7 @@ import { nonEmptyStringListSchema } from "./aws.test.schema.js";
  * ```
  */
 export const awsVendorParamsSchema = z.object({});
+export type AwsVendorParams = z.infer<typeof awsVendorParamsSchema>;
 
 /**
  * ```xml
@@ -53,6 +54,7 @@ export const baseAwsVendorParamsSchema = z.object({
    */
   useAccountIdRouting: z.boolean().optional().default(true),
 });
+export type BaseAwsVendorParams = z.infer<typeof baseAwsVendorParamsSchema>;
 
 /**
  * ```xml
@@ -92,3 +94,4 @@ export const s3VendorParamsSchema = z.object({
    */
   useMultiRegionAccessPoints: z.boolean().optional().default(true),
 });
+export type S3VendorParams = z.infer<typeof s3VendorParamsSchema>;

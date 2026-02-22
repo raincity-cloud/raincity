@@ -9,3 +9,4 @@ import { z } from "zod/v4";
  * ```
  */
 export const s3UnwrappedXmlOutputSchema = z.object({});
+export type S3UnwrappedXmlOutput = z.infer<typeof s3UnwrappedXmlOutputSchema>;

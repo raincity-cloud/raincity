@@ -338,6 +338,7 @@ export const abacStatusSchema = z.object({
    */
   Status: bucketAbacStatusSchema.optional(),
 });
+export type AbacStatus = z.infer<typeof abacStatusSchema>;
 
 /**
  * ```xml
@@ -355,8 +356,10 @@ export const abortIncompleteMultipartUploadSchema = z.object({
    */
   DaysAfterInitiation: daysAfterInitiationSchema.optional(),
 });
+export type AbortIncompleteMultipartUpload = z.infer<typeof abortIncompleteMultipartUploadSchema>;
 
 export const abortMultipartUploadOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
+export type AbortMultipartUploadOutput = z.infer<typeof abortMultipartUploadOutputSchema>;
 
 export const abortMultipartUploadRequestSchema = z.object({
   /**
@@ -414,6 +417,7 @@ export const abortMultipartUploadRequestSchema = z.object({
    */
   IfMatchInitiatedTime: ifMatchInitiatedTimeSchema.optional(),
 });
+export type AbortMultipartUploadRequest = z.infer<typeof abortMultipartUploadRequestSchema>;
 
 /**
  * ```xml
@@ -429,6 +433,7 @@ export const accelerateConfigurationSchema = z.object({
    */
   Status: bucketAccelerateStatusSchema.optional(),
 });
+export type AccelerateConfiguration = z.infer<typeof accelerateConfigurationSchema>;
 
 /**
  * ```xml
@@ -449,6 +454,7 @@ export const accessControlPolicySchema = z.object({
    */
   Owner: z.lazy(() => ownerSchema).optional(),
 });
+export type AccessControlPolicy = z.infer<typeof accessControlPolicySchema>;
 
 /**
  * ```xml
@@ -464,6 +470,7 @@ export const accessControlTranslationSchema = z.object({
    */
   Owner: ownerOverrideSchema,
 });
+export type AccessControlTranslation = z.infer<typeof accessControlTranslationSchema>;
 
 /**
  * ```xml
@@ -473,6 +480,7 @@ export const accessControlTranslationSchema = z.object({
  * ```
  */
 export const accessDeniedSchema = z.object({});
+export type AccessDenied = z.infer<typeof accessDeniedSchema>;
 
 /**
  * ```xml
@@ -496,6 +504,7 @@ export const analyticsAndOperatorSchema = z.object({
    */
   Tags: tagSetSchema.optional(),
 });
+export type AnalyticsAndOperator = z.infer<typeof analyticsAndOperatorSchema>;
 
 /**
  * ```xml
@@ -525,6 +534,7 @@ export const analyticsConfigurationSchema = z.object({
    */
   StorageClassAnalysis: z.lazy(() => storageClassAnalysisSchema),
 });
+export type AnalyticsConfiguration = z.infer<typeof analyticsConfigurationSchema>;
 
 /**
  * ```xml
@@ -539,6 +549,7 @@ export const analyticsExportDestinationSchema = z.object({
    */
   S3BucketDestination: z.lazy(() => analyticsS3BucketDestinationSchema),
 });
+export type AnalyticsExportDestination = z.infer<typeof analyticsExportDestinationSchema>;
 
 /**
  * ```xml
@@ -576,6 +587,7 @@ export const analyticsS3BucketDestinationSchema = z.object({
    */
   Prefix: prefixSchema.optional(),
 });
+export type AnalyticsS3BucketDestination = z.infer<typeof analyticsS3BucketDestinationSchema>;
 
 /**
  * ```xml
@@ -618,6 +630,7 @@ export const blockedEncryptionTypesSchema = z.object({
    */
   EncryptionType: encryptionTypeListSchema.optional(),
 });
+export type BlockedEncryptionTypes = z.infer<typeof blockedEncryptionTypesSchema>;
 
 /**
  * ```xml
@@ -658,6 +671,7 @@ export const bucketSchema = z.object({
    */
   BucketArn: s3RegionalOrS3ExpressBucketArnStringSchema.optional(),
 });
+export type Bucket = z.infer<typeof bucketSchema>;
 
 /**
  * ```xml
@@ -666,6 +680,7 @@ export const bucketSchema = z.object({
  * ```
  */
 export const bucketAlreadyExistsSchema = z.object({});
+export type BucketAlreadyExists = z.infer<typeof bucketAlreadyExistsSchema>;
 
 /**
  * ```xml
@@ -676,6 +691,7 @@ export const bucketAlreadyExistsSchema = z.object({});
  * ```
  */
 export const bucketAlreadyOwnedByYouSchema = z.object({});
+export type BucketAlreadyOwnedByYou = z.infer<typeof bucketAlreadyOwnedByYouSchema>;
 
 /**
  * ```xml
@@ -701,6 +717,7 @@ export const bucketInfoSchema = z.object({
    */
   Type: bucketTypeSchema.optional(),
 });
+export type BucketInfo = z.infer<typeof bucketInfoSchema>;
 
 /**
  * ```xml
@@ -717,6 +734,7 @@ export const bucketLifecycleConfigurationSchema = z.object({
    */
   Rules: lifecycleRulesSchema,
 });
+export type BucketLifecycleConfiguration = z.infer<typeof bucketLifecycleConfigurationSchema>;
 
 /**
  * ```xml
@@ -724,6 +742,7 @@ export const bucketLifecycleConfigurationSchema = z.object({
  * ```
  */
 export const bucketLoggingStatusSchema = z.object({ LoggingEnabled: z.lazy(() => loggingEnabledSchema).optional() });
+export type BucketLoggingStatus = z.infer<typeof bucketLoggingStatusSchema>;
 
 /**
  * ```xml
@@ -741,6 +760,7 @@ export const corsConfigurationSchema = z.object({
    */
   CORSRules: corsRulesSchema,
 });
+export type CorsConfiguration = z.infer<typeof corsConfigurationSchema>;
 
 /**
  * ```xml
@@ -790,6 +810,7 @@ export const corsRuleSchema = z.object({
    */
   MaxAgeSeconds: maxAgeSecondsSchema.optional(),
 });
+export type CorsRule = z.infer<typeof corsRuleSchema>;
 
 /**
  * ```xml
@@ -873,6 +894,7 @@ export const csvInputSchema = z.object({
    */
   AllowQuotedRecordDelimiter: allowQuotedRecordDelimiterSchema.optional(),
 });
+export type CsvInput = z.infer<typeof csvInputSchema>;
 
 /**
  * ```xml
@@ -925,6 +947,7 @@ export const csvOutputSchema = z.object({
    */
   QuoteCharacter: quoteCharacterSchema.optional(),
 });
+export type CsvOutput = z.infer<typeof csvOutputSchema>;
 
 /**
  * ```xml
@@ -987,6 +1010,7 @@ export const checksumSchema = z.object({
    */
   ChecksumType: checksumTypeSchema.optional(),
 });
+export type Checksum = z.infer<typeof checksumSchema>;
 
 /**
  * ```xml
@@ -1004,6 +1028,7 @@ export const commonPrefixSchema = z.object({
    */
   Prefix: prefixSchema.optional(),
 });
+export type CommonPrefix = z.infer<typeof commonPrefixSchema>;
 
 export const completeMultipartUploadOutputSchema = z.object({
   /**
@@ -1141,6 +1166,7 @@ export const completeMultipartUploadOutputSchema = z.object({
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type CompleteMultipartUploadOutput = z.infer<typeof completeMultipartUploadOutputSchema>;
 
 export const completeMultipartUploadRequestSchema = z.object({
   /**
@@ -1319,6 +1345,7 @@ export const completeMultipartUploadRequestSchema = z.object({
    */
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
 });
+export type CompleteMultipartUploadRequest = z.infer<typeof completeMultipartUploadRequestSchema>;
 
 /**
  * ```xml
@@ -1335,6 +1362,7 @@ export const completedMultipartUploadSchema = z.object({
    */
   Parts: completedPartListSchema.optional(),
 });
+export type CompletedMultipartUpload = z.infer<typeof completedMultipartUploadSchema>;
 
 /**
  * ```xml
@@ -1420,6 +1448,7 @@ export const completedPartSchema = z.object({
    */
   PartNumber: partNumberSchema.optional(),
 });
+export type CompletedPart = z.infer<typeof completedPartSchema>;
 
 /**
  * ```xml
@@ -1456,6 +1485,7 @@ export const conditionSchema = z.object({
    */
   KeyPrefixEquals: keyPrefixEqualsSchema.optional(),
 });
+export type Condition = z.infer<typeof conditionSchema>;
 
 /**
  * ```xml
@@ -1463,6 +1493,7 @@ export const conditionSchema = z.object({
  * ```
  */
 export const continuationEventSchema = z.object({});
+export type ContinuationEvent = z.infer<typeof continuationEventSchema>;
 
 export const copyObjectOutputSchema = z.object({
   /**
@@ -1553,6 +1584,7 @@ export const copyObjectOutputSchema = z.object({
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type CopyObjectOutput = z.infer<typeof copyObjectOutputSchema>;
 
 export const copyObjectRequestSchema = z.object({
   /**
@@ -2299,6 +2331,7 @@ export const copyObjectRequestSchema = z.object({
    */
   ExpectedSourceBucketOwner: accountIdSchema.optional(),
 });
+export type CopyObjectRequest = z.infer<typeof copyObjectRequestSchema>;
 
 /**
  * ```xml
@@ -2370,6 +2403,7 @@ export const copyObjectResultSchema = z.object({
    */
   ChecksumSHA256: checksumSha256Schema.optional(),
 });
+export type CopyObjectResult = z.infer<typeof copyObjectResultSchema>;
 
 /**
  * ```xml
@@ -2435,6 +2469,7 @@ export const copyPartResultSchema = z.object({
    */
   ChecksumSHA256: checksumSha256Schema.optional(),
 });
+export type CopyPartResult = z.infer<typeof copyPartResultSchema>;
 
 /**
  * ```xml
@@ -2492,6 +2527,7 @@ export const createBucketConfigurationSchema = z.object({
    */
   Tags: tagSetSchema.optional(),
 });
+export type CreateBucketConfiguration = z.infer<typeof createBucketConfigurationSchema>;
 
 export const createBucketMetadataConfigurationRequestSchema = z.object({
   /**
@@ -2535,6 +2571,7 @@ export const createBucketMetadataConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type CreateBucketMetadataConfigurationRequest = z.infer<typeof createBucketMetadataConfigurationRequestSchema>;
 
 export const createBucketMetadataTableConfigurationRequestSchema = z.object({
   /**
@@ -2569,6 +2606,9 @@ export const createBucketMetadataTableConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type CreateBucketMetadataTableConfigurationRequest = z.infer<
+  typeof createBucketMetadataTableConfigurationRequestSchema
+>;
 
 export const createBucketOutputSchema = z.object({
   /**
@@ -2589,6 +2629,7 @@ export const createBucketOutputSchema = z.object({
    */
   BucketArn: s3RegionalOrS3ExpressBucketArnStringSchema.optional(),
 });
+export type CreateBucketOutput = z.infer<typeof createBucketOutputSchema>;
 
 export const createBucketRequestSchema = z.object({
   /**
@@ -2680,6 +2721,7 @@ export const createBucketRequestSchema = z.object({
   ObjectLockEnabledForBucket: objectLockEnabledForBucketSchema.optional(),
   ObjectOwnership: objectOwnershipSchema.optional(),
 });
+export type CreateBucketRequest = z.infer<typeof createBucketRequestSchema>;
 
 export const createMultipartUploadOutputSchema = z.object({
   /**
@@ -2798,6 +2840,7 @@ export const createMultipartUploadOutputSchema = z.object({
    */
   ChecksumType: checksumTypeSchema.optional(),
 });
+export type CreateMultipartUploadOutput = z.infer<typeof createMultipartUploadOutputSchema>;
 
 export const createMultipartUploadRequestSchema = z.object({
   /**
@@ -3394,6 +3437,7 @@ export const createMultipartUploadRequestSchema = z.object({
    */
   ChecksumType: checksumTypeSchema.optional(),
 });
+export type CreateMultipartUploadRequest = z.infer<typeof createMultipartUploadRequestSchema>;
 
 export const createSessionOutputSchema = z.object({
   /**
@@ -3437,6 +3481,7 @@ export const createSessionOutputSchema = z.object({
    */
   Credentials: z.lazy(() => sessionCredentialsSchema),
 });
+export type CreateSessionOutput = z.infer<typeof createSessionOutputSchema>;
 
 export const createSessionRequestSchema = z.object({
   /**
@@ -3509,6 +3554,7 @@ export const createSessionRequestSchema = z.object({
    */
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
 });
+export type CreateSessionRequest = z.infer<typeof createSessionRequestSchema>;
 
 /**
  * ```xml
@@ -3551,6 +3597,7 @@ export const defaultRetentionSchema = z.object({
    */
   Years: yearsSchema.optional(),
 });
+export type DefaultRetention = z.infer<typeof defaultRetentionSchema>;
 
 /**
  * ```xml
@@ -3579,6 +3626,7 @@ export const deleteSchema = z.object({
    */
   Quiet: quietSchema.optional(),
 });
+export type Delete = z.infer<typeof deleteSchema>;
 
 export const deleteBucketAnalyticsConfigurationRequestSchema = z.object({
   /**
@@ -3600,6 +3648,7 @@ export const deleteBucketAnalyticsConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketAnalyticsConfigurationRequest = z.infer<typeof deleteBucketAnalyticsConfigurationRequestSchema>;
 
 export const deleteBucketCorsRequestSchema = z.object({
   /**
@@ -3615,6 +3664,7 @@ export const deleteBucketCorsRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketCorsRequest = z.infer<typeof deleteBucketCorsRequestSchema>;
 
 export const deleteBucketEncryptionRequestSchema = z.object({
   /**
@@ -3640,6 +3690,7 @@ export const deleteBucketEncryptionRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketEncryptionRequest = z.infer<typeof deleteBucketEncryptionRequestSchema>;
 
 export const deleteBucketIntelligentTieringConfigurationRequestSchema = z.object({
   /**
@@ -3661,6 +3712,9 @@ export const deleteBucketIntelligentTieringConfigurationRequestSchema = z.object
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketIntelligentTieringConfigurationRequest = z.infer<
+  typeof deleteBucketIntelligentTieringConfigurationRequestSchema
+>;
 
 export const deleteBucketInventoryConfigurationRequestSchema = z.object({
   /**
@@ -3682,6 +3736,7 @@ export const deleteBucketInventoryConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketInventoryConfigurationRequest = z.infer<typeof deleteBucketInventoryConfigurationRequestSchema>;
 
 export const deleteBucketLifecycleRequestSchema = z.object({
   /**
@@ -3701,6 +3756,7 @@ export const deleteBucketLifecycleRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketLifecycleRequest = z.infer<typeof deleteBucketLifecycleRequestSchema>;
 
 export const deleteBucketMetadataConfigurationRequestSchema = z.object({
   /**
@@ -3721,6 +3777,7 @@ export const deleteBucketMetadataConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketMetadataConfigurationRequest = z.infer<typeof deleteBucketMetadataConfigurationRequestSchema>;
 
 export const deleteBucketMetadataTableConfigurationRequestSchema = z.object({
   /**
@@ -3737,6 +3794,9 @@ export const deleteBucketMetadataTableConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketMetadataTableConfigurationRequest = z.infer<
+  typeof deleteBucketMetadataTableConfigurationRequestSchema
+>;
 
 export const deleteBucketMetricsConfigurationRequestSchema = z.object({
   /**
@@ -3759,6 +3819,7 @@ export const deleteBucketMetricsConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketMetricsConfigurationRequest = z.infer<typeof deleteBucketMetricsConfigurationRequestSchema>;
 
 export const deleteBucketOwnershipControlsRequestSchema = z.object({
   /**
@@ -3774,6 +3835,7 @@ export const deleteBucketOwnershipControlsRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketOwnershipControlsRequest = z.infer<typeof deleteBucketOwnershipControlsRequestSchema>;
 
 export const deleteBucketPolicyRequestSchema = z.object({
   /**
@@ -3799,6 +3861,7 @@ export const deleteBucketPolicyRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketPolicyRequest = z.infer<typeof deleteBucketPolicyRequestSchema>;
 
 export const deleteBucketReplicationRequestSchema = z.object({
   /**
@@ -3814,6 +3877,7 @@ export const deleteBucketReplicationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketReplicationRequest = z.infer<typeof deleteBucketReplicationRequestSchema>;
 
 export const deleteBucketRequestSchema = z.object({
   /**
@@ -3839,6 +3903,7 @@ export const deleteBucketRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketRequest = z.infer<typeof deleteBucketRequestSchema>;
 
 export const deleteBucketTaggingRequestSchema = z.object({
   /**
@@ -3854,6 +3919,7 @@ export const deleteBucketTaggingRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketTaggingRequest = z.infer<typeof deleteBucketTaggingRequestSchema>;
 
 export const deleteBucketWebsiteRequestSchema = z.object({
   /**
@@ -3869,6 +3935,7 @@ export const deleteBucketWebsiteRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteBucketWebsiteRequest = z.infer<typeof deleteBucketWebsiteRequestSchema>;
 
 /**
  * ```xml
@@ -3907,6 +3974,7 @@ export const deleteMarkerEntrySchema = z.object({
    */
   LastModified: lastModifiedSchema.optional(),
 });
+export type DeleteMarkerEntry = z.infer<typeof deleteMarkerEntrySchema>;
 
 /**
  * ```xml
@@ -3934,6 +4002,7 @@ export const deleteMarkerReplicationSchema = z.object({
    */
   Status: deleteMarkerReplicationStatusSchema.optional(),
 });
+export type DeleteMarkerReplication = z.infer<typeof deleteMarkerReplicationSchema>;
 
 export const deleteObjectOutputSchema = z.object({
   /**
@@ -3960,6 +4029,7 @@ export const deleteObjectOutputSchema = z.object({
   VersionId: objectVersionIdSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type DeleteObjectOutput = z.infer<typeof deleteObjectOutputSchema>;
 
 export const deleteObjectRequestSchema = z.object({
   /**
@@ -4067,6 +4137,7 @@ export const deleteObjectRequestSchema = z.object({
    */
   IfMatchSize: ifMatchSizeSchema.optional(),
 });
+export type DeleteObjectRequest = z.infer<typeof deleteObjectRequestSchema>;
 
 export const deleteObjectTaggingOutputSchema = z.object({
   /**
@@ -4076,6 +4147,7 @@ export const deleteObjectTaggingOutputSchema = z.object({
    */
   VersionId: objectVersionIdSchema.optional(),
 });
+export type DeleteObjectTaggingOutput = z.infer<typeof deleteObjectTaggingOutputSchema>;
 
 export const deleteObjectTaggingRequestSchema = z.object({
   /**
@@ -4109,6 +4181,7 @@ export const deleteObjectTaggingRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeleteObjectTaggingRequest = z.infer<typeof deleteObjectTaggingRequestSchema>;
 
 export const deleteObjectsOutputSchema = z.object({
   /**
@@ -4127,6 +4200,7 @@ export const deleteObjectsOutputSchema = z.object({
    */
   Errors: errorsSchema.optional(),
 });
+export type DeleteObjectsOutput = z.infer<typeof deleteObjectsOutputSchema>;
 
 export const deleteObjectsRequestSchema = z.object({
   /**
@@ -4240,6 +4314,7 @@ export const deleteObjectsRequestSchema = z.object({
    */
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
 });
+export type DeleteObjectsRequest = z.infer<typeof deleteObjectsRequestSchema>;
 
 export const deletePublicAccessBlockRequestSchema = z.object({
   /**
@@ -4255,6 +4330,7 @@ export const deletePublicAccessBlockRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type DeletePublicAccessBlockRequest = z.infer<typeof deletePublicAccessBlockRequestSchema>;
 
 /**
  * ```xml
@@ -4302,6 +4378,7 @@ export const deletedObjectSchema = z.object({
    */
   DeleteMarkerVersionId: deleteMarkerVersionIdSchema.optional(),
 });
+export type DeletedObject = z.infer<typeof deletedObjectSchema>;
 
 /**
  * ```xml
@@ -4369,6 +4446,7 @@ export const destinationSchema = z.object({
    */
   Metrics: z.lazy(() => metricsSchema).optional(),
 });
+export type Destination = z.infer<typeof destinationSchema>;
 
 /**
  * ```xml
@@ -4407,6 +4485,7 @@ export const destinationResultSchema = z.object({
    */
   TableNamespace: s3TablesNamespaceSchema.optional(),
 });
+export type DestinationResult = z.infer<typeof destinationResultSchema>;
 
 /**
  * ```xml
@@ -4438,6 +4517,7 @@ export const encryptionSchema = z.object({
    */
   KMSContext: kmsContextSchema.optional(),
 });
+export type Encryption = z.infer<typeof encryptionSchema>;
 
 /**
  * ```xml
@@ -4462,6 +4542,7 @@ export const encryptionConfigurationSchema = z.object({
    */
   ReplicaKmsKeyID: replicaKmsKeyIdSchema.optional(),
 });
+export type EncryptionConfiguration = z.infer<typeof encryptionConfigurationSchema>;
 
 /**
  * ```xml
@@ -4470,6 +4551,7 @@ export const encryptionConfigurationSchema = z.object({
  * ```
  */
 export const encryptionTypeMismatchSchema = z.object({});
+export type EncryptionTypeMismatch = z.infer<typeof encryptionTypeMismatchSchema>;
 
 /**
  * ```xml
@@ -4478,6 +4560,7 @@ export const encryptionTypeMismatchSchema = z.object({});
  * ```
  */
 export const endEventSchema = z.object({});
+export type EndEvent = z.infer<typeof endEventSchema>;
 
 /**
  * ```xml
@@ -6346,6 +6429,7 @@ export const errorSchema = z.object({
    */
   Message: messageSchema.optional(),
 });
+export type Error = z.infer<typeof errorSchema>;
 
 /**
  * ```xml
@@ -6585,6 +6669,7 @@ export const errorDetailsSchema = z.object({
    */
   ErrorMessage: errorMessageSchema.optional(),
 });
+export type ErrorDetails = z.infer<typeof errorDetailsSchema>;
 
 /**
  * ```xml
@@ -6604,6 +6689,7 @@ export const errorDocumentSchema = z.object({
    */
   Key: objectKeySchema,
 });
+export type ErrorDocument = z.infer<typeof errorDocumentSchema>;
 
 /**
  * ```xml
@@ -6611,6 +6697,7 @@ export const errorDocumentSchema = z.object({
  * ```
  */
 export const eventBridgeConfigurationSchema = z.object({});
+export type EventBridgeConfiguration = z.infer<typeof eventBridgeConfigurationSchema>;
 
 /**
  * ```xml
@@ -6630,6 +6717,7 @@ export const existingObjectReplicationSchema = z.object({
    */
   Status: existingObjectReplicationStatusSchema,
 });
+export type ExistingObjectReplication = z.infer<typeof existingObjectReplicationSchema>;
 
 /**
  * ```xml
@@ -6658,6 +6746,7 @@ export const filterRuleSchema = z.object({
    */
   Value: filterRuleValueSchema.optional(),
 });
+export type FilterRule = z.infer<typeof filterRuleSchema>;
 
 export const getBucketAbacOutputSchema = z.object({
   /**
@@ -6667,6 +6756,7 @@ export const getBucketAbacOutputSchema = z.object({
    */
   AbacStatus: z.lazy(() => abacStatusSchema).optional(),
 });
+export type GetBucketAbacOutput = z.infer<typeof getBucketAbacOutputSchema>;
 
 export const getBucketAbacRequestSchema = z.object({
   /**
@@ -6682,6 +6772,7 @@ export const getBucketAbacRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketAbacRequest = z.infer<typeof getBucketAbacRequestSchema>;
 
 export const getBucketAccelerateConfigurationOutputSchema = z.object({
   /**
@@ -6692,6 +6783,7 @@ export const getBucketAccelerateConfigurationOutputSchema = z.object({
   Status: bucketAccelerateStatusSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type GetBucketAccelerateConfigurationOutput = z.infer<typeof getBucketAccelerateConfigurationOutputSchema>;
 
 export const getBucketAccelerateConfigurationRequestSchema = z.object({
   /**
@@ -6708,6 +6800,7 @@ export const getBucketAccelerateConfigurationRequestSchema = z.object({
   ExpectedBucketOwner: accountIdSchema.optional(),
   RequestPayer: requestPayerSchema.optional(),
 });
+export type GetBucketAccelerateConfigurationRequest = z.infer<typeof getBucketAccelerateConfigurationRequestSchema>;
 
 export const getBucketAclOutputSchema = z.object({
   /**
@@ -6723,6 +6816,7 @@ export const getBucketAclOutputSchema = z.object({
    */
   Grants: grantsSchema.optional(),
 });
+export type GetBucketAclOutput = z.infer<typeof getBucketAclOutputSchema>;
 
 export const getBucketAclRequestSchema = z.object({
   /**
@@ -6743,6 +6837,7 @@ export const getBucketAclRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketAclRequest = z.infer<typeof getBucketAclRequestSchema>;
 
 export const getBucketAnalyticsConfigurationOutputSchema = z.object({
   /**
@@ -6752,6 +6847,7 @@ export const getBucketAnalyticsConfigurationOutputSchema = z.object({
    */
   AnalyticsConfiguration: z.lazy(() => analyticsConfigurationSchema).optional(),
 });
+export type GetBucketAnalyticsConfigurationOutput = z.infer<typeof getBucketAnalyticsConfigurationOutputSchema>;
 
 export const getBucketAnalyticsConfigurationRequestSchema = z.object({
   /**
@@ -6773,6 +6869,7 @@ export const getBucketAnalyticsConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketAnalyticsConfigurationRequest = z.infer<typeof getBucketAnalyticsConfigurationRequestSchema>;
 
 export const getBucketCorsOutputSchema = z.object({
   /**
@@ -6783,6 +6880,7 @@ export const getBucketCorsOutputSchema = z.object({
    */
   CORSRules: corsRulesSchema.optional(),
 });
+export type GetBucketCorsOutput = z.infer<typeof getBucketCorsOutputSchema>;
 
 export const getBucketCorsRequestSchema = z.object({
   /**
@@ -6803,10 +6901,12 @@ export const getBucketCorsRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketCorsRequest = z.infer<typeof getBucketCorsRequestSchema>;
 
 export const getBucketEncryptionOutputSchema = z.object({
   ServerSideEncryptionConfiguration: z.lazy(() => serverSideEncryptionConfigurationSchema).optional(),
 });
+export type GetBucketEncryptionOutput = z.infer<typeof getBucketEncryptionOutputSchema>;
 
 export const getBucketEncryptionRequestSchema = z.object({
   /**
@@ -6832,6 +6932,7 @@ export const getBucketEncryptionRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketEncryptionRequest = z.infer<typeof getBucketEncryptionRequestSchema>;
 
 export const getBucketIntelligentTieringConfigurationOutputSchema = z.object({
   /**
@@ -6841,6 +6942,9 @@ export const getBucketIntelligentTieringConfigurationOutputSchema = z.object({
    */
   IntelligentTieringConfiguration: z.lazy(() => intelligentTieringConfigurationSchema).optional(),
 });
+export type GetBucketIntelligentTieringConfigurationOutput = z.infer<
+  typeof getBucketIntelligentTieringConfigurationOutputSchema
+>;
 
 export const getBucketIntelligentTieringConfigurationRequestSchema = z.object({
   /**
@@ -6862,6 +6966,9 @@ export const getBucketIntelligentTieringConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketIntelligentTieringConfigurationRequest = z.infer<
+  typeof getBucketIntelligentTieringConfigurationRequestSchema
+>;
 
 export const getBucketInventoryConfigurationOutputSchema = z.object({
   /**
@@ -6871,6 +6978,7 @@ export const getBucketInventoryConfigurationOutputSchema = z.object({
    */
   InventoryConfiguration: z.lazy(() => inventoryConfigurationSchema).optional(),
 });
+export type GetBucketInventoryConfigurationOutput = z.infer<typeof getBucketInventoryConfigurationOutputSchema>;
 
 export const getBucketInventoryConfigurationRequestSchema = z.object({
   /**
@@ -6892,6 +7000,7 @@ export const getBucketInventoryConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketInventoryConfigurationRequest = z.infer<typeof getBucketInventoryConfigurationRequestSchema>;
 
 export const getBucketLifecycleConfigurationOutputSchema = z.object({
   /**
@@ -6928,6 +7037,7 @@ export const getBucketLifecycleConfigurationOutputSchema = z.object({
    */
   TransitionDefaultMinimumObjectSize: transitionDefaultMinimumObjectSizeSchema.optional(),
 });
+export type GetBucketLifecycleConfigurationOutput = z.infer<typeof getBucketLifecycleConfigurationOutputSchema>;
 
 export const getBucketLifecycleConfigurationRequestSchema = z.object({
   /**
@@ -6947,6 +7057,7 @@ export const getBucketLifecycleConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketLifecycleConfigurationRequest = z.infer<typeof getBucketLifecycleConfigurationRequestSchema>;
 
 export const getBucketLocationOutputSchema = z.object({
   /**
@@ -6959,6 +7070,7 @@ export const getBucketLocationOutputSchema = z.object({
    */
   LocationConstraint: bucketLocationConstraintSchema.optional(),
 });
+export type GetBucketLocationOutput = z.infer<typeof getBucketLocationOutputSchema>;
 
 export const getBucketLocationRequestSchema = z.object({
   /**
@@ -6979,8 +7091,10 @@ export const getBucketLocationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketLocationRequest = z.infer<typeof getBucketLocationRequestSchema>;
 
 export const getBucketLoggingOutputSchema = z.object({ LoggingEnabled: z.lazy(() => loggingEnabledSchema).optional() });
+export type GetBucketLoggingOutput = z.infer<typeof getBucketLoggingOutputSchema>;
 
 export const getBucketLoggingRequestSchema = z.object({
   /**
@@ -6996,6 +7110,7 @@ export const getBucketLoggingRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketLoggingRequest = z.infer<typeof getBucketLoggingRequestSchema>;
 
 export const getBucketMetadataConfigurationOutputSchema = z.object({
   /**
@@ -7007,6 +7122,7 @@ export const getBucketMetadataConfigurationOutputSchema = z.object({
    */
   GetBucketMetadataConfigurationResult: z.lazy(() => getBucketMetadataConfigurationResultSchema).optional(),
 });
+export type GetBucketMetadataConfigurationOutput = z.infer<typeof getBucketMetadataConfigurationOutputSchema>;
 
 export const getBucketMetadataConfigurationRequestSchema = z.object({
   /**
@@ -7028,6 +7144,7 @@ export const getBucketMetadataConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketMetadataConfigurationRequest = z.infer<typeof getBucketMetadataConfigurationRequestSchema>;
 
 /**
  * ```xml
@@ -7046,6 +7163,7 @@ export const getBucketMetadataConfigurationResultSchema = z.object({
    */
   MetadataConfigurationResult: z.lazy(() => metadataConfigurationResultSchema),
 });
+export type GetBucketMetadataConfigurationResult = z.infer<typeof getBucketMetadataConfigurationResultSchema>;
 
 export const getBucketMetadataTableConfigurationOutputSchema = z.object({
   /**
@@ -7055,6 +7173,7 @@ export const getBucketMetadataTableConfigurationOutputSchema = z.object({
    */
   GetBucketMetadataTableConfigurationResult: z.lazy(() => getBucketMetadataTableConfigurationResultSchema).optional(),
 });
+export type GetBucketMetadataTableConfigurationOutput = z.infer<typeof getBucketMetadataTableConfigurationOutputSchema>;
 
 export const getBucketMetadataTableConfigurationRequestSchema = z.object({
   /**
@@ -7072,6 +7191,9 @@ export const getBucketMetadataTableConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketMetadataTableConfigurationRequest = z.infer<
+  typeof getBucketMetadataTableConfigurationRequestSchema
+>;
 
 /**
  * ```xml
@@ -7121,6 +7243,7 @@ export const getBucketMetadataTableConfigurationResultSchema = z.object({
    */
   Error: z.lazy(() => errorDetailsSchema).optional(),
 });
+export type GetBucketMetadataTableConfigurationResult = z.infer<typeof getBucketMetadataTableConfigurationResultSchema>;
 
 export const getBucketMetricsConfigurationOutputSchema = z.object({
   /**
@@ -7130,6 +7253,7 @@ export const getBucketMetricsConfigurationOutputSchema = z.object({
    */
   MetricsConfiguration: z.lazy(() => metricsConfigurationSchema).optional(),
 });
+export type GetBucketMetricsConfigurationOutput = z.infer<typeof getBucketMetricsConfigurationOutputSchema>;
 
 export const getBucketMetricsConfigurationRequestSchema = z.object({
   /**
@@ -7152,6 +7276,7 @@ export const getBucketMetricsConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketMetricsConfigurationRequest = z.infer<typeof getBucketMetricsConfigurationRequestSchema>;
 
 export const getBucketNotificationConfigurationRequestSchema = z.object({
   /**
@@ -7172,6 +7297,7 @@ export const getBucketNotificationConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketNotificationConfigurationRequest = z.infer<typeof getBucketNotificationConfigurationRequestSchema>;
 
 export const getBucketOwnershipControlsOutputSchema = z.object({
   /**
@@ -7182,6 +7308,7 @@ export const getBucketOwnershipControlsOutputSchema = z.object({
    */
   OwnershipControls: z.lazy(() => ownershipControlsSchema).optional(),
 });
+export type GetBucketOwnershipControlsOutput = z.infer<typeof getBucketOwnershipControlsOutputSchema>;
 
 export const getBucketOwnershipControlsRequestSchema = z.object({
   /**
@@ -7197,6 +7324,7 @@ export const getBucketOwnershipControlsRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketOwnershipControlsRequest = z.infer<typeof getBucketOwnershipControlsRequestSchema>;
 
 export const getBucketPolicyOutputSchema = z.object({
   /**
@@ -7206,6 +7334,7 @@ export const getBucketPolicyOutputSchema = z.object({
    */
   Policy: policySchema.optional(),
 });
+export type GetBucketPolicyOutput = z.infer<typeof getBucketPolicyOutputSchema>;
 
 export const getBucketPolicyRequestSchema = z.object({
   /**
@@ -7241,6 +7370,7 @@ export const getBucketPolicyRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketPolicyRequest = z.infer<typeof getBucketPolicyRequestSchema>;
 
 export const getBucketPolicyStatusOutputSchema = z.object({
   /**
@@ -7250,6 +7380,7 @@ export const getBucketPolicyStatusOutputSchema = z.object({
    */
   PolicyStatus: z.lazy(() => policyStatusSchema).optional(),
 });
+export type GetBucketPolicyStatusOutput = z.infer<typeof getBucketPolicyStatusOutputSchema>;
 
 export const getBucketPolicyStatusRequestSchema = z.object({
   /**
@@ -7265,10 +7396,12 @@ export const getBucketPolicyStatusRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketPolicyStatusRequest = z.infer<typeof getBucketPolicyStatusRequestSchema>;
 
 export const getBucketReplicationOutputSchema = z.object({
   ReplicationConfiguration: z.lazy(() => replicationConfigurationSchema).optional(),
 });
+export type GetBucketReplicationOutput = z.infer<typeof getBucketReplicationOutputSchema>;
 
 export const getBucketReplicationRequestSchema = z.object({
   /**
@@ -7284,6 +7417,7 @@ export const getBucketReplicationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketReplicationRequest = z.infer<typeof getBucketReplicationRequestSchema>;
 
 export const getBucketRequestPaymentOutputSchema = z.object({
   /**
@@ -7293,6 +7427,7 @@ export const getBucketRequestPaymentOutputSchema = z.object({
    */
   Payer: payerSchema.optional(),
 });
+export type GetBucketRequestPaymentOutput = z.infer<typeof getBucketRequestPaymentOutputSchema>;
 
 export const getBucketRequestPaymentRequestSchema = z.object({
   /**
@@ -7308,6 +7443,7 @@ export const getBucketRequestPaymentRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketRequestPaymentRequest = z.infer<typeof getBucketRequestPaymentRequestSchema>;
 
 export const getBucketTaggingOutputSchema = z.object({
   /**
@@ -7317,6 +7453,7 @@ export const getBucketTaggingOutputSchema = z.object({
    */
   TagSet: tagSetSchema,
 });
+export type GetBucketTaggingOutput = z.infer<typeof getBucketTaggingOutputSchema>;
 
 export const getBucketTaggingRequestSchema = z.object({
   /**
@@ -7332,6 +7469,7 @@ export const getBucketTaggingRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketTaggingRequest = z.infer<typeof getBucketTaggingRequestSchema>;
 
 export const getBucketVersioningOutputSchema = z.object({
   /**
@@ -7349,6 +7487,7 @@ export const getBucketVersioningOutputSchema = z.object({
    */
   MFADelete: mfaDeleteStatusSchema.optional(),
 });
+export type GetBucketVersioningOutput = z.infer<typeof getBucketVersioningOutputSchema>;
 
 export const getBucketVersioningRequestSchema = z.object({
   /**
@@ -7364,6 +7503,7 @@ export const getBucketVersioningRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketVersioningRequest = z.infer<typeof getBucketVersioningRequestSchema>;
 
 export const getBucketWebsiteOutputSchema = z.object({
   /**
@@ -7391,6 +7531,7 @@ export const getBucketWebsiteOutputSchema = z.object({
    */
   RoutingRules: routingRulesSchema.optional(),
 });
+export type GetBucketWebsiteOutput = z.infer<typeof getBucketWebsiteOutputSchema>;
 
 export const getBucketWebsiteRequestSchema = z.object({
   /**
@@ -7406,6 +7547,7 @@ export const getBucketWebsiteRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetBucketWebsiteRequest = z.infer<typeof getBucketWebsiteRequestSchema>;
 
 export const getObjectAclOutputSchema = z.object({
   /**
@@ -7422,6 +7564,7 @@ export const getObjectAclOutputSchema = z.object({
   Grants: grantsSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type GetObjectAclOutput = z.infer<typeof getObjectAclOutputSchema>;
 
 export const getObjectAclRequestSchema = z.object({
   /**
@@ -7455,6 +7598,7 @@ export const getObjectAclRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetObjectAclRequest = z.infer<typeof getObjectAclRequestSchema>;
 
 export const getObjectAttributesOutputSchema = z.object({
   /**
@@ -7523,6 +7667,7 @@ export const getObjectAttributesOutputSchema = z.object({
    */
   ObjectSize: objectSizeSchema.optional(),
 });
+export type GetObjectAttributesOutput = z.infer<typeof getObjectAttributesOutputSchema>;
 
 /**
  * ```xml
@@ -7589,6 +7734,7 @@ export const getObjectAttributesPartsSchema = z.object({
    */
   Parts: partsListSchema.optional(),
 });
+export type GetObjectAttributesParts = z.infer<typeof getObjectAttributesPartsSchema>;
 
 export const getObjectAttributesRequestSchema = z.object({
   /**
@@ -7690,6 +7836,7 @@ export const getObjectAttributesRequestSchema = z.object({
    */
   ObjectAttributes: objectAttributesListSchema,
 });
+export type GetObjectAttributesRequest = z.infer<typeof getObjectAttributesRequestSchema>;
 
 export const getObjectLegalHoldOutputSchema = z.object({
   /**
@@ -7699,6 +7846,7 @@ export const getObjectLegalHoldOutputSchema = z.object({
    */
   LegalHold: z.lazy(() => objectLockLegalHoldSchema).optional(),
 });
+export type GetObjectLegalHoldOutput = z.infer<typeof getObjectLegalHoldOutputSchema>;
 
 export const getObjectLegalHoldRequestSchema = z.object({
   /**
@@ -7729,6 +7877,7 @@ export const getObjectLegalHoldRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetObjectLegalHoldRequest = z.infer<typeof getObjectLegalHoldRequestSchema>;
 
 export const getObjectLockConfigurationOutputSchema = z.object({
   /**
@@ -7738,6 +7887,7 @@ export const getObjectLockConfigurationOutputSchema = z.object({
    */
   ObjectLockConfiguration: z.lazy(() => objectLockConfigurationSchema).optional(),
 });
+export type GetObjectLockConfigurationOutput = z.infer<typeof getObjectLockConfigurationOutputSchema>;
 
 export const getObjectLockConfigurationRequestSchema = z.object({
   /**
@@ -7755,6 +7905,7 @@ export const getObjectLockConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetObjectLockConfigurationRequest = z.infer<typeof getObjectLockConfigurationRequestSchema>;
 
 export const getObjectOutputSchema = z.object({
   /**
@@ -8082,6 +8233,7 @@ export const getObjectOutputSchema = z.object({
    */
   ObjectLockLegalHoldStatus: objectLockLegalHoldStatusSchema.optional(),
 });
+export type GetObjectOutput = z.infer<typeof getObjectOutputSchema>;
 
 export const getObjectRequestSchema = z.object({
   /**
@@ -8357,6 +8509,7 @@ export const getObjectRequestSchema = z.object({
    */
   ChecksumMode: checksumModeSchema.optional(),
 });
+export type GetObjectRequest = z.infer<typeof getObjectRequestSchema>;
 
 export const getObjectRetentionOutputSchema = z.object({
   /**
@@ -8366,6 +8519,7 @@ export const getObjectRetentionOutputSchema = z.object({
    */
   Retention: z.lazy(() => objectLockRetentionSchema).optional(),
 });
+export type GetObjectRetentionOutput = z.infer<typeof getObjectRetentionOutputSchema>;
 
 export const getObjectRetentionRequestSchema = z.object({
   /**
@@ -8396,6 +8550,7 @@ export const getObjectRetentionRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetObjectRetentionRequest = z.infer<typeof getObjectRetentionRequestSchema>;
 
 export const getObjectTaggingOutputSchema = z.object({
   /**
@@ -8411,6 +8566,7 @@ export const getObjectTaggingOutputSchema = z.object({
    */
   TagSet: tagSetSchema,
 });
+export type GetObjectTaggingOutput = z.infer<typeof getObjectTaggingOutputSchema>;
 
 export const getObjectTaggingRequestSchema = z.object({
   /**
@@ -8445,6 +8601,7 @@ export const getObjectTaggingRequestSchema = z.object({
   ExpectedBucketOwner: accountIdSchema.optional(),
   RequestPayer: requestPayerSchema.optional(),
 });
+export type GetObjectTaggingRequest = z.infer<typeof getObjectTaggingRequestSchema>;
 
 export const getObjectTorrentOutputSchema = z.object({
   /**
@@ -8455,6 +8612,7 @@ export const getObjectTorrentOutputSchema = z.object({
   Body: streamingBlobSchema.optional().default(new Uint8Array([])),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type GetObjectTorrentOutput = z.infer<typeof getObjectTorrentOutputSchema>;
 
 export const getObjectTorrentRequestSchema = z.object({
   /**
@@ -8477,6 +8635,7 @@ export const getObjectTorrentRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetObjectTorrentRequest = z.infer<typeof getObjectTorrentRequestSchema>;
 
 export const getPublicAccessBlockOutputSchema = z.object({
   /**
@@ -8486,6 +8645,7 @@ export const getPublicAccessBlockOutputSchema = z.object({
    */
   PublicAccessBlockConfiguration: z.lazy(() => publicAccessBlockConfigurationSchema).optional(),
 });
+export type GetPublicAccessBlockOutput = z.infer<typeof getPublicAccessBlockOutputSchema>;
 
 export const getPublicAccessBlockRequestSchema = z.object({
   /**
@@ -8502,6 +8662,7 @@ export const getPublicAccessBlockRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type GetPublicAccessBlockRequest = z.infer<typeof getPublicAccessBlockRequestSchema>;
 
 /**
  * ```xml
@@ -8516,6 +8677,7 @@ export const glacierJobParametersSchema = z.object({
    */
   Tier: tierSchema,
 });
+export type GlacierJobParameters = z.infer<typeof glacierJobParametersSchema>;
 
 /**
  * ```xml
@@ -8536,6 +8698,7 @@ export const grantSchema = z.object({
    */
   Permission: permissionSchema.optional(),
 });
+export type Grant = z.infer<typeof grantSchema>;
 
 /**
  * ```xml
@@ -8574,6 +8737,7 @@ export const granteeSchema = z.object({
    */
   Type: typeSchema,
 });
+export type Grantee = z.infer<typeof granteeSchema>;
 
 export const headBucketOutputSchema = z.object({
   /**
@@ -8623,6 +8787,7 @@ export const headBucketOutputSchema = z.object({
    */
   AccessPointAlias: accessPointAliasSchema.optional(),
 });
+export type HeadBucketOutput = z.infer<typeof headBucketOutputSchema>;
 
 export const headBucketRequestSchema = z.object({
   /**
@@ -8659,6 +8824,7 @@ export const headBucketRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type HeadBucketRequest = z.infer<typeof headBucketRequestSchema>;
 
 export const headObjectOutputSchema = z.object({
   /**
@@ -9029,6 +9195,7 @@ export const headObjectOutputSchema = z.object({
    */
   ObjectLockLegalHoldStatus: objectLockLegalHoldStatusSchema.optional(),
 });
+export type HeadObjectOutput = z.infer<typeof headObjectOutputSchema>;
 
 export const headObjectRequestSchema = z.object({
   /**
@@ -9259,6 +9426,7 @@ export const headObjectRequestSchema = z.object({
    */
   ChecksumMode: checksumModeSchema.optional(),
 });
+export type HeadObjectRequest = z.infer<typeof headObjectRequestSchema>;
 
 /**
  * ```xml
@@ -9272,6 +9440,7 @@ export const headObjectRequestSchema = z.object({
  * ```
  */
 export const idempotencyParameterMismatchSchema = z.object({});
+export type IdempotencyParameterMismatch = z.infer<typeof idempotencyParameterMismatchSchema>;
 
 /**
  * ```xml
@@ -9295,6 +9464,7 @@ export const indexDocumentSchema = z.object({
    */
   Suffix: suffixSchema,
 });
+export type IndexDocument = z.infer<typeof indexDocumentSchema>;
 
 /**
  * ```xml
@@ -9325,6 +9495,7 @@ export const initiatorSchema = z.object({
    */
   DisplayName: displayNameSchema.optional(),
 });
+export type Initiator = z.infer<typeof initiatorSchema>;
 
 /**
  * ```xml
@@ -9357,6 +9528,7 @@ export const inputSerializationSchema = z.object({
    */
   Parquet: z.lazy(() => parquetInputSchema).optional(),
 });
+export type InputSerialization = z.infer<typeof inputSerializationSchema>;
 
 /**
  * ```xml
@@ -9379,6 +9551,7 @@ export const intelligentTieringAndOperatorSchema = z.object({
    */
   Tags: tagSetSchema.optional(),
 });
+export type IntelligentTieringAndOperator = z.infer<typeof intelligentTieringAndOperatorSchema>;
 
 /**
  * ```xml
@@ -9414,6 +9587,7 @@ export const intelligentTieringConfigurationSchema = z.object({
    */
   Tierings: tieringListSchema,
 });
+export type IntelligentTieringConfiguration = z.infer<typeof intelligentTieringConfigurationSchema>;
 
 /**
  * ```xml
@@ -9443,6 +9617,7 @@ export const intelligentTieringFilterSchema = z.object({
    */
   And: z.lazy(() => intelligentTieringAndOperatorSchema).optional(),
 });
+export type IntelligentTieringFilter = z.infer<typeof intelligentTieringFilterSchema>;
 
 /**
  * ```xml
@@ -9459,6 +9634,7 @@ export const invalidObjectStateSchema = z.object({
   StorageClass: storageClassSchema.optional(),
   AccessTier: intelligentTieringAccessTierSchema.optional(),
 });
+export type InvalidObjectState = z.infer<typeof invalidObjectStateSchema>;
 
 /**
  * ```xml
@@ -9467,6 +9643,7 @@ export const invalidObjectStateSchema = z.object({
  * ```
  */
 export const invalidRequestSchema = z.object({});
+export type InvalidRequest = z.infer<typeof invalidRequestSchema>;
 
 /**
  * ```xml
@@ -9474,6 +9651,7 @@ export const invalidRequestSchema = z.object({});
  * ```
  */
 export const invalidWriteOffsetSchema = z.object({});
+export type InvalidWriteOffset = z.infer<typeof invalidWriteOffsetSchema>;
 
 /**
  * ```xml
@@ -9530,6 +9708,7 @@ export const inventoryConfigurationSchema = z.object({
    */
   Schedule: z.lazy(() => inventoryScheduleSchema),
 });
+export type InventoryConfiguration = z.infer<typeof inventoryConfigurationSchema>;
 
 /**
  * ```xml
@@ -9545,6 +9724,7 @@ export const inventoryDestinationSchema = z.object({
    */
   S3BucketDestination: z.lazy(() => inventoryS3BucketDestinationSchema),
 });
+export type InventoryDestination = z.infer<typeof inventoryDestinationSchema>;
 
 /**
  * ```xml
@@ -9565,6 +9745,7 @@ export const inventoryEncryptionSchema = z.object({
    */
   SSEKMS: z.lazy(() => ssekmsSchema).optional(),
 });
+export type InventoryEncryption = z.infer<typeof inventoryEncryptionSchema>;
 
 /**
  * ```xml
@@ -9580,6 +9761,7 @@ export const inventoryFilterSchema = z.object({
    */
   Prefix: prefixSchema,
 });
+export type InventoryFilter = z.infer<typeof inventoryFilterSchema>;
 
 /**
  * ```xml
@@ -9624,6 +9806,7 @@ export const inventoryS3BucketDestinationSchema = z.object({
    */
   Encryption: z.lazy(() => inventoryEncryptionSchema).optional(),
 });
+export type InventoryS3BucketDestination = z.infer<typeof inventoryS3BucketDestinationSchema>;
 
 /**
  * ```xml
@@ -9638,6 +9821,7 @@ export const inventoryScheduleSchema = z.object({
    */
   Frequency: inventoryFrequencySchema,
 });
+export type InventorySchedule = z.infer<typeof inventoryScheduleSchema>;
 
 /**
  * ```xml
@@ -9665,6 +9849,7 @@ export const inventoryTableConfigurationSchema = z.object({
    */
   EncryptionConfiguration: z.lazy(() => metadataTableEncryptionConfigurationSchema).optional(),
 });
+export type InventoryTableConfiguration = z.infer<typeof inventoryTableConfigurationSchema>;
 
 /**
  * ```xml
@@ -9735,6 +9920,7 @@ export const inventoryTableConfigurationResultSchema = z.object({
    */
   TableArn: s3TablesArnSchema.optional(),
 });
+export type InventoryTableConfigurationResult = z.infer<typeof inventoryTableConfigurationResultSchema>;
 
 /**
  * ```xml
@@ -9762,6 +9948,7 @@ export const inventoryTableConfigurationUpdatesSchema = z.object({
    */
   EncryptionConfiguration: z.lazy(() => metadataTableEncryptionConfigurationSchema).optional(),
 });
+export type InventoryTableConfigurationUpdates = z.infer<typeof inventoryTableConfigurationUpdatesSchema>;
 
 /**
  * ```xml
@@ -9776,6 +9963,7 @@ export const jsonInputSchema = z.object({
    */
   Type: jsonTypeSchema.optional(),
 });
+export type JsonInput = z.infer<typeof jsonInputSchema>;
 
 /**
  * ```xml
@@ -9791,6 +9979,7 @@ export const jsonOutputSchema = z.object({
    */
   RecordDelimiter: recordDelimiterSchema.optional(),
 });
+export type JsonOutput = z.infer<typeof jsonOutputSchema>;
 
 /**
  * ```xml
@@ -9817,6 +10006,7 @@ export const journalTableConfigurationSchema = z.object({
    */
   EncryptionConfiguration: z.lazy(() => metadataTableEncryptionConfigurationSchema).optional(),
 });
+export type JournalTableConfiguration = z.infer<typeof journalTableConfigurationSchema>;
 
 /**
  * ```xml
@@ -9875,6 +10065,7 @@ export const journalTableConfigurationResultSchema = z.object({
    */
   RecordExpiration: z.lazy(() => recordExpirationSchema),
 });
+export type JournalTableConfigurationResult = z.infer<typeof journalTableConfigurationResultSchema>;
 
 /**
  * ```xml
@@ -9893,6 +10084,7 @@ export const journalTableConfigurationUpdatesSchema = z.object({
    */
   RecordExpiration: z.lazy(() => recordExpirationSchema),
 });
+export type JournalTableConfigurationUpdates = z.infer<typeof journalTableConfigurationUpdatesSchema>;
 
 /**
  * ```xml
@@ -9917,6 +10109,7 @@ export const lambdaFunctionConfigurationSchema = z.object({
   Events: eventListSchema,
   Filter: z.lazy(() => notificationConfigurationFilterSchema).optional(),
 });
+export type LambdaFunctionConfiguration = z.infer<typeof lambdaFunctionConfigurationSchema>;
 
 /**
  * ```xml
@@ -9957,6 +10150,7 @@ export const lifecycleExpirationSchema = z.object({
    */
   ExpiredObjectDeleteMarker: expiredObjectDeleteMarkerSchema.optional(),
 });
+export type LifecycleExpiration = z.infer<typeof lifecycleExpirationSchema>;
 
 /**
  * ```xml
@@ -10039,6 +10233,7 @@ export const lifecycleRuleSchema = z.object({
   NoncurrentVersionExpiration: z.lazy(() => noncurrentVersionExpirationSchema).optional(),
   AbortIncompleteMultipartUpload: z.lazy(() => abortIncompleteMultipartUploadSchema).optional(),
 });
+export type LifecycleRule = z.infer<typeof lifecycleRuleSchema>;
 
 /**
  * ```xml
@@ -10073,6 +10268,7 @@ export const lifecycleRuleAndOperatorSchema = z.object({
    */
   ObjectSizeLessThan: objectSizeLessThanBytesSchema.optional(),
 });
+export type LifecycleRuleAndOperator = z.infer<typeof lifecycleRuleAndOperatorSchema>;
 
 /**
  * ```xml
@@ -10119,6 +10315,7 @@ export const lifecycleRuleFilterSchema = z.object({
   ObjectSizeLessThan: objectSizeLessThanBytesSchema.optional(),
   And: z.lazy(() => lifecycleRuleAndOperatorSchema).optional(),
 });
+export type LifecycleRuleFilter = z.infer<typeof lifecycleRuleFilterSchema>;
 
 export const listBucketAnalyticsConfigurationsOutputSchema = z.object({
   /**
@@ -10152,6 +10349,7 @@ export const listBucketAnalyticsConfigurationsOutputSchema = z.object({
    */
   AnalyticsConfigurationList: analyticsConfigurationListSchema.optional(),
 });
+export type ListBucketAnalyticsConfigurationsOutput = z.infer<typeof listBucketAnalyticsConfigurationsOutputSchema>;
 
 export const listBucketAnalyticsConfigurationsRequestSchema = z.object({
   /**
@@ -10174,6 +10372,7 @@ export const listBucketAnalyticsConfigurationsRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type ListBucketAnalyticsConfigurationsRequest = z.infer<typeof listBucketAnalyticsConfigurationsRequestSchema>;
 
 export const listBucketIntelligentTieringConfigurationsOutputSchema = z.object({
   /**
@@ -10206,6 +10405,9 @@ export const listBucketIntelligentTieringConfigurationsOutputSchema = z.object({
    */
   IntelligentTieringConfigurationList: intelligentTieringConfigurationListSchema.optional(),
 });
+export type ListBucketIntelligentTieringConfigurationsOutput = z.infer<
+  typeof listBucketIntelligentTieringConfigurationsOutputSchema
+>;
 
 export const listBucketIntelligentTieringConfigurationsRequestSchema = z.object({
   /**
@@ -10228,6 +10430,9 @@ export const listBucketIntelligentTieringConfigurationsRequestSchema = z.object(
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type ListBucketIntelligentTieringConfigurationsRequest = z.infer<
+  typeof listBucketIntelligentTieringConfigurationsRequestSchema
+>;
 
 export const listBucketInventoryConfigurationsOutputSchema = z.object({
   /**
@@ -10259,6 +10464,7 @@ export const listBucketInventoryConfigurationsOutputSchema = z.object({
    */
   NextContinuationToken: nextTokenSchema.optional(),
 });
+export type ListBucketInventoryConfigurationsOutput = z.infer<typeof listBucketInventoryConfigurationsOutputSchema>;
 
 export const listBucketInventoryConfigurationsRequestSchema = z.object({
   /**
@@ -10282,6 +10488,7 @@ export const listBucketInventoryConfigurationsRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type ListBucketInventoryConfigurationsRequest = z.infer<typeof listBucketInventoryConfigurationsRequestSchema>;
 
 export const listBucketMetricsConfigurationsOutputSchema = z.object({
   /**
@@ -10314,6 +10521,7 @@ export const listBucketMetricsConfigurationsOutputSchema = z.object({
    */
   MetricsConfigurationList: metricsConfigurationListSchema.optional(),
 });
+export type ListBucketMetricsConfigurationsOutput = z.infer<typeof listBucketMetricsConfigurationsOutputSchema>;
 
 export const listBucketMetricsConfigurationsRequestSchema = z.object({
   /**
@@ -10337,6 +10545,7 @@ export const listBucketMetricsConfigurationsRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type ListBucketMetricsConfigurationsRequest = z.infer<typeof listBucketMetricsConfigurationsRequestSchema>;
 
 export const listBucketsOutputSchema = z.object({
   /**
@@ -10369,6 +10578,7 @@ export const listBucketsOutputSchema = z.object({
    */
   Prefix: prefixSchema.optional(),
 });
+export type ListBucketsOutput = z.infer<typeof listBucketsOutputSchema>;
 
 export const listBucketsRequestSchema = z.object({
   /**
@@ -10416,6 +10626,7 @@ export const listBucketsRequestSchema = z.object({
    */
   BucketRegion: bucketRegionSchema.optional(),
 });
+export type ListBucketsRequest = z.infer<typeof listBucketsRequestSchema>;
 
 export const listDirectoryBucketsOutputSchema = z.object({
   /**
@@ -10432,6 +10643,7 @@ export const listDirectoryBucketsOutputSchema = z.object({
    */
   ContinuationToken: directoryBucketTokenSchema.optional(),
 });
+export type ListDirectoryBucketsOutput = z.infer<typeof listDirectoryBucketsOutputSchema>;
 
 export const listDirectoryBucketsRequestSchema = z.object({
   /**
@@ -10451,6 +10663,7 @@ export const listDirectoryBucketsRequestSchema = z.object({
    */
   MaxDirectoryBuckets: maxDirectoryBucketsSchema.optional(),
 });
+export type ListDirectoryBucketsRequest = z.infer<typeof listDirectoryBucketsRequestSchema>;
 
 export const listMultipartUploadsOutputSchema = z.object({
   /**
@@ -10563,6 +10776,7 @@ export const listMultipartUploadsOutputSchema = z.object({
   EncodingType: encodingTypeSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type ListMultipartUploadsOutput = z.infer<typeof listMultipartUploadsOutputSchema>;
 
 export const listMultipartUploadsRequestSchema = z.object({
   /**
@@ -10678,6 +10892,7 @@ export const listMultipartUploadsRequestSchema = z.object({
   ExpectedBucketOwner: accountIdSchema.optional(),
   RequestPayer: requestPayerSchema.optional(),
 });
+export type ListMultipartUploadsRequest = z.infer<typeof listMultipartUploadsRequestSchema>;
 
 export const listObjectVersionsOutputSchema = z.object({
   /**
@@ -10778,6 +10993,7 @@ export const listObjectVersionsOutputSchema = z.object({
   EncodingType: encodingTypeSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type ListObjectVersionsOutput = z.infer<typeof listObjectVersionsOutputSchema>;
 
 export const listObjectVersionsRequestSchema = z.object({
   /**
@@ -10846,6 +11062,7 @@ export const listObjectVersionsRequestSchema = z.object({
    */
   OptionalObjectAttributes: optionalObjectAttributesListSchema.optional(),
 });
+export type ListObjectVersionsRequest = z.infer<typeof listObjectVersionsRequestSchema>;
 
 export const listObjectsOutputSchema = z.object({
   /**
@@ -10944,6 +11161,7 @@ export const listObjectsOutputSchema = z.object({
   EncodingType: encodingTypeSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type ListObjectsOutput = z.infer<typeof listObjectsOutputSchema>;
 
 export const listObjectsRequestSchema = z.object({
   /**
@@ -11019,6 +11237,7 @@ export const listObjectsRequestSchema = z.object({
    */
   OptionalObjectAttributes: optionalObjectAttributesListSchema.optional(),
 });
+export type ListObjectsRequest = z.infer<typeof listObjectsRequestSchema>;
 
 export const listObjectsV2OutputSchema = z.object({
   /**
@@ -11151,6 +11370,7 @@ export const listObjectsV2OutputSchema = z.object({
   StartAfter: startAfterSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type ListObjectsV2Output = z.infer<typeof listObjectsV2OutputSchema>;
 
 export const listObjectsV2RequestSchema = z.object({
   /**
@@ -11291,6 +11511,7 @@ export const listObjectsV2RequestSchema = z.object({
    */
   OptionalObjectAttributes: optionalObjectAttributesListSchema.optional(),
 });
+export type ListObjectsV2Request = z.infer<typeof listObjectsV2RequestSchema>;
 
 export const listPartsOutputSchema = z.object({
   /**
@@ -11422,6 +11643,7 @@ export const listPartsOutputSchema = z.object({
    */
   ChecksumType: checksumTypeSchema.optional(),
 });
+export type ListPartsOutput = z.infer<typeof listPartsOutputSchema>;
 
 export const listPartsRequestSchema = z.object({
   /**
@@ -11515,6 +11737,7 @@ export const listPartsRequestSchema = z.object({
    */
   SSECustomerKeyMD5: sseCustomerKeyMd5Schema.optional(),
 });
+export type ListPartsRequest = z.infer<typeof listPartsRequestSchema>;
 
 /**
  * ```xml
@@ -11543,6 +11766,7 @@ export const locationInfoSchema = z.object({
    */
   Name: locationNameAsStringSchema.optional(),
 });
+export type LocationInfo = z.infer<typeof locationInfoSchema>;
 
 /**
  * ```xml
@@ -11585,6 +11809,7 @@ export const loggingEnabledSchema = z.object({
    */
   TargetObjectKeyFormat: z.lazy(() => targetObjectKeyFormatSchema).optional(),
 });
+export type LoggingEnabled = z.infer<typeof loggingEnabledSchema>;
 
 /**
  * ```xml
@@ -11611,6 +11836,7 @@ export const metadataConfigurationSchema = z.object({
    */
   InventoryTableConfiguration: z.lazy(() => inventoryTableConfigurationSchema).optional(),
 });
+export type MetadataConfiguration = z.infer<typeof metadataConfigurationSchema>;
 
 /**
  * ```xml
@@ -11645,6 +11871,7 @@ export const metadataConfigurationResultSchema = z.object({
    */
   InventoryTableConfigurationResult: z.lazy(() => inventoryTableConfigurationResultSchema).optional(),
 });
+export type MetadataConfigurationResult = z.infer<typeof metadataConfigurationResultSchema>;
 
 /**
  * ```xml
@@ -11665,6 +11892,7 @@ export const metadataEntrySchema = z.object({
    */
   Value: metadataValueSchema.optional(),
 });
+export type MetadataEntry = z.infer<typeof metadataEntrySchema>;
 
 /**
  * ```xml
@@ -11687,6 +11915,7 @@ export const metadataTableConfigurationSchema = z.object({
    */
   S3TablesDestination: z.lazy(() => s3TablesDestinationSchema),
 });
+export type MetadataTableConfiguration = z.infer<typeof metadataTableConfigurationSchema>;
 
 /**
  * ```xml
@@ -11712,6 +11941,7 @@ export const metadataTableConfigurationResultSchema = z.object({
    */
   S3TablesDestinationResult: z.lazy(() => s3TablesDestinationResultSchema),
 });
+export type MetadataTableConfigurationResult = z.infer<typeof metadataTableConfigurationResultSchema>;
 
 /**
  * ```xml
@@ -11743,6 +11973,7 @@ export const metadataTableEncryptionConfigurationSchema = z.object({
    */
   KmsKeyArn: kmsKeyArnSchema.optional(),
 });
+export type MetadataTableEncryptionConfiguration = z.infer<typeof metadataTableEncryptionConfigurationSchema>;
 
 /**
  * ```xml
@@ -11765,6 +11996,7 @@ export const metricsSchema = z.object({
    */
   EventThreshold: z.lazy(() => replicationTimeValueSchema).optional(),
 });
+export type Metrics = z.infer<typeof metricsSchema>;
 
 /**
  * ```xml
@@ -11793,6 +12025,7 @@ export const metricsAndOperatorSchema = z.object({
    */
   AccessPointArn: accessPointArnSchema.optional(),
 });
+export type MetricsAndOperator = z.infer<typeof metricsAndOperatorSchema>;
 
 /**
  * ```xml
@@ -11819,6 +12052,7 @@ export const metricsConfigurationSchema = z.object({
    */
   Filter: metricsFilterSchema.optional(),
 });
+export type MetricsConfiguration = z.infer<typeof metricsConfigurationSchema>;
 
 /**
  * ```xml
@@ -11887,6 +12121,7 @@ export const multipartUploadSchema = z.object({
    */
   ChecksumType: checksumTypeSchema.optional(),
 });
+export type MultipartUpload = z.infer<typeof multipartUploadSchema>;
 
 /**
  * ```xml
@@ -11894,6 +12129,7 @@ export const multipartUploadSchema = z.object({
  * ```
  */
 export const noSuchBucketSchema = z.object({});
+export type NoSuchBucket = z.infer<typeof noSuchBucketSchema>;
 
 /**
  * ```xml
@@ -11901,6 +12137,7 @@ export const noSuchBucketSchema = z.object({});
  * ```
  */
 export const noSuchKeySchema = z.object({});
+export type NoSuchKey = z.infer<typeof noSuchKeySchema>;
 
 /**
  * ```xml
@@ -11908,6 +12145,7 @@ export const noSuchKeySchema = z.object({});
  * ```
  */
 export const noSuchUploadSchema = z.object({});
+export type NoSuchUpload = z.infer<typeof noSuchUploadSchema>;
 
 /**
  * ```xml
@@ -11949,6 +12187,7 @@ export const noncurrentVersionExpirationSchema = z.object({
    */
   NewerNoncurrentVersions: versionCountSchema.optional(),
 });
+export type NoncurrentVersionExpiration = z.infer<typeof noncurrentVersionExpirationSchema>;
 
 /**
  * ```xml
@@ -11987,6 +12226,7 @@ export const noncurrentVersionTransitionSchema = z.object({
    */
   NewerNoncurrentVersions: versionCountSchema.optional(),
 });
+export type NoncurrentVersionTransition = z.infer<typeof noncurrentVersionTransitionSchema>;
 
 /**
  * ```xml
@@ -11994,6 +12234,7 @@ export const noncurrentVersionTransitionSchema = z.object({
  * ```
  */
 export const notFoundSchema = z.object({});
+export type NotFound = z.infer<typeof notFoundSchema>;
 
 /**
  * ```xml
@@ -12029,6 +12270,7 @@ export const notificationConfigurationSchema = z.object({
    */
   EventBridgeConfiguration: z.lazy(() => eventBridgeConfigurationSchema).optional(),
 });
+export type NotificationConfiguration = z.infer<typeof notificationConfigurationSchema>;
 
 /**
  * ```xml
@@ -12038,6 +12280,7 @@ export const notificationConfigurationSchema = z.object({
  * ```
  */
 export const notificationConfigurationFilterSchema = z.object({ Key: z.lazy(() => s3KeyFilterSchema).optional() });
+export type NotificationConfigurationFilter = z.infer<typeof notificationConfigurationFilterSchema>;
 
 /**
  * ```xml
@@ -12142,6 +12385,7 @@ export const objectSchema = z.object({
    */
   RestoreStatus: z.lazy(() => restoreStatusSchema).optional(),
 });
+export type Object = z.infer<typeof objectSchema>;
 
 /**
  * ```xml
@@ -12149,6 +12393,7 @@ export const objectSchema = z.object({
  * ```
  */
 export const objectAlreadyInActiveTierErrorSchema = z.object({});
+export type ObjectAlreadyInActiveTierError = z.infer<typeof objectAlreadyInActiveTierErrorSchema>;
 
 /**
  * ```xml
@@ -12207,6 +12452,7 @@ export const objectIdentifierSchema = z.object({
    */
   Size: sizeSchema.optional(),
 });
+export type ObjectIdentifier = z.infer<typeof objectIdentifierSchema>;
 
 /**
  * ```xml
@@ -12232,6 +12478,7 @@ export const objectLockConfigurationSchema = z.object({
    */
   Rule: z.lazy(() => objectLockRuleSchema).optional(),
 });
+export type ObjectLockConfiguration = z.infer<typeof objectLockConfigurationSchema>;
 
 /**
  * ```xml
@@ -12246,6 +12493,7 @@ export const objectLockLegalHoldSchema = z.object({
    */
   Status: objectLockLegalHoldStatusSchema.optional(),
 });
+export type ObjectLockLegalHold = z.infer<typeof objectLockLegalHoldSchema>;
 
 /**
  * ```xml
@@ -12266,6 +12514,7 @@ export const objectLockRetentionSchema = z.object({
    */
   RetainUntilDate: dateSchema.optional(),
 });
+export type ObjectLockRetention = z.infer<typeof objectLockRetentionSchema>;
 
 /**
  * ```xml
@@ -12283,6 +12532,7 @@ export const objectLockRuleSchema = z.object({
    */
   DefaultRetention: z.lazy(() => defaultRetentionSchema).optional(),
 });
+export type ObjectLockRule = z.infer<typeof objectLockRuleSchema>;
 
 /**
  * ```xml
@@ -12291,6 +12541,7 @@ export const objectLockRuleSchema = z.object({
  * ```
  */
 export const objectNotInActiveTierErrorSchema = z.object({});
+export type ObjectNotInActiveTierError = z.infer<typeof objectNotInActiveTierErrorSchema>;
 
 /**
  * ```xml
@@ -12357,6 +12608,7 @@ export const objectPartSchema = z.object({
    */
   ChecksumSHA256: checksumSha256Schema.optional(),
 });
+export type ObjectPart = z.infer<typeof objectPartSchema>;
 
 /**
  * ```xml
@@ -12436,6 +12688,7 @@ export const objectVersionSchema = z.object({
    */
   RestoreStatus: z.lazy(() => restoreStatusSchema).optional(),
 });
+export type ObjectVersion = z.infer<typeof objectVersionSchema>;
 
 /**
  * ```xml
@@ -12450,6 +12703,7 @@ export const outputLocationSchema = z.object({
    */
   S3: z.lazy(() => s3LocationSchema).optional(),
 });
+export type OutputLocation = z.infer<typeof outputLocationSchema>;
 
 /**
  * ```xml
@@ -12470,6 +12724,7 @@ export const outputSerializationSchema = z.object({
    */
   JSON: z.lazy(() => jsonOutputSchema).optional(),
 });
+export type OutputSerialization = z.infer<typeof outputSerializationSchema>;
 
 /**
  * ```xml
@@ -12490,6 +12745,7 @@ export const ownerSchema = z.object({
    */
   ID: idSchema.optional(),
 });
+export type Owner = z.infer<typeof ownerSchema>;
 
 /**
  * ```xml
@@ -12504,6 +12760,7 @@ export const ownershipControlsSchema = z.object({
    */
   Rules: ownershipControlsRulesSchema,
 });
+export type OwnershipControls = z.infer<typeof ownershipControlsSchema>;
 
 /**
  * ```xml
@@ -12511,6 +12768,7 @@ export const ownershipControlsSchema = z.object({
  * ```
  */
 export const ownershipControlsRuleSchema = z.object({ ObjectOwnership: objectOwnershipSchema });
+export type OwnershipControlsRule = z.infer<typeof ownershipControlsRuleSchema>;
 
 /**
  * ```xml
@@ -12518,6 +12776,7 @@ export const ownershipControlsRuleSchema = z.object({ ObjectOwnership: objectOwn
  * ```
  */
 export const parquetInputSchema = z.object({});
+export type ParquetInput = z.infer<typeof parquetInputSchema>;
 
 /**
  * ```xml
@@ -12593,6 +12852,7 @@ export const partSchema = z.object({
    */
   ChecksumSHA256: checksumSha256Schema.optional(),
 });
+export type Part = z.infer<typeof partSchema>;
 
 /**
  * ```xml
@@ -12617,6 +12877,7 @@ export const partitionedPrefixSchema = z.object({
    */
   PartitionDateSource: partitionDateSourceSchema.optional(),
 });
+export type PartitionedPrefix = z.infer<typeof partitionedPrefixSchema>;
 
 /**
  * ```xml
@@ -12632,6 +12893,7 @@ export const policyStatusSchema = z.object({
    */
   IsPublic: isPublicSchema.optional(),
 });
+export type PolicyStatus = z.infer<typeof policyStatusSchema>;
 
 /**
  * ```xml
@@ -12658,6 +12920,7 @@ export const progressSchema = z.object({
    */
   BytesReturned: bytesReturnedSchema.optional(),
 });
+export type Progress = z.infer<typeof progressSchema>;
 
 /**
  * ```xml
@@ -12672,6 +12935,7 @@ export const progressEventSchema = z.object({
    */
   Details: z.lazy(() => progressSchema).optional(),
 });
+export type ProgressEvent = z.infer<typeof progressEventSchema>;
 
 /**
  * ```xml
@@ -12732,6 +12996,7 @@ export const publicAccessBlockConfigurationSchema = z.object({
    */
   RestrictPublicBuckets: settingSchema.optional(),
 });
+export type PublicAccessBlockConfiguration = z.infer<typeof publicAccessBlockConfigurationSchema>;
 
 export const putBucketAbacRequestSchema = z.object({
   /**
@@ -12767,6 +13032,7 @@ export const putBucketAbacRequestSchema = z.object({
    */
   AbacStatus: z.lazy(() => abacStatusSchema),
 });
+export type PutBucketAbacRequest = z.infer<typeof putBucketAbacRequestSchema>;
 
 export const putBucketAccelerateConfigurationRequestSchema = z.object({
   /**
@@ -12800,6 +13066,7 @@ export const putBucketAccelerateConfigurationRequestSchema = z.object({
    */
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
 });
+export type PutBucketAccelerateConfigurationRequest = z.infer<typeof putBucketAccelerateConfigurationRequestSchema>;
 
 export const putBucketAclRequestSchema = z.object({
   /**
@@ -12881,6 +13148,7 @@ export const putBucketAclRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketAclRequest = z.infer<typeof putBucketAclRequestSchema>;
 
 export const putBucketAnalyticsConfigurationRequestSchema = z.object({
   /**
@@ -12908,6 +13176,7 @@ export const putBucketAnalyticsConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketAnalyticsConfigurationRequest = z.infer<typeof putBucketAnalyticsConfigurationRequestSchema>;
 
 export const putBucketCorsRequestSchema = z.object({
   /**
@@ -12953,6 +13222,7 @@ export const putBucketCorsRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketCorsRequest = z.infer<typeof putBucketCorsRequestSchema>;
 
 export const putBucketEncryptionRequestSchema = z.object({
   /**
@@ -13006,6 +13276,7 @@ export const putBucketEncryptionRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketEncryptionRequest = z.infer<typeof putBucketEncryptionRequestSchema>;
 
 export const putBucketIntelligentTieringConfigurationRequestSchema = z.object({
   /**
@@ -13033,6 +13304,9 @@ export const putBucketIntelligentTieringConfigurationRequestSchema = z.object({
    */
   IntelligentTieringConfiguration: z.lazy(() => intelligentTieringConfigurationSchema),
 });
+export type PutBucketIntelligentTieringConfigurationRequest = z.infer<
+  typeof putBucketIntelligentTieringConfigurationRequestSchema
+>;
 
 export const putBucketInventoryConfigurationRequestSchema = z.object({
   /**
@@ -13060,6 +13334,7 @@ export const putBucketInventoryConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketInventoryConfigurationRequest = z.infer<typeof putBucketInventoryConfigurationRequestSchema>;
 
 export const putBucketLifecycleConfigurationOutputSchema = z.object({
   /**
@@ -13090,6 +13365,7 @@ export const putBucketLifecycleConfigurationOutputSchema = z.object({
    */
   TransitionDefaultMinimumObjectSize: transitionDefaultMinimumObjectSizeSchema.optional(),
 });
+export type PutBucketLifecycleConfigurationOutput = z.infer<typeof putBucketLifecycleConfigurationOutputSchema>;
 
 export const putBucketLifecycleConfigurationRequestSchema = z.object({
   /**
@@ -13154,6 +13430,7 @@ export const putBucketLifecycleConfigurationRequestSchema = z.object({
    */
   TransitionDefaultMinimumObjectSize: transitionDefaultMinimumObjectSizeSchema.optional(),
 });
+export type PutBucketLifecycleConfigurationRequest = z.infer<typeof putBucketLifecycleConfigurationRequestSchema>;
 
 export const putBucketLoggingRequestSchema = z.object({
   /**
@@ -13194,6 +13471,7 @@ export const putBucketLoggingRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketLoggingRequest = z.infer<typeof putBucketLoggingRequestSchema>;
 
 export const putBucketMetricsConfigurationRequestSchema = z.object({
   /**
@@ -13222,6 +13500,7 @@ export const putBucketMetricsConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketMetricsConfigurationRequest = z.infer<typeof putBucketMetricsConfigurationRequestSchema>;
 
 export const putBucketNotificationConfigurationRequestSchema = z.object({
   /**
@@ -13245,6 +13524,7 @@ export const putBucketNotificationConfigurationRequestSchema = z.object({
    */
   SkipDestinationValidation: skipValidationSchema.optional(),
 });
+export type PutBucketNotificationConfigurationRequest = z.infer<typeof putBucketNotificationConfigurationRequestSchema>;
 
 export const putBucketOwnershipControlsRequestSchema = z.object({
   /**
@@ -13288,6 +13568,7 @@ export const putBucketOwnershipControlsRequestSchema = z.object({
    */
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
 });
+export type PutBucketOwnershipControlsRequest = z.infer<typeof putBucketOwnershipControlsRequestSchema>;
 
 export const putBucketPolicyRequestSchema = z.object({
   /**
@@ -13389,6 +13670,7 @@ export const putBucketPolicyRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketPolicyRequest = z.infer<typeof putBucketPolicyRequestSchema>;
 
 export const putBucketReplicationRequestSchema = z.object({
   /**
@@ -13432,6 +13714,7 @@ export const putBucketReplicationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketReplicationRequest = z.infer<typeof putBucketReplicationRequestSchema>;
 
 export const putBucketRequestPaymentRequestSchema = z.object({
   /**
@@ -13474,6 +13757,7 @@ export const putBucketRequestPaymentRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketRequestPaymentRequest = z.infer<typeof putBucketRequestPaymentRequestSchema>;
 
 export const putBucketTaggingRequestSchema = z.object({
   /**
@@ -13516,6 +13800,7 @@ export const putBucketTaggingRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketTaggingRequest = z.infer<typeof putBucketTaggingRequestSchema>;
 
 export const putBucketVersioningRequestSchema = z.object({
   /**
@@ -13564,6 +13849,7 @@ export const putBucketVersioningRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketVersioningRequest = z.infer<typeof putBucketVersioningRequestSchema>;
 
 export const putBucketWebsiteRequestSchema = z.object({
   /**
@@ -13606,8 +13892,10 @@ export const putBucketWebsiteRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutBucketWebsiteRequest = z.infer<typeof putBucketWebsiteRequestSchema>;
 
 export const putObjectAclOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
+export type PutObjectAclOutput = z.infer<typeof putObjectAclOutputSchema>;
 
 export const putObjectAclRequestSchema = z.object({
   /**
@@ -13715,8 +14003,10 @@ export const putObjectAclRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutObjectAclRequest = z.infer<typeof putObjectAclRequestSchema>;
 
 export const putObjectLegalHoldOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
+export type PutObjectLegalHoldOutput = z.infer<typeof putObjectLegalHoldOutputSchema>;
 
 export const putObjectLegalHoldRequestSchema = z.object({
   /**
@@ -13772,8 +14062,10 @@ export const putObjectLegalHoldRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutObjectLegalHoldRequest = z.infer<typeof putObjectLegalHoldRequestSchema>;
 
 export const putObjectLockConfigurationOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
+export type PutObjectLockConfigurationOutput = z.infer<typeof putObjectLockConfigurationOutputSchema>;
 
 export const putObjectLockConfigurationRequestSchema = z.object({
   /**
@@ -13821,6 +14113,7 @@ export const putObjectLockConfigurationRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutObjectLockConfigurationRequest = z.infer<typeof putObjectLockConfigurationRequestSchema>;
 
 export const putObjectOutputSchema = z.object({
   /**
@@ -13988,6 +14281,7 @@ export const putObjectOutputSchema = z.object({
   Size: sizeSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type PutObjectOutput = z.infer<typeof putObjectOutputSchema>;
 
 export const putObjectRequestSchema = z.object({
   /**
@@ -14549,8 +14843,10 @@ export const putObjectRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutObjectRequest = z.infer<typeof putObjectRequestSchema>;
 
 export const putObjectRetentionOutputSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
+export type PutObjectRetentionOutput = z.infer<typeof putObjectRetentionOutputSchema>;
 
 export const putObjectRetentionRequestSchema = z.object({
   /**
@@ -14612,6 +14908,7 @@ export const putObjectRetentionRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutObjectRetentionRequest = z.infer<typeof putObjectRetentionRequestSchema>;
 
 export const putObjectTaggingOutputSchema = z.object({
   /**
@@ -14621,6 +14918,7 @@ export const putObjectTaggingOutputSchema = z.object({
    */
   VersionId: objectVersionIdSchema.optional(),
 });
+export type PutObjectTaggingOutput = z.infer<typeof putObjectTaggingOutputSchema>;
 
 export const putObjectTaggingRequestSchema = z.object({
   /**
@@ -14686,6 +14984,7 @@ export const putObjectTaggingRequestSchema = z.object({
    */
   RequestPayer: requestPayerSchema.optional(),
 });
+export type PutObjectTaggingRequest = z.infer<typeof putObjectTaggingRequestSchema>;
 
 export const putPublicAccessBlockRequestSchema = z.object({
   /**
@@ -14729,6 +15028,7 @@ export const putPublicAccessBlockRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type PutPublicAccessBlockRequest = z.infer<typeof putPublicAccessBlockRequestSchema>;
 
 /**
  * ```xml
@@ -14753,6 +15053,7 @@ export const queueConfigurationSchema = z.object({
   Events: eventListSchema,
   Filter: z.lazy(() => notificationConfigurationFilterSchema).optional(),
 });
+export type QueueConfiguration = z.infer<typeof queueConfigurationSchema>;
 
 /**
  * ```xml
@@ -14782,6 +15083,7 @@ export const recordExpirationSchema = z.object({
    */
   Days: recordExpirationDaysSchema.optional(),
 });
+export type RecordExpiration = z.infer<typeof recordExpirationSchema>;
 
 /**
  * ```xml
@@ -14802,6 +15104,7 @@ export const recordsEventSchema = z.object({
    */
   Payload: bodySchema.optional(),
 });
+export type RecordsEvent = z.infer<typeof recordsEventSchema>;
 
 /**
  * ```xml
@@ -14860,6 +15163,7 @@ export const redirectSchema = z.object({
    */
   ReplaceKeyWith: replaceKeyWithSchema.optional(),
 });
+export type Redirect = z.infer<typeof redirectSchema>;
 
 /**
  * ```xml
@@ -14881,8 +15185,10 @@ export const redirectAllRequestsToSchema = z.object({
    */
   Protocol: protocolSchema.optional(),
 });
+export type RedirectAllRequestsTo = z.infer<typeof redirectAllRequestsToSchema>;
 
 export const renameObjectOutputSchema = z.object({});
+export type RenameObjectOutput = z.infer<typeof renameObjectOutputSchema>;
 
 export const renameObjectRequestSchema = z.object({
   /**
@@ -14986,6 +15292,7 @@ export const renameObjectRequestSchema = z.object({
    */
   ClientToken: clientTokenSchema.optional(),
 });
+export type RenameObjectRequest = z.infer<typeof renameObjectRequestSchema>;
 
 /**
  * ```xml
@@ -15007,6 +15314,7 @@ export const replicaModificationsSchema = z.object({
    */
   Status: replicaModificationsStatusSchema,
 });
+export type ReplicaModifications = z.infer<typeof replicaModificationsSchema>;
 
 /**
  * ```xml
@@ -15031,6 +15339,7 @@ export const replicationConfigurationSchema = z.object({
    */
   Rules: replicationRulesSchema,
 });
+export type ReplicationConfiguration = z.infer<typeof replicationConfigurationSchema>;
 
 /**
  * ```xml
@@ -15103,6 +15412,7 @@ export const replicationRuleSchema = z.object({
   Destination: z.lazy(() => destinationSchema),
   DeleteMarkerReplication: z.lazy(() => deleteMarkerReplicationSchema).optional(),
 });
+export type ReplicationRule = z.infer<typeof replicationRuleSchema>;
 
 /**
  * ```xml
@@ -15135,6 +15445,7 @@ export const replicationRuleAndOperatorSchema = z.object({
    */
   Tags: tagSetSchema.optional(),
 });
+export type ReplicationRuleAndOperator = z.infer<typeof replicationRuleAndOperatorSchema>;
 
 /**
  * ```xml
@@ -15180,6 +15491,7 @@ export const replicationRuleFilterSchema = z.object({
    */
   And: z.lazy(() => replicationRuleAndOperatorSchema).optional(),
 });
+export type ReplicationRuleFilter = z.infer<typeof replicationRuleFilterSchema>;
 
 /**
  * ```xml
@@ -15203,6 +15515,7 @@ export const replicationTimeSchema = z.object({
    */
   Time: z.lazy(() => replicationTimeValueSchema),
 });
+export type ReplicationTime = z.infer<typeof replicationTimeSchema>;
 
 /**
  * ```xml
@@ -15219,6 +15532,7 @@ export const replicationTimeValueSchema = z.object({
    */
   Minutes: minutesSchema.optional(),
 });
+export type ReplicationTimeValue = z.infer<typeof replicationTimeValueSchema>;
 
 /**
  * ```xml
@@ -15233,6 +15547,7 @@ export const requestPaymentConfigurationSchema = z.object({
    */
   Payer: payerSchema,
 });
+export type RequestPaymentConfiguration = z.infer<typeof requestPaymentConfigurationSchema>;
 
 /**
  * ```xml
@@ -15248,6 +15563,7 @@ export const requestProgressSchema = z.object({
    */
   Enabled: enableRequestProgressSchema.optional(),
 });
+export type RequestProgress = z.infer<typeof requestProgressSchema>;
 
 export const restoreObjectOutputSchema = z.object({
   RequestCharged: requestChargedSchema.optional(),
@@ -15259,6 +15575,7 @@ export const restoreObjectOutputSchema = z.object({
    */
   RestoreOutputPath: restoreOutputPathSchema.optional(),
 });
+export type RestoreObjectOutput = z.infer<typeof restoreObjectOutputSchema>;
 
 export const restoreObjectRequestSchema = z.object({
   /**
@@ -15306,6 +15623,7 @@ export const restoreObjectRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type RestoreObjectRequest = z.infer<typeof restoreObjectRequestSchema>;
 
 /**
  * ```xml
@@ -15370,6 +15688,7 @@ export const restoreRequestSchema = z.object({
    */
   OutputLocation: z.lazy(() => outputLocationSchema).optional(),
 });
+export type RestoreRequest = z.infer<typeof restoreRequestSchema>;
 
 /**
  * ```xml
@@ -15412,6 +15731,7 @@ export const restoreStatusSchema = z.object({
    */
   RestoreExpiryDate: restoreExpiryDateSchema.optional(),
 });
+export type RestoreStatus = z.infer<typeof restoreStatusSchema>;
 
 /**
  * ```xml
@@ -15439,6 +15759,7 @@ export const routingRuleSchema = z.object({
    */
   Redirect: z.lazy(() => redirectSchema),
 });
+export type RoutingRule = z.infer<typeof routingRuleSchema>;
 
 /**
  * ```xml
@@ -15446,6 +15767,7 @@ export const routingRuleSchema = z.object({
  * ```
  */
 export const s3KeyFilterSchema = z.object({ FilterRules: filterRuleListSchema.optional() });
+export type S3KeyFilter = z.infer<typeof s3KeyFilterSchema>;
 
 /**
  * ```xml
@@ -15497,6 +15819,7 @@ export const s3LocationSchema = z.object({
    */
   StorageClass: storageClassSchema.optional(),
 });
+export type S3Location = z.infer<typeof s3LocationSchema>;
 
 /**
  * ```xml
@@ -15529,6 +15852,7 @@ export const s3TablesDestinationSchema = z.object({
    */
   TableName: s3TablesNameSchema,
 });
+export type S3TablesDestination = z.infer<typeof s3TablesDestinationSchema>;
 
 /**
  * ```xml
@@ -15576,6 +15900,7 @@ export const s3TablesDestinationResultSchema = z.object({
    */
   TableNamespace: s3TablesNamespaceSchema,
 });
+export type S3TablesDestinationResult = z.infer<typeof s3TablesDestinationResultSchema>;
 
 /**
  * ```xml
@@ -15591,6 +15916,7 @@ export const ssekmsSchema = z.object({
    */
   KeyId: ssekmsKeyIdSchema,
 });
+export type Ssekms = z.infer<typeof ssekmsSchema>;
 
 /**
  * ```xml
@@ -15632,6 +15958,7 @@ export const ssekmsEncryptionSchema = z.object({
    */
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
 });
+export type SsekmsEncryption = z.infer<typeof ssekmsEncryptionSchema>;
 
 /**
  * ```xml
@@ -15639,6 +15966,7 @@ export const ssekmsEncryptionSchema = z.object({
  * ```
  */
 export const sses3Schema = z.object({});
+export type Sses3 = z.infer<typeof sses3Schema>;
 
 /**
  * ```xml
@@ -15669,6 +15997,7 @@ export const scanRangeSchema = z.object({
    */
   End: endSchema.optional(),
 });
+export type ScanRange = z.infer<typeof scanRangeSchema>;
 
 export const selectObjectContentOutputSchema = z.object({
   /**
@@ -15678,6 +16007,7 @@ export const selectObjectContentOutputSchema = z.object({
    */
   Payload: selectObjectContentEventStreamSchema.optional(),
 });
+export type SelectObjectContentOutput = z.infer<typeof selectObjectContentOutputSchema>;
 
 /**
  * ```xml
@@ -15798,6 +16128,7 @@ export const selectObjectContentRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type SelectObjectContentRequest = z.infer<typeof selectObjectContentRequestSchema>;
 
 /**
  * ```xml
@@ -15843,6 +16174,7 @@ export const selectParametersSchema = z.object({
    */
   OutputSerialization: z.lazy(() => outputSerializationSchema),
 });
+export type SelectParameters = z.infer<typeof selectParametersSchema>;
 
 /**
  * ```xml
@@ -15947,6 +16279,7 @@ export const serverSideEncryptionByDefaultSchema = z.object({
    */
   KMSMasterKeyID: ssekmsKeyIdSchema.optional(),
 });
+export type ServerSideEncryptionByDefault = z.infer<typeof serverSideEncryptionByDefaultSchema>;
 
 /**
  * ```xml
@@ -15961,6 +16294,7 @@ export const serverSideEncryptionConfigurationSchema = z.object({
    */
   Rules: serverSideEncryptionRulesSchema,
 });
+export type ServerSideEncryptionConfiguration = z.infer<typeof serverSideEncryptionConfigurationSchema>;
 
 /**
  * ```xml
@@ -16027,6 +16361,7 @@ export const serverSideEncryptionRuleSchema = z.object({
    */
   BlockedEncryptionTypes: z.lazy(() => blockedEncryptionTypesSchema).optional(),
 });
+export type ServerSideEncryptionRule = z.infer<typeof serverSideEncryptionRuleSchema>;
 
 /**
  * ```xml
@@ -16072,6 +16407,7 @@ export const sessionCredentialsSchema = z.object({
    */
   Expiration: sessionExpirationSchema,
 });
+export type SessionCredentials = z.infer<typeof sessionCredentialsSchema>;
 
 /**
  * ```xml
@@ -16082,6 +16418,7 @@ export const sessionCredentialsSchema = z.object({
  * ```
  */
 export const simplePrefixSchema = z.object({});
+export type SimplePrefix = z.infer<typeof simplePrefixSchema>;
 
 /**
  * ```xml
@@ -16114,6 +16451,7 @@ export const sourceSelectionCriteriaSchema = z.object({
    */
   ReplicaModifications: z.lazy(() => replicaModificationsSchema).optional(),
 });
+export type SourceSelectionCriteria = z.infer<typeof sourceSelectionCriteriaSchema>;
 
 /**
  * ```xml
@@ -16129,6 +16467,7 @@ export const sseKmsEncryptedObjectsSchema = z.object({
    */
   Status: sseKmsEncryptedObjectsStatusSchema,
 });
+export type SseKmsEncryptedObjects = z.infer<typeof sseKmsEncryptedObjectsSchema>;
 
 /**
  * ```xml
@@ -16155,6 +16494,7 @@ export const statsSchema = z.object({
    */
   BytesReturned: bytesReturnedSchema.optional(),
 });
+export type Stats = z.infer<typeof statsSchema>;
 
 /**
  * ```xml
@@ -16169,6 +16509,7 @@ export const statsEventSchema = z.object({
    */
   Details: z.lazy(() => statsSchema).optional(),
 });
+export type StatsEvent = z.infer<typeof statsEventSchema>;
 
 /**
  * ```xml
@@ -16185,6 +16526,7 @@ export const storageClassAnalysisSchema = z.object({
    */
   DataExport: z.lazy(() => storageClassAnalysisDataExportSchema).optional(),
 });
+export type StorageClassAnalysis = z.infer<typeof storageClassAnalysisSchema>;
 
 /**
  * ```xml
@@ -16205,6 +16547,7 @@ export const storageClassAnalysisDataExportSchema = z.object({
    */
   Destination: z.lazy(() => analyticsExportDestinationSchema),
 });
+export type StorageClassAnalysisDataExport = z.infer<typeof storageClassAnalysisDataExportSchema>;
 
 /**
  * ```xml
@@ -16225,6 +16568,7 @@ export const tagSchema = z.object({
    */
   Value: valueSchema,
 });
+export type Tag = z.infer<typeof tagSchema>;
 
 /**
  * ```xml
@@ -16239,6 +16583,7 @@ export const taggingSchema = z.object({
    */
   TagSet: tagSetSchema,
 });
+export type Tagging = z.infer<typeof taggingSchema>;
 
 /**
  * ```xml
@@ -16261,6 +16606,7 @@ export const targetGrantSchema = z.object({
    */
   Permission: bucketLogsPermissionSchema.optional(),
 });
+export type TargetGrant = z.infer<typeof targetGrantSchema>;
 
 /**
  * ```xml
@@ -16283,6 +16629,7 @@ export const targetObjectKeyFormatSchema = z.object({
    */
   PartitionedPrefix: z.lazy(() => partitionedPrefixSchema).optional(),
 });
+export type TargetObjectKeyFormat = z.infer<typeof targetObjectKeyFormatSchema>;
 
 /**
  * ```xml
@@ -16310,6 +16657,7 @@ export const tieringSchema = z.object({
    */
   AccessTier: intelligentTieringAccessTierSchema,
 });
+export type Tiering = z.infer<typeof tieringSchema>;
 
 /**
  * ```xml
@@ -16319,6 +16667,7 @@ export const tieringSchema = z.object({
  * ```
  */
 export const tooManyPartsSchema = z.object({});
+export type TooManyParts = z.infer<typeof tooManyPartsSchema>;
 
 /**
  * ```xml
@@ -16344,6 +16693,7 @@ export const topicConfigurationSchema = z.object({
   Events: eventListSchema,
   Filter: z.lazy(() => notificationConfigurationFilterSchema).optional(),
 });
+export type TopicConfiguration = z.infer<typeof topicConfigurationSchema>;
 
 /**
  * ```xml
@@ -16380,6 +16730,7 @@ export const transitionSchema = z.object({
    */
   StorageClass: transitionStorageClassSchema.optional(),
 });
+export type Transition = z.infer<typeof transitionSchema>;
 
 export const updateBucketMetadataInventoryTableConfigurationRequestSchema = z.object({
   /**
@@ -16425,6 +16776,9 @@ export const updateBucketMetadataInventoryTableConfigurationRequestSchema = z.ob
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type UpdateBucketMetadataInventoryTableConfigurationRequest = z.infer<
+  typeof updateBucketMetadataInventoryTableConfigurationRequestSchema
+>;
 
 export const updateBucketMetadataJournalTableConfigurationRequestSchema = z.object({
   /**
@@ -16470,6 +16824,9 @@ export const updateBucketMetadataJournalTableConfigurationRequestSchema = z.obje
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type UpdateBucketMetadataJournalTableConfigurationRequest = z.infer<
+  typeof updateBucketMetadataJournalTableConfigurationRequestSchema
+>;
 
 export const updateObjectEncryptionRequestSchema = z.object({
   /**
@@ -16552,8 +16909,10 @@ export const updateObjectEncryptionRequestSchema = z.object({
    */
   ChecksumAlgorithm: checksumAlgorithmSchema.optional(),
 });
+export type UpdateObjectEncryptionRequest = z.infer<typeof updateObjectEncryptionRequestSchema>;
 
 export const updateObjectEncryptionResponseSchema = z.object({ RequestCharged: requestChargedSchema.optional() });
+export type UpdateObjectEncryptionResponse = z.infer<typeof updateObjectEncryptionResponseSchema>;
 
 export const uploadPartCopyOutputSchema = z.object({
   /**
@@ -16618,6 +16977,7 @@ export const uploadPartCopyOutputSchema = z.object({
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type UploadPartCopyOutput = z.infer<typeof uploadPartCopyOutputSchema>;
 
 export const uploadPartCopyRequestSchema = z.object({
   /**
@@ -16853,6 +17213,7 @@ export const uploadPartCopyRequestSchema = z.object({
    */
   ExpectedSourceBucketOwner: accountIdSchema.optional(),
 });
+export type UploadPartCopyRequest = z.infer<typeof uploadPartCopyRequestSchema>;
 
 export const uploadPartOutputSchema = z.object({
   /**
@@ -16952,6 +17313,7 @@ export const uploadPartOutputSchema = z.object({
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
   RequestCharged: requestChargedSchema.optional(),
 });
+export type UploadPartOutput = z.infer<typeof uploadPartOutputSchema>;
 
 export const uploadPartRequestSchema = z.object({
   /**
@@ -17116,6 +17478,7 @@ export const uploadPartRequestSchema = z.object({
    */
   ExpectedBucketOwner: accountIdSchema.optional(),
 });
+export type UploadPartRequest = z.infer<typeof uploadPartRequestSchema>;
 
 /**
  * ```xml
@@ -17139,6 +17502,7 @@ export const versioningConfigurationSchema = z.object({
    */
   Status: bucketVersioningStatusSchema.optional(),
 });
+export type VersioningConfiguration = z.infer<typeof versioningConfigurationSchema>;
 
 /**
  * ```xml
@@ -17174,6 +17538,7 @@ export const websiteConfigurationSchema = z.object({
    */
   RoutingRules: routingRulesSchema.optional(),
 });
+export type WebsiteConfiguration = z.infer<typeof websiteConfigurationSchema>;
 
 export const writeGetObjectResponseRequestSchema = z.object({
   /**
@@ -17552,3 +17917,4 @@ export const writeGetObjectResponseRequestSchema = z.object({
    */
   BucketKeyEnabled: bucketKeyEnabledSchema.optional(),
 });
+export type WriteGetObjectResponseRequest = z.infer<typeof writeGetObjectResponseRequestSchema>;
