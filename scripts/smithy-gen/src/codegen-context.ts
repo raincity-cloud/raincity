@@ -11,6 +11,7 @@ import { generateIntegerShapes } from "./generators/integer-shape-gen.js";
 import { generateListShapes } from "./generators/list-shape-gen.js";
 import { generateLongShapes } from "./generators/long-shape-gen.js";
 import { generateMapShapes } from "./generators/map-shape-gen.js";
+import { generateOperationShapes } from "./generators/operation-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
 import { generateStructureShapes } from "./generators/structure-shape-gen.js";
 import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
@@ -23,6 +24,7 @@ import type { IntegerShape } from "./shapes/integer-shape.js";
 import type { ListShape } from "./shapes/list-shape.js";
 import type { LongShape } from "./shapes/long-shape.js";
 import type { MapShape } from "./shapes/map-shape.js";
+import type { OperationShape } from "./shapes/operation-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
 import type { StructureShape } from "./shapes/structure-shape.js";
 import type { TimestampShape } from "./shapes/timestamp-shape.js";
@@ -92,6 +94,12 @@ function isUnionShape(entry: ShapeEntry): entry is ShapeEntry<UnionShape> {
   return entry.shape.type === "union";
 }
 
+function isOperationShape(
+  entry: ShapeEntry,
+): entry is ShapeEntry<OperationShape> {
+  return entry.shape.type === "operation";
+}
+
 export class CodeGenContext {
   private model: SmithyAstModel;
   private shapeRegistry = new Map<string, Import>();
@@ -132,6 +140,10 @@ export class CodeGenContext {
     shapeKey: string,
   ): SmithyAstModel["shapes"][string]["type"] | undefined {
     return this.model.shapes[shapeKey]?.type;
+  }
+
+  getShape(shapeKey: string): SmithyAstModel["shapes"][string] | undefined {
+    return this.model.shapes[shapeKey];
   }
 
   addCode(fileKey: string, codeItem: Code): void {
@@ -188,6 +200,11 @@ export class CodeGenContext {
 
     const unionShapes = (grouped["union"] ?? []).filter(isUnionShape);
     generateUnionShapes(this, unionShapes);
+
+    const operationShapes = (grouped["operation"] ?? []).filter(
+      isOperationShape,
+    );
+    generateOperationShapes(this, operationShapes);
   }
 
   renderFiles(): Map<string, string> {

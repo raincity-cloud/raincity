@@ -29,8 +29,26 @@ export const operationShapeSchema = abstractShapeSchema
       ...staticContextParams,
       ...unsignedPayloadTrait,
     }).optional(),
-    input: z.unknown(),
-    output: z.unknown(),
-    errors: z.unknown(),
+    input: z
+      .object({
+        target: z.string(),
+      })
+      .strict(),
+    output: z
+      .object({
+        target: z.string(),
+      })
+      .strict(),
+    errors: z
+      .array(
+        z
+          .object({
+            target: z.string(),
+          })
+          .strict(),
+      )
+      .optional(),
   })
   .strict();
+
+export type OperationShape = z.infer<typeof operationShapeSchema>;
