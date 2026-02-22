@@ -1,16 +1,7 @@
 import { camelCase } from "lodash-es";
-import { code, def, imp } from "ts-poet";
-import { z } from "zod/v4";
+import { code, def, Import, imp } from "ts-poet";
 import type { CodeGenContext } from "../codegen-context.js";
 import type { TimestampShape } from "../shapes/timestamp-shape.js";
-
-const zImp = imp("z@zod/v4");
-
-const RFC3339_DATE_TIME_PATTERN =
-  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$";
-const IMF_FIXDATE_PATTERN =
-  "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$";
-const FRACTIONAL_TRUNCATION_REGEX = /\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/;
 
 interface TimestampShapeEntry {
   key: string;
@@ -21,61 +12,19 @@ type TimestampFormat = NonNullable<
   TimestampShape["traits"]
 >["smithy.api#timestampFormat"];
 
-export function normalizeDateTimeToCanonicalUtc(value: string): string {
-  if (!new RegExp(RFC3339_DATE_TIME_PATTERN).test(value)) {
-    throw new Error("Invalid RFC3339 date-time timestamp");
-  }
-
-  const truncated = value.replace(FRACTIONAL_TRUNCATION_REGEX, ".$1");
-  const parsed = new Date(truncated);
-  if (Number.isNaN(parsed.getTime())) {
-    throw new Error("Invalid RFC3339 date-time timestamp");
-  }
-
-  return parsed.toISOString();
-}
-
-export function createTimestampSchemaForFormat(format: TimestampFormat) {
-  if (format === "date-time") {
-    return z
-      .string()
-      .regex(new RegExp(RFC3339_DATE_TIME_PATTERN))
-      .refine((value) => {
-        const truncated = value.replace(FRACTIONAL_TRUNCATION_REGEX, ".$1");
-        return !Number.isNaN(new Date(truncated).getTime());
-      }, "Invalid RFC3339 date-time timestamp")
-      .transform((value) => normalizeDateTimeToCanonicalUtc(value));
-  }
-
-  return z
-    .string()
-    .regex(new RegExp(IMF_FIXDATE_PATTERN))
-    .refine((value) => {
-      const parsed = new Date(value);
-      return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
-    }, "Invalid IMF-fixdate timestamp");
-}
-
-export function buildConstraintChain(
+function buildTimestampSchemaImport(
+  fileKey: string,
   format: NonNullable<TimestampFormat>,
-): string {
-  if (format === "date-time") {
-    const formatPattern = JSON.stringify(RFC3339_DATE_TIME_PATTERN);
-    const truncationPattern = "/\\.(\\d{3})\\d+(?=Z|[+-]\\d{2}:\\d{2}$)/";
-    return `.regex(new RegExp(${formatPattern})).refine((value) => {
-  const truncated = value.replace(${truncationPattern}, ".$1");
-  return !Number.isNaN(new Date(truncated).getTime());
-}, "Invalid RFC3339 date-time timestamp").transform((value) => {
-  const truncated = value.replace(${truncationPattern}, ".$1");
-  return new Date(truncated).toISOString();
-})`;
-  }
+): Import {
+  const helperPath = fileKey.startsWith("common-schemas:")
+    ? "../timestamp-schema-helpers.js"
+    : "@raincity/aws-api-shared";
+  const schemaName =
+    format === "date-time"
+      ? "rfc3339DateTimeTimestampSchema"
+      : "imfFixdateTimestampSchema";
 
-  const httpDatePattern = JSON.stringify(IMF_FIXDATE_PATTERN);
-  return `.regex(new RegExp(${httpDatePattern})).refine((value) => {
-  const parsed = new Date(value);
-  return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
-}, "Invalid IMF-fixdate timestamp")`;
+  return Import.importsName(schemaName, helperPath, false);
 }
 
 function resolveTimestampFormatForFile(
@@ -108,9 +57,9 @@ export function generateTimestampShapes(
       shape.traits?.["smithy.api#timestampFormat"],
       fileKey,
     );
-    const constraints = buildConstraintChain(format);
+    const timestampSchema = buildTimestampSchemaImport(fileKey, format);
 
-    const schemaCode = code`export const ${def(schemaName)} = ${zImp}.string()${constraints};`;
+    const schemaCode = code`export const ${def(schemaName)} = ${timestampSchema};`;
 
     ctx.addCode(fileKey, schemaCode);
     ctx.registerShape(key, imp(`${schemaName}@${ctx.getImportPath(fileKey)}`));
