@@ -21,6 +21,7 @@ export enum ResourceDelimiter {
   COLON = ":",
 }
 export const resourceDelimiterSchema = z.enum(ResourceDelimiter);
+
 /**
  * ```xml
  * Designates the target as containing data of a known classification level.

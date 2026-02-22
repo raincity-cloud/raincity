@@ -197,6 +197,9 @@ describe("CodeGenContext string shape generation", () => {
     const output = ctx.renderFiles().get("s3-schemas:schema") ?? "";
     expect(output).toContain("alphaSchema");
     expect(output).toContain("betaSchema");
+    expect(output).toContain(
+      "export const alphaSchema = z.string();\n\nexport const betaSchema = z.string();",
+    );
   });
 
   it("camelCases the shape name to produce the schema variable name", () => {

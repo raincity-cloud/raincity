@@ -37,6 +37,7 @@ export const partitionEndpointSpecialCaseSchema = z.object({
   // TODO: structure member target smithy.api#Boolean for PartitionEndpointSpecialCase.fips is not generated yet.
   fips: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * Defines the endpoint pattern to apply for all regional endpoints in the given partition.
@@ -65,6 +66,7 @@ export const partitionSpecialCaseSchema = z.object({
   // TODO: structure member target smithy.api#Boolean for PartitionSpecialCase.fips is not generated yet.
   fips: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * Defines the endpoint pattern to apply for a region.
@@ -100,6 +102,7 @@ export const regionSpecialCaseSchema = z.object({
   // TODO: structure member target smithy.api#String for RegionSpecialCase.signingRegion is not generated yet.
   signingRegion: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * Marks that a services has only dualStack endpoints.
@@ -108,6 +111,7 @@ export const regionSpecialCaseSchema = z.object({
 // TODO: aws.endpoints#endpointsModifier ({}) on structure dualStackOnlyEndpoints is not mapped to zod.
 // TODO: smithy.api#trait ({"selector":"service","breakingChanges":[{"change":"any"}]}) on structure dualStackOnlyEndpoints is not mapped to zod.
 export const dualStackOnlyEndpointsSchema = z.object({});
+
 /**
  * ```xml
  * Marks a trait as an endpoints modifier defining trait.
@@ -118,6 +122,7 @@ export const dualStackOnlyEndpointsSchema = z.object({});
  */
 // TODO: smithy.api#trait ({"selector":"structure[trait|trait]","breakingChanges":[{"change":"presence"}]}) on structure endpointsModifier is not mapped to zod.
 export const endpointsModifierSchema = z.object({});
+
 /**
  * ```xml
  * Marks that a services has hand written endpoint rules.
@@ -126,6 +131,7 @@ export const endpointsModifierSchema = z.object({});
 // TODO: aws.endpoints#endpointsModifier ({}) on structure rulesBasedEndpoints is not mapped to zod.
 // TODO: smithy.api#trait ({"selector":"service","breakingChanges":[{"change":"any"}]}) on structure rulesBasedEndpoints is not mapped to zod.
 export const rulesBasedEndpointsSchema = z.object({});
+
 /**
  * ```xml
  * Marks that a services is non-regionalized and has
@@ -151,6 +157,7 @@ export const standardPartitionalEndpointsSchema = z.object({
   // TODO: structure member target aws.endpoints#PartitionEndpointSpecialCaseMap for standardPartitionalEndpoints.partitionEndpointSpecialCases is not generated yet.
   partitionEndpointSpecialCases: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * Marks that a services endpoints should be resolved using

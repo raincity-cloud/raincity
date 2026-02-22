@@ -7,8 +7,13 @@ import {
 } from "./aws.endpoints.structures.js";
 
 export const partitionEndpointSpecialCaseListSchema = z.array(partitionEndpointSpecialCaseSchema);
+
 export const partitionSpecialCaseListSchema = z.array(partitionSpecialCaseSchema);
+
 export const regionSpecialCaseListSchema = z.array(regionSpecialCaseSchema);
+
 export const partitionEndpointSpecialCaseMapSchema = z.record(z.string(), partitionEndpointSpecialCaseListSchema);
+
 export const partitionSpecialCaseMapSchema = z.record(z.string(), partitionSpecialCaseListSchema);
+
 export const regionSpecialCaseMapSchema = z.record(z.string(), regionSpecialCaseListSchema);

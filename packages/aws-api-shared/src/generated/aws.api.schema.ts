@@ -7,13 +7,16 @@ import { z } from "zod/v4";
  * ```
  */
 export const arnNamespaceSchema = z.string().regex(new RegExp("^[a-z0-9.\\-]{1,63}$"));
+
 /**
  * ```xml
  * A string representing a CloudFormation service name.
  * ```
  */
 export const cloudFormationNameSchema = z.string().regex(new RegExp("^[A-Z][A-Za-z0-9]+$"));
+
 export const cloudWatchMetricNamespaceSchema = z.string().min(1).max(255).regex(new RegExp("^[^:].*$"));
+
 /**
  * ```xml
  * Points to an operation designated for a tagging APi

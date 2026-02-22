@@ -278,6 +278,7 @@ export interface AmazonS3Service {
   abortMultipartUpload(
     input: z.infer<typeof abortMultipartUploadRequestSchema>,
   ): z.infer<typeof abortMultipartUploadOutputSchema>;
+
   /**
    * ```xml
    * <p>Completes a multipart upload by assembling previously uploaded parts.</p>
@@ -447,6 +448,7 @@ export interface AmazonS3Service {
   completeMultipartUpload(
     input: z.infer<typeof completeMultipartUploadRequestSchema>,
   ): z.infer<typeof completeMultipartUploadOutputSchema>;
+
   /**
  * ```xml
  * <p>Creates a copy of an object that is already stored in Amazon S3.</p>
@@ -656,6 +658,7 @@ export interface AmazonS3Service {
       Glacier.</p>
  */
   copyObject(input: z.infer<typeof copyObjectRequestSchema>): z.infer<typeof copyObjectOutputSchema>;
+
   /**
  * ```xml
  * <note>
@@ -808,7 +811,7 @@ export interface AmazonS3Service {
       access control lists (ACLs).</p>
  */
   createBucket(input: z.infer<typeof createBucketRequestSchema>): z.infer<typeof createBucketOutputSchema>;
-  // TODO: operation CreateBucketMetadataConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>Creates an S3 Metadata V2 metadata configuration for a general purpose bucket. For more information, see
@@ -907,8 +910,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation CreateBucketMetadataConfiguration references unresolved target(s): smithy.api#Unit.
   createBucketMetadataConfiguration(input: z.infer<typeof createBucketMetadataConfigurationRequestSchema>): unknown;
-  // TODO: operation CreateBucketMetadataTableConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <important>
@@ -986,9 +990,11 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation CreateBucketMetadataTableConfiguration references unresolved target(s): smithy.api#Unit.
   createBucketMetadataTableConfiguration(
     input: z.infer<typeof createBucketMetadataTableConfigurationRequestSchema>,
   ): unknown;
+
   /**
    * ```xml
    * <important>
@@ -1246,6 +1252,7 @@ export interface AmazonS3Service {
   createMultipartUpload(
     input: z.infer<typeof createMultipartUploadRequestSchema>,
   ): z.infer<typeof createMultipartUploadOutputSchema>;
+
   /**
    * ```xml
    * <p>Creates a session that establishes temporary security credentials to support fast authentication and
@@ -1360,7 +1367,7 @@ export interface AmazonS3Service {
    * @throws {NoSuchBucket} <p>The specified bucket does not exist.</p>
    */
   createSession(input: z.infer<typeof createSessionRequestSchema>): z.infer<typeof createSessionOutputSchema>;
-  // TODO: operation DeleteBucket references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>Deletes the S3 bucket. All objects (including all object versions and delete markers) in the bucket
@@ -1424,8 +1431,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucket references unresolved target(s): smithy.api#Unit.
   deleteBucket(input: z.infer<typeof deleteBucketRequestSchema>): unknown;
-  // TODO: operation DeleteBucketAnalyticsConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -1462,8 +1470,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketAnalyticsConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketAnalyticsConfiguration(input: z.infer<typeof deleteBucketAnalyticsConfigurationRequestSchema>): unknown;
-  // TODO: operation DeleteBucketCors references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -1494,8 +1503,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketCors references unresolved target(s): smithy.api#Unit.
   deleteBucketCors(input: z.infer<typeof deleteBucketCorsRequestSchema>): unknown;
-  // TODO: operation DeleteBucketEncryption references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>This implementation of the DELETE action resets the default encryption for the bucket as server-side
@@ -1562,8 +1572,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketEncryption references unresolved target(s): smithy.api#Unit.
   deleteBucketEncryption(input: z.infer<typeof deleteBucketEncryptionRequestSchema>): unknown;
-  // TODO: operation DeleteBucketIntelligentTieringConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -1596,10 +1607,11 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketIntelligentTieringConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketIntelligentTieringConfiguration(
     input: z.infer<typeof deleteBucketIntelligentTieringConfigurationRequestSchema>,
   ): unknown;
-  // TODO: operation DeleteBucketInventoryConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -1634,8 +1646,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketInventoryConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketInventoryConfiguration(input: z.infer<typeof deleteBucketInventoryConfigurationRequestSchema>): unknown;
-  // TODO: operation DeleteBucketLifecycle references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>Deletes the lifecycle configuration from the specified bucket. Amazon S3 removes all the lifecycle
@@ -1708,8 +1721,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketLifecycle references unresolved target(s): smithy.api#Unit.
   deleteBucketLifecycle(input: z.infer<typeof deleteBucketLifecycleRequestSchema>): unknown;
-  // TODO: operation DeleteBucketMetadataConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p> Deletes an S3 Metadata configuration from a general purpose bucket. For more information, see
@@ -1761,8 +1775,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketMetadataConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketMetadataConfiguration(input: z.infer<typeof deleteBucketMetadataConfigurationRequestSchema>): unknown;
-  // TODO: operation DeleteBucketMetadataTableConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <important>
@@ -1814,10 +1829,11 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketMetadataTableConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketMetadataTableConfiguration(
     input: z.infer<typeof deleteBucketMetadataTableConfigurationRequestSchema>,
   ): unknown;
-  // TODO: operation DeleteBucketMetricsConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -1859,8 +1875,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketMetricsConfiguration references unresolved target(s): smithy.api#Unit.
   deleteBucketMetricsConfiguration(input: z.infer<typeof deleteBucketMetricsConfigurationRequestSchema>): unknown;
-  // TODO: operation DeleteBucketOwnershipControls references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -1889,8 +1906,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketOwnershipControls references unresolved target(s): smithy.api#Unit.
   deleteBucketOwnershipControls(input: z.infer<typeof deleteBucketOwnershipControlsRequestSchema>): unknown;
-  // TODO: operation DeleteBucketPolicy references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>Deletes the policy of a specified bucket.</p>
@@ -1962,8 +1980,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketPolicy references unresolved target(s): smithy.api#Unit.
   deleteBucketPolicy(input: z.infer<typeof deleteBucketPolicyRequestSchema>): unknown;
-  // TODO: operation DeleteBucketReplication references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -1997,8 +2016,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketReplication references unresolved target(s): smithy.api#Unit.
   deleteBucketReplication(input: z.infer<typeof deleteBucketReplicationRequestSchema>): unknown;
-  // TODO: operation DeleteBucketTagging references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -2026,8 +2046,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketTagging references unresolved target(s): smithy.api#Unit.
   deleteBucketTagging(input: z.infer<typeof deleteBucketTaggingRequestSchema>): unknown;
-  // TODO: operation DeleteBucketWebsite references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -2061,7 +2082,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeleteBucketWebsite references unresolved target(s): smithy.api#Unit.
   deleteBucketWebsite(input: z.infer<typeof deleteBucketWebsiteRequestSchema>): unknown;
+
   /**
    * ```xml
    * <p>Removes an object from a bucket. The behavior depends on the bucket's versioning state: </p>
@@ -2192,6 +2215,7 @@ export interface AmazonS3Service {
    * ```
    */
   deleteObject(input: z.infer<typeof deleteObjectRequestSchema>): z.infer<typeof deleteObjectOutputSchema>;
+
   /**
    * ```xml
    * <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. If
@@ -2335,6 +2359,7 @@ export interface AmazonS3Service {
    * ```
    */
   deleteObjects(input: z.infer<typeof deleteObjectsRequestSchema>): z.infer<typeof deleteObjectsOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -2368,7 +2393,7 @@ export interface AmazonS3Service {
   deleteObjectTagging(
     input: z.infer<typeof deleteObjectTaggingRequestSchema>,
   ): z.infer<typeof deleteObjectTaggingOutputSchema>;
-  // TODO: operation DeletePublicAccessBlock references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -2409,13 +2434,16 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation DeletePublicAccessBlock references unresolved target(s): smithy.api#Unit.
   deletePublicAccessBlock(input: z.infer<typeof deletePublicAccessBlockRequestSchema>): unknown;
+
   /**
    * ```xml
    * <p>Returns the attribute-based access control (ABAC) property of the general purpose bucket. If ABAC is enabled on your bucket, you can use tags on the bucket for access control. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/buckets-tagging-enable-abac.html">Enabling ABAC in general purpose buckets</a>.</p>
    * ```
    */
   getBucketAbac(input: z.infer<typeof getBucketAbacRequestSchema>): z.infer<typeof getBucketAbacOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -2452,6 +2480,7 @@ export interface AmazonS3Service {
   getBucketAccelerateConfiguration(
     input: z.infer<typeof getBucketAccelerateConfigurationRequestSchema>,
   ): z.infer<typeof getBucketAccelerateConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -2487,6 +2516,7 @@ export interface AmazonS3Service {
    * ```
    */
   getBucketAcl(input: z.infer<typeof getBucketAclRequestSchema>): z.infer<typeof getBucketAclOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -2526,6 +2556,7 @@ export interface AmazonS3Service {
   getBucketAnalyticsConfiguration(
     input: z.infer<typeof getBucketAnalyticsConfigurationRequestSchema>,
   ): z.infer<typeof getBucketAnalyticsConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -2560,6 +2591,7 @@ export interface AmazonS3Service {
    * ```
    */
   getBucketCors(input: z.infer<typeof getBucketCorsRequestSchema>): z.infer<typeof getBucketCorsOutputSchema>;
+
   /**
    * ```xml
    * <p>Returns the default encryption configuration for an Amazon S3 bucket. By default, all buckets have a
@@ -2629,6 +2661,7 @@ export interface AmazonS3Service {
   getBucketEncryption(
     input: z.infer<typeof getBucketEncryptionRequestSchema>,
   ): z.infer<typeof getBucketEncryptionOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -2664,6 +2697,7 @@ export interface AmazonS3Service {
   getBucketIntelligentTieringConfiguration(
     input: z.infer<typeof getBucketIntelligentTieringConfigurationRequestSchema>,
   ): z.infer<typeof getBucketIntelligentTieringConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -2702,6 +2736,7 @@ export interface AmazonS3Service {
   getBucketInventoryConfiguration(
     input: z.infer<typeof getBucketInventoryConfigurationRequestSchema>,
   ): z.infer<typeof getBucketInventoryConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <p>Returns the lifecycle configuration information set on the bucket. For information about lifecycle
@@ -2805,6 +2840,7 @@ export interface AmazonS3Service {
   getBucketLifecycleConfiguration(
     input: z.infer<typeof getBucketLifecycleConfigurationRequestSchema>,
   ): z.infer<typeof getBucketLifecycleConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <important>
@@ -2854,6 +2890,7 @@ export interface AmazonS3Service {
   getBucketLocation(
     input: z.infer<typeof getBucketLocationRequestSchema>,
   ): z.infer<typeof getBucketLocationOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -2880,6 +2917,7 @@ export interface AmazonS3Service {
    * ```
    */
   getBucketLogging(input: z.infer<typeof getBucketLoggingRequestSchema>): z.infer<typeof getBucketLoggingOutputSchema>;
+
   /**
    * ```xml
    * <p>Retrieves the S3 Metadata configuration for a general purpose bucket. For more information, see
@@ -2933,6 +2971,7 @@ export interface AmazonS3Service {
   getBucketMetadataConfiguration(
     input: z.infer<typeof getBucketMetadataConfigurationRequestSchema>,
   ): z.infer<typeof getBucketMetadataConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <important>
@@ -2986,6 +3025,7 @@ export interface AmazonS3Service {
   getBucketMetadataTableConfiguration(
     input: z.infer<typeof getBucketMetadataTableConfigurationRequestSchema>,
   ): z.infer<typeof getBucketMetadataTableConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3031,6 +3071,7 @@ export interface AmazonS3Service {
   getBucketMetricsConfiguration(
     input: z.infer<typeof getBucketMetricsConfigurationRequestSchema>,
   ): z.infer<typeof getBucketMetricsConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3066,6 +3107,7 @@ export interface AmazonS3Service {
   getBucketNotificationConfiguration(
     input: z.infer<typeof getBucketNotificationConfigurationRequestSchema>,
   ): z.infer<typeof notificationConfigurationSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3111,6 +3153,7 @@ export interface AmazonS3Service {
   getBucketOwnershipControls(
     input: z.infer<typeof getBucketOwnershipControlsRequestSchema>,
   ): z.infer<typeof getBucketOwnershipControlsOutputSchema>;
+
   /**
    * ```xml
    * <p>Returns the policy of a specified bucket.</p>
@@ -3186,6 +3229,7 @@ export interface AmazonS3Service {
    * ```
    */
   getBucketPolicy(input: z.infer<typeof getBucketPolicyRequestSchema>): z.infer<typeof getBucketPolicyOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3227,6 +3271,7 @@ export interface AmazonS3Service {
   getBucketPolicyStatus(
     input: z.infer<typeof getBucketPolicyStatusRequestSchema>,
   ): z.infer<typeof getBucketPolicyStatusOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3269,6 +3314,7 @@ export interface AmazonS3Service {
   getBucketReplication(
     input: z.infer<typeof getBucketReplicationRequestSchema>,
   ): z.infer<typeof getBucketReplicationOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3292,6 +3338,7 @@ export interface AmazonS3Service {
   getBucketRequestPayment(
     input: z.infer<typeof getBucketRequestPaymentRequestSchema>,
   ): z.infer<typeof getBucketRequestPaymentOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3333,6 +3380,7 @@ export interface AmazonS3Service {
    * ```
    */
   getBucketTagging(input: z.infer<typeof getBucketTaggingRequestSchema>): z.infer<typeof getBucketTaggingOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3369,6 +3417,7 @@ export interface AmazonS3Service {
   getBucketVersioning(
     input: z.infer<typeof getBucketVersioningRequestSchema>,
   ): z.infer<typeof getBucketVersioningOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3399,6 +3448,7 @@ export interface AmazonS3Service {
    * ```
    */
   getBucketWebsite(input: z.infer<typeof getBucketWebsiteRequestSchema>): z.infer<typeof getBucketWebsiteOutputSchema>;
+
   /**
  * ```xml
  * <p>Retrieves an object from Amazon S3.</p>
@@ -3578,6 +3628,7 @@ export interface AmazonS3Service {
  * @throws {NoSuchKey} <p>The specified key does not exist.</p>
  */
   getObject(input: z.infer<typeof getObjectRequestSchema>): z.infer<typeof getObjectOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3628,6 +3679,7 @@ export interface AmazonS3Service {
    * @throws {NoSuchKey} <p>The specified key does not exist.</p>
    */
   getObjectAcl(input: z.infer<typeof getObjectAclRequestSchema>): z.infer<typeof getObjectAclOutputSchema>;
+
   /**
    * ```xml
    * <p>Retrieves all of the metadata from an object without returning the object itself. This operation is
@@ -3845,6 +3897,7 @@ export interface AmazonS3Service {
   getObjectAttributes(
     input: z.infer<typeof getObjectAttributesRequestSchema>,
   ): z.infer<typeof getObjectAttributesOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3868,6 +3921,7 @@ export interface AmazonS3Service {
   getObjectLegalHold(
     input: z.infer<typeof getObjectLegalHoldRequestSchema>,
   ): z.infer<typeof getObjectLegalHoldOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3892,6 +3946,7 @@ export interface AmazonS3Service {
   getObjectLockConfiguration(
     input: z.infer<typeof getObjectLockConfigurationRequestSchema>,
   ): z.infer<typeof getObjectLockConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3915,6 +3970,7 @@ export interface AmazonS3Service {
   getObjectRetention(
     input: z.infer<typeof getObjectRetentionRequestSchema>,
   ): z.infer<typeof getObjectRetentionOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3953,6 +4009,7 @@ export interface AmazonS3Service {
    * ```
    */
   getObjectTagging(input: z.infer<typeof getObjectTaggingRequestSchema>): z.infer<typeof getObjectTaggingOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -3980,6 +4037,7 @@ export interface AmazonS3Service {
    * ```
    */
   getObjectTorrent(input: z.infer<typeof getObjectTorrentRequestSchema>): z.infer<typeof getObjectTorrentOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -4033,6 +4091,7 @@ export interface AmazonS3Service {
   getPublicAccessBlock(
     input: z.infer<typeof getPublicAccessBlockRequestSchema>,
   ): z.infer<typeof getPublicAccessBlockOutputSchema>;
+
   /**
    * ```xml
    * <p>You can use this operation to determine if a bucket exists and if you have permission to access it.
@@ -4113,6 +4172,7 @@ export interface AmazonS3Service {
    * @throws {NotFound} <p>The specified content does not exist.</p>
    */
   headBucket(input: z.infer<typeof headBucketRequestSchema>): z.infer<typeof headBucketOutputSchema>;
+
   /**
    * ```xml
    * <p>The <code>HEAD</code> operation retrieves metadata from an object without returning the object
@@ -4274,6 +4334,7 @@ export interface AmazonS3Service {
    * @throws {NotFound} <p>The specified content does not exist.</p>
    */
   headObject(input: z.infer<typeof headObjectRequestSchema>): z.infer<typeof headObjectOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -4320,6 +4381,7 @@ export interface AmazonS3Service {
   listBucketAnalyticsConfigurations(
     input: z.infer<typeof listBucketAnalyticsConfigurationsRequestSchema>,
   ): z.infer<typeof listBucketAnalyticsConfigurationsOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -4355,6 +4417,7 @@ export interface AmazonS3Service {
   listBucketIntelligentTieringConfigurations(
     input: z.infer<typeof listBucketIntelligentTieringConfigurationsRequestSchema>,
   ): z.infer<typeof listBucketIntelligentTieringConfigurationsOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -4400,6 +4463,7 @@ export interface AmazonS3Service {
   listBucketInventoryConfigurations(
     input: z.infer<typeof listBucketInventoryConfigurationsRequestSchema>,
   ): z.infer<typeof listBucketInventoryConfigurationsOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -4446,6 +4510,7 @@ export interface AmazonS3Service {
   listBucketMetricsConfigurations(
     input: z.infer<typeof listBucketMetricsConfigurationsRequestSchema>,
   ): z.infer<typeof listBucketMetricsConfigurationsOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -4469,6 +4534,7 @@ export interface AmazonS3Service {
    * ```
    */
   listBuckets(input: z.infer<typeof listBucketsRequestSchema>): z.infer<typeof listBucketsOutputSchema>;
+
   /**
    * ```xml
    * <p>Returns a list of all Amazon S3 directory buckets owned by the authenticated sender of the request. For
@@ -4508,6 +4574,7 @@ export interface AmazonS3Service {
   listDirectoryBuckets(
     input: z.infer<typeof listDirectoryBucketsRequestSchema>,
   ): z.infer<typeof listDirectoryBucketsOutputSchema>;
+
   /**
    * ```xml
    * <p>This operation lists in-progress multipart uploads in a bucket. An in-progress multipart upload is a
@@ -4644,6 +4711,7 @@ export interface AmazonS3Service {
   listMultipartUploads(
     input: z.infer<typeof listMultipartUploadsRequestSchema>,
   ): z.infer<typeof listMultipartUploadsOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -4694,6 +4762,7 @@ export interface AmazonS3Service {
    * @throws {NoSuchBucket} <p>The specified bucket does not exist.</p>
    */
   listObjects(input: z.infer<typeof listObjectsRequestSchema>): z.infer<typeof listObjectsOutputSchema>;
+
   /**
    * ```xml
    * <p>Returns some or all (up to 1,000) of the objects in a bucket with each request. You can use the
@@ -4804,6 +4873,7 @@ export interface AmazonS3Service {
    * @throws {NoSuchBucket} <p>The specified bucket does not exist.</p>
    */
   listObjectsV2(input: z.infer<typeof listObjectsV2RequestSchema>): z.infer<typeof listObjectsV2OutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -4851,6 +4921,7 @@ export interface AmazonS3Service {
   listObjectVersions(
     input: z.infer<typeof listObjectVersionsRequestSchema>,
   ): z.infer<typeof listObjectVersionsOutputSchema>;
+
   /**
    * ```xml
    * <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
@@ -4944,14 +5015,15 @@ export interface AmazonS3Service {
    * ```
    */
   listParts(input: z.infer<typeof listPartsRequestSchema>): z.infer<typeof listPartsOutputSchema>;
-  // TODO: operation PutBucketAbac references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>Sets the attribute-based access control (ABAC) property of the general purpose bucket. You must have <code>s3:PutBucketABAC</code> permission to perform this action. When you enable ABAC, you can use tags for access control on your buckets. Additionally, when ABAC is enabled, you must use the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_TagResource.html">TagResource</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_control_UntagResource.html">UntagResource</a> actions to manage tags on your buckets. You can nolonger use the <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketTagging.html">PutBucketTagging</a> and <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketTagging.html">DeleteBucketTagging</a> actions to tag your bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/buckets-tagging-enable-abac.html">Enabling ABAC in general purpose buckets</a>. </p>
    * ```
    */
+  // TODO: operation PutBucketAbac references unresolved target(s): smithy.api#Unit.
   putBucketAbac(input: z.infer<typeof putBucketAbacRequestSchema>): unknown;
-  // TODO: operation PutBucketAccelerateConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -4997,8 +5069,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketAccelerateConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketAccelerateConfiguration(input: z.infer<typeof putBucketAccelerateConfigurationRequestSchema>): unknown;
-  // TODO: operation PutBucketAcl references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <important>
@@ -5204,8 +5277,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketAcl references unresolved target(s): smithy.api#Unit.
   putBucketAcl(input: z.infer<typeof putBucketAclRequestSchema>): unknown;
-  // TODO: operation PutBucketAnalyticsConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -5317,8 +5391,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketAnalyticsConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketAnalyticsConfiguration(input: z.infer<typeof putBucketAnalyticsConfigurationRequestSchema>): unknown;
-  // TODO: operation PutBucketCors references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -5379,8 +5454,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketCors references unresolved target(s): smithy.api#Unit.
   putBucketCors(input: z.infer<typeof putBucketCorsRequestSchema>): unknown;
-  // TODO: operation PutBucketEncryption references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>This operation configures default encryption and Amazon S3 Bucket Keys for an existing bucket. You can also <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/API_BlockedEncryptionTypes.html">block encryption types</a> using this operation.</p>
@@ -5507,8 +5583,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketEncryption references unresolved target(s): smithy.api#Unit.
   putBucketEncryption(input: z.infer<typeof putBucketEncryptionRequestSchema>): unknown;
-  // TODO: operation PutBucketIntelligentTieringConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -5573,10 +5650,11 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketIntelligentTieringConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketIntelligentTieringConfiguration(
     input: z.infer<typeof putBucketIntelligentTieringConfigurationRequestSchema>,
   ): unknown;
-  // TODO: operation PutBucketInventoryConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -5667,7 +5745,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketInventoryConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketInventoryConfiguration(input: z.infer<typeof putBucketInventoryConfigurationRequestSchema>): unknown;
+
   /**
    * ```xml
    * <p>Creates a new lifecycle configuration for the bucket or replaces an existing lifecycle
@@ -5803,7 +5883,7 @@ export interface AmazonS3Service {
   putBucketLifecycleConfiguration(
     input: z.infer<typeof putBucketLifecycleConfigurationRequestSchema>,
   ): z.infer<typeof putBucketLifecycleConfigurationOutputSchema>;
-  // TODO: operation PutBucketLogging references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <important>
@@ -5900,8 +5980,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketLogging references unresolved target(s): smithy.api#Unit.
   putBucketLogging(input: z.infer<typeof putBucketLoggingRequestSchema>): unknown;
-  // TODO: operation PutBucketMetricsConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -5957,8 +6038,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketMetricsConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketMetricsConfiguration(input: z.infer<typeof putBucketMetricsConfigurationRequestSchema>): unknown;
-  // TODO: operation PutBucketNotificationConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -6015,8 +6097,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketNotificationConfiguration references unresolved target(s): smithy.api#Unit.
   putBucketNotificationConfiguration(input: z.infer<typeof putBucketNotificationConfigurationRequestSchema>): unknown;
-  // TODO: operation PutBucketOwnershipControls references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -6044,8 +6127,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketOwnershipControls references unresolved target(s): smithy.api#Unit.
   putBucketOwnershipControls(input: z.infer<typeof putBucketOwnershipControlsRequestSchema>): unknown;
-  // TODO: operation PutBucketPolicy references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>Applies an Amazon S3 bucket policy to an Amazon S3 bucket.</p>
@@ -6125,8 +6209,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketPolicy references unresolved target(s): smithy.api#Unit.
   putBucketPolicy(input: z.infer<typeof putBucketPolicyRequestSchema>): unknown;
-  // TODO: operation PutBucketReplication references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -6200,8 +6285,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketReplication references unresolved target(s): smithy.api#Unit.
   putBucketReplication(input: z.infer<typeof putBucketReplicationRequestSchema>): unknown;
-  // TODO: operation PutBucketRequestPayment references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -6229,8 +6315,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketRequestPayment references unresolved target(s): smithy.api#Unit.
   putBucketRequestPayment(input: z.infer<typeof putBucketRequestPaymentRequestSchema>): unknown;
-  // TODO: operation PutBucketTagging references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -6293,8 +6380,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketTagging references unresolved target(s): smithy.api#Unit.
   putBucketTagging(input: z.infer<typeof putBucketTaggingRequestSchema>): unknown;
-  // TODO: operation PutBucketVersioning references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -6351,8 +6439,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketVersioning references unresolved target(s): smithy.api#Unit.
   putBucketVersioning(input: z.infer<typeof putBucketVersioningRequestSchema>): unknown;
-  // TODO: operation PutBucketWebsite references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -6487,7 +6576,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutBucketWebsite references unresolved target(s): smithy.api#Unit.
   putBucketWebsite(input: z.infer<typeof putBucketWebsiteRequestSchema>): unknown;
+
   /**
  * ```xml
  * <important>
@@ -6682,6 +6773,7 @@ export interface AmazonS3Service {
       copied object. </p>
  */
   putObject(input: z.infer<typeof putObjectRequestSchema>): z.infer<typeof putObjectOutputSchema>;
+
   /**
    * ```xml
    * <important>
@@ -6881,6 +6973,7 @@ export interface AmazonS3Service {
    * @throws {NoSuchKey} <p>The specified key does not exist.</p>
    */
   putObjectAcl(input: z.infer<typeof putObjectAclRequestSchema>): z.infer<typeof putObjectAclOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -6896,6 +6989,7 @@ export interface AmazonS3Service {
   putObjectLegalHold(
     input: z.infer<typeof putObjectLegalHoldRequestSchema>,
   ): z.infer<typeof putObjectLegalHoldOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -6929,6 +7023,7 @@ export interface AmazonS3Service {
   putObjectLockConfiguration(
     input: z.infer<typeof putObjectLockConfigurationRequestSchema>,
   ): z.infer<typeof putObjectLockConfigurationOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -6947,6 +7042,7 @@ export interface AmazonS3Service {
   putObjectRetention(
     input: z.infer<typeof putObjectRetentionRequestSchema>,
   ): z.infer<typeof putObjectRetentionOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -7005,7 +7101,7 @@ export interface AmazonS3Service {
    * ```
    */
   putObjectTagging(input: z.infer<typeof putObjectTaggingRequestSchema>): z.infer<typeof putObjectTaggingOutputSchema>;
-  // TODO: operation PutPublicAccessBlock references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -7053,7 +7149,9 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation PutPublicAccessBlock references unresolved target(s): smithy.api#Unit.
   putPublicAccessBlock(input: z.infer<typeof putPublicAccessBlockRequestSchema>): unknown;
+
   /**
  * ```xml
  * <p>Renames an existing object in a directory bucket that uses the S3 Express One Zone storage class.
@@ -7119,6 +7217,7 @@ export interface AmazonS3Service {
          </note>
  */
   renameObject(input: z.infer<typeof renameObjectRequestSchema>): z.infer<typeof renameObjectOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -7324,6 +7423,7 @@ export interface AmazonS3Service {
    * @throws {ObjectAlreadyInActiveTierError} <p>This action is not allowed against this storage tier.</p>
    */
   restoreObject(input: z.infer<typeof restoreObjectRequestSchema>): z.infer<typeof restoreObjectOutputSchema>;
+
   /**
    * ```xml
    * <note>
@@ -7447,7 +7547,7 @@ export interface AmazonS3Service {
   selectObjectContent(
     input: z.infer<typeof selectObjectContentRequestSchema>,
   ): z.infer<typeof selectObjectContentOutputSchema>;
-  // TODO: operation UpdateBucketMetadataInventoryTableConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>Enables or disables a live inventory table for an S3 Metadata configuration on a general
@@ -7537,10 +7637,11 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation UpdateBucketMetadataInventoryTableConfiguration references unresolved target(s): smithy.api#Unit.
   updateBucketMetadataInventoryTableConfiguration(
     input: z.infer<typeof updateBucketMetadataInventoryTableConfigurationRequestSchema>,
   ): unknown;
-  // TODO: operation UpdateBucketMetadataJournalTableConfiguration references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <p>Enables or disables journal table record expiration for an S3 Metadata configuration on a general
@@ -7583,9 +7684,11 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation UpdateBucketMetadataJournalTableConfiguration references unresolved target(s): smithy.api#Unit.
   updateBucketMetadataJournalTableConfiguration(
     input: z.infer<typeof updateBucketMetadataJournalTableConfigurationRequestSchema>,
   ): unknown;
+
   /**
  * ```xml
  * <note>
@@ -7762,6 +7865,7 @@ export interface AmazonS3Service {
   updateObjectEncryption(
     input: z.infer<typeof updateObjectEncryptionRequestSchema>,
   ): z.infer<typeof updateObjectEncryptionResponseSchema>;
+
   /**
    * ```xml
    * <p>Uploads a part in a multipart upload.</p>
@@ -7953,6 +8057,7 @@ export interface AmazonS3Service {
    * ```
    */
   uploadPart(input: z.infer<typeof uploadPartRequestSchema>): z.infer<typeof uploadPartOutputSchema>;
+
   /**
    * ```xml
    * <p>Uploads a part by copying data from an existing object as data source. To specify the data source,
@@ -8174,7 +8279,7 @@ export interface AmazonS3Service {
    * ```
    */
   uploadPartCopy(input: z.infer<typeof uploadPartCopyRequestSchema>): z.infer<typeof uploadPartCopyOutputSchema>;
-  // TODO: operation WriteGetObjectResponse references unresolved target(s): smithy.api#Unit.
+
   /**
    * ```xml
    * <note>
@@ -8215,5 +8320,6 @@ export interface AmazonS3Service {
    *          </important>
    * ```
    */
+  // TODO: operation WriteGetObjectResponse references unresolved target(s): smithy.api#Unit.
   writeGetObjectResponse(input: z.infer<typeof writeGetObjectResponseRequestSchema>): unknown;
 }

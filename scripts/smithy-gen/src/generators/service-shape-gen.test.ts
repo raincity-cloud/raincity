@@ -91,6 +91,95 @@ describe("CodeGenContext service shape generation", () => {
     );
   });
 
+  it("inserts a blank line between service methods", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#GetObjectRequest": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#GetObjectOutput": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#GetObject": {
+          type: "operation",
+          input: { target: "com.amazonaws.s3#GetObjectRequest" },
+          output: { target: "com.amazonaws.s3#GetObjectOutput" },
+        },
+        "com.amazonaws.s3#PutObjectRequest": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#PutObjectOutput": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#PutObject": {
+          type: "operation",
+          input: { target: "com.amazonaws.s3#PutObjectRequest" },
+          output: { target: "com.amazonaws.s3#PutObjectOutput" },
+        },
+        "com.amazonaws.s3#AmazonS3": {
+          type: "service",
+          version: "2006-03-01",
+          operations: [
+            { target: "com.amazonaws.s3#GetObject" },
+            { target: "com.amazonaws.s3#PutObject" },
+          ],
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
+
+    expect(output).toContain(
+      "getObject(input: z.infer<typeof getObjectRequestSchema>): z.infer<typeof getObjectOutputSchema>;\n\n  putObject(input: z.infer<typeof putObjectRequestSchema>): z.infer<typeof putObjectOutputSchema>;",
+    );
+  });
+
+  it("emits unresolved target TODO comments after operation tsdoc", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#KnownInput": {
+          type: "structure",
+          members: {},
+          mixins: {},
+        },
+        "com.amazonaws.s3#GetObject": {
+          type: "operation",
+          traits: {
+            "smithy.api#documentation": "Retrieves an object from S3.",
+          },
+          input: { target: "com.amazonaws.s3#KnownInput" },
+          output: { target: "com.amazonaws.s3#MissingOutput" },
+        },
+        "com.amazonaws.s3#AmazonS3": {
+          type: "service",
+          version: "2006-03-01",
+          operations: [{ target: "com.amazonaws.s3#GetObject" }],
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
+    const tsDocIndex = output.indexOf(" * Retrieves an object from S3.");
+    const todoIndex = output.indexOf(
+      "// TODO: operation GetObject references unresolved target(s): com.amazonaws.s3#MissingOutput.",
+    );
+    const methodIndex = output.indexOf("getObject(input:");
+
+    expect(tsDocIndex).toBeGreaterThan(-1);
+    expect(todoIndex).toBeGreaterThan(tsDocIndex);
+    expect(methodIndex).toBeGreaterThan(todoIndex);
+  });
+
   it("imports cross-namespace operation input and output types", () => {
     const ctx = new CodeGenContext(
       makeModel({
@@ -200,5 +289,29 @@ describe("CodeGenContext service shape generation", () => {
     expect(serviceOutput).toContain("export interface AmazonS3Service {");
     expect(serviceOutput).toContain("getObject(input:");
     expect(serviceOutput).not.toContain("deleteObject(input:");
+  });
+
+  it("inserts a blank line between service shapes in the same file", () => {
+    const ctx = new CodeGenContext(
+      makeModel({
+        "com.amazonaws.s3#AmazonS3": {
+          type: "service",
+          version: "2006-03-01",
+          operations: [],
+        },
+        "com.amazonaws.s3#S3Control": {
+          type: "service",
+          version: "2018-08-20",
+          operations: [],
+        },
+      }),
+    );
+
+    ctx.generate();
+    const output = ctx.renderFiles().get("s3-schemas:service") ?? "";
+
+    expect(output).toContain(
+      "export interface AmazonS3Service {}\n\nexport interface S3ControlService {}",
+    );
   });
 });

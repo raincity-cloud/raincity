@@ -7,6 +7,7 @@ import { z } from "zod/v4";
  * ```
  */
 export const awsVendorParamsSchema = z.object({});
+
 /**
  * ```xml
  * Base vendor params for all aws services.
@@ -57,6 +58,7 @@ export const baseAwsVendorParamsSchema = z.object({
   // TODO: structure member target smithy.api#Boolean for BaseAwsVendorParams.useAccountIdRouting is not generated yet.
   useAccountIdRouting: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * Vendor params for S3.

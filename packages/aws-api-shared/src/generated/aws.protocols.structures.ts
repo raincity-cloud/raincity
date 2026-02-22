@@ -25,6 +25,7 @@ export const httpConfigurationSchema = z.object({
   // TODO: structure member target aws.protocols#StringList for HttpConfiguration.eventStreamHttp is not generated yet.
   eventStreamHttp: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * An RPC-based protocol that sends JSON payloads. This protocol does not use
@@ -34,6 +35,7 @@ export const httpConfigurationSchema = z.object({
 // TODO: smithy.api#protocolDefinition ({"traits":["smithy.api#timestampFormat","smithy.api#cors","smithy.api#endpoint","smithy.api#hostLabel"]}) on structure awsJson1_0 is not mapped to zod.
 // TODO: smithy.api#trait ({"selector":"service"}) on structure awsJson1_0 is not mapped to zod.
 export const awsJson10Schema = z.object({});
+
 /**
  * ```xml
  * An RPC-based protocol that sends JSON payloads. This protocol does not use
@@ -43,6 +45,7 @@ export const awsJson10Schema = z.object({});
 // TODO: smithy.api#protocolDefinition ({"traits":["smithy.api#timestampFormat","smithy.api#cors","smithy.api#endpoint","smithy.api#hostLabel"]}) on structure awsJson1_1 is not mapped to zod.
 // TODO: smithy.api#trait ({"selector":"service"}) on structure awsJson1_1 is not mapped to zod.
 export const awsJson11Schema = z.object({});
+
 /**
  * ```xml
  * An RPC-based protocol that sends 'POST' requests in the body as
@@ -54,6 +57,7 @@ export const awsJson11Schema = z.object({});
 // TODO: smithy.api#trait ({"selector":"service [trait|xmlNamespace]"}) on structure awsQuery is not mapped to zod.
 // TODO: smithy.api#traitValidators ({"UnsupportedProtocolDocument":{"message":"Document types are not supported with awsQuery","selector":"~> member :test(> document)"}}) on structure awsQuery is not mapped to zod.
 export const awsQuerySchema = z.object({});
+
 /**
  * ```xml
  * Enable backward compatibility when migrating from awsQuery to the awsJson
@@ -62,6 +66,7 @@ export const awsQuerySchema = z.object({});
  */
 // TODO: smithy.api#trait ({"selector":"service :test([trait|aws.protocols#awsJson1_0], [trait|smithy.protocols#rpcv2Cbor])"}) on structure awsQueryCompatible is not mapped to zod.
 export const awsQueryCompatibleSchema = z.object({});
+
 /**
  * ```xml
  * Provides the value in the 'Code' distinguishing field and HTTP response
@@ -85,6 +90,7 @@ export const awsQueryErrorSchema = z.object({
   // TODO: structure member target smithy.api#Integer for awsQueryError.httpResponseCode is not generated yet.
   httpResponseCode: z.unknown(),
 });
+
 /**
  * ```xml
  * An RPC-based protocol that sends 'POST' requests in the body as Amazon EC2
@@ -96,6 +102,7 @@ export const awsQueryErrorSchema = z.object({
 // TODO: smithy.api#trait ({"selector":"service [trait|xmlNamespace]"}) on structure ec2Query is not mapped to zod.
 // TODO: smithy.api#traitValidators ({"UnsupportedProtocolDocument":{"message":"Document types are not supported with ec2Query","selector":"~> member :test(> document)"}}) on structure ec2Query is not mapped to zod.
 export const ec2QuerySchema = z.object({});
+
 /**
  * ```xml
  * Indicates that an operation supports checksum validation.
@@ -135,6 +142,7 @@ export const httpChecksumSchema = z.object({
   // TODO: structure member target aws.protocols#ChecksumAlgorithmSet for httpChecksum.responseAlgorithms is not generated yet.
   responseAlgorithms: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * A RESTful protocol that sends JSON in structured payloads.
@@ -143,6 +151,7 @@ export const httpChecksumSchema = z.object({
 // TODO: smithy.api#protocolDefinition ({"traits":["smithy.api#timestampFormat","smithy.api#cors","smithy.api#endpoint","smithy.api#hostLabel","smithy.api#http","smithy.api#httpError","smithy.api#httpHeader","smithy.api#httpLabel","smithy.api#httpPayload","smithy.api#httpPrefixHeaders","smithy.api#httpQuery","smithy.api#httpQueryParams","smithy.api#httpResponseCode","aws.protocols#httpChecksum","smithy.api#httpChecksumRequired","smithy.api#jsonName"]}) on structure restJson1 is not mapped to zod.
 // TODO: smithy.api#trait ({"selector":"service"}) on structure restJson1 is not mapped to zod.
 export const restJson1Schema = z.object({});
+
 /**
  * ```xml
  * A RESTful protocol that sends XML in structured payloads.

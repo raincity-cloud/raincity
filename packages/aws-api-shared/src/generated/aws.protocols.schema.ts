@@ -9,6 +9,7 @@ import { checksumAlgorithmSchema } from "./aws.protocols.enums.js";
  * ```
  */
 export const ec2QueryNameSchema = z.string().regex(new RegExp("^[a-zA-Z_][a-zA-Z_0-9-]*$"));
+
 export const checksumAlgorithmSetSchema = z.array(checksumAlgorithmSchema).min(1).superRefine(
   (items, refinementContext) => {
     const seen = new Map<string, number>();
@@ -24,5 +25,6 @@ export const checksumAlgorithmSetSchema = z.array(checksumAlgorithmSchema).min(1
     }
   },
 );
+
 // TODO: list member target smithy.api#String is not generated yet.
 export const stringListSchema = z.array(z.unknown());

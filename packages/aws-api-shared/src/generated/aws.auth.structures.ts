@@ -18,6 +18,7 @@ export const cognitoUserPoolsSchema = z.object({
   // TODO: structure member target aws.auth#StringList for cognitoUserPools.providerArns is not generated yet.
   providerArns: z.unknown(),
 });
+
 /**
  * ```xml
  * [Signature Version 4](https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html)
@@ -43,6 +44,7 @@ export const sigv4Schema = z.object({
   // TODO: structure member target smithy.api#String for sigv4.name is not generated yet.
   name: z.unknown(),
 });
+
 /**
  * ```xml
  * Signature Version 4 Asymmetric (SigV4A), an extension of Signature Version 4 (SigV4), is the
@@ -67,6 +69,7 @@ export const sigv4ASchema = z.object({
   // TODO: structure member target smithy.api#String for sigv4a.name is not generated yet.
   name: z.unknown(),
 });
+
 /**
  * ```xml
  * Indicates that the request payload of a signed request is not to be used

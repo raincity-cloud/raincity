@@ -53,146 +53,285 @@ import {
 } from "./structures.js";
 
 export const bodySchema = z.instanceof(Uint8Array);
+
 export const streamingBlobSchema = z.instanceof(Uint8Array);
+
 export const accessPointAliasSchema = z.boolean();
+
 export const allowQuotedRecordDelimiterSchema = z.boolean();
+
 export const bucketKeyEnabledSchema = z.boolean();
+
 export const bypassGovernanceRetentionSchema = z.boolean();
+
 export const confirmRemoveSelfBucketAccessSchema = z.boolean();
+
 export const deleteMarkerSchema = z.boolean();
+
 export const enableRequestProgressSchema = z.boolean();
+
 export const expiredObjectDeleteMarkerSchema = z.boolean();
+
 export const fetchOwnerSchema = z.boolean();
+
 export const isEnabledSchema = z.boolean();
+
 export const isLatestSchema = z.boolean();
+
 export const isPublicSchema = z.boolean();
+
 export const isRestoreInProgressSchema = z.boolean();
+
 export const isTruncatedSchema = z.boolean();
+
 export const objectLockEnabledForBucketSchema = z.boolean();
+
 export const quietSchema = z.boolean();
+
 export const settingSchema = z.boolean();
+
 export const skipValidationSchema = z.boolean();
+
 export const daysSchema = z.number();
+
 export const daysAfterInitiationSchema = z.number();
+
 export const getObjectResponseStatusCodeSchema = z.number();
+
 export const intelligentTieringDaysSchema = z.number();
+
 export const keyCountSchema = z.number();
+
 export const maxAgeSecondsSchema = z.number();
+
 export const maxBucketsSchema = z.number().min(1).max(10000);
+
 export const maxDirectoryBucketsSchema = z.number().min(0).max(1000);
+
 export const maxKeysSchema = z.number();
+
 export const maxPartsSchema = z.number();
+
 export const maxUploadsSchema = z.number();
+
 export const minutesSchema = z.number();
+
 export const missingMetaSchema = z.number();
+
 export const partNumberSchema = z.number();
+
 export const partsCountSchema = z.number();
+
 export const prioritySchema = z.number();
+
 export const recordExpirationDaysSchema = z.number();
+
 export const tagCountSchema = z.number();
+
 export const versionCountSchema = z.number();
+
 export const yearsSchema = z.number();
+
 export const bytesProcessedSchema = z.bigint();
+
 export const bytesReturnedSchema = z.bigint();
+
 export const bytesScannedSchema = z.bigint();
+
 export const contentLengthSchema = z.bigint();
+
 export const endSchema = z.bigint();
+
 export const ifMatchSizeSchema = z.bigint();
+
 export const mpuObjectSizeSchema = z.bigint();
+
 export const objectSizeSchema = z.bigint();
+
 export const objectSizeGreaterThanBytesSchema = z.bigint();
+
 export const objectSizeLessThanBytesSchema = z.bigint();
+
 export const sizeSchema = z.bigint();
+
 export const startSchema = z.bigint();
+
 export const writeOffsetBytesSchema = z.bigint();
+
 export const abortRuleIdSchema = z.string();
+
 export const acceptRangesSchema = z.string();
+
 export const accessKeyIdValueSchema = z.string();
+
 export const accessPointArnSchema = z.string();
+
 export const accountIdSchema = z.string();
+
 export const allowedHeaderSchema = z.string();
+
 export const allowedMethodSchema = z.string();
+
 export const allowedOriginSchema = z.string();
+
 export const analyticsIdSchema = z.string();
+
 export const bucketLocationNameSchema = z.string();
+
 export const bucketNameSchema = z.string();
+
 export const bucketRegionSchema = z.string();
+
 export const cacheControlSchema = z.string();
+
 export const checksumCrc32Schema = z.string();
+
 export const checksumCrc32CSchema = z.string();
+
 export const checksumCrc64NvmeSchema = z.string();
+
 export const checksumSha1Schema = z.string();
+
 export const checksumSha256Schema = z.string();
+
 export const clientTokenSchema = z.string();
+
 export const codeSchema = z.string();
+
 export const commentsSchema = z.string();
+
 export const contentDispositionSchema = z.string();
+
 export const contentEncodingSchema = z.string();
+
 export const contentLanguageSchema = z.string();
+
 export const contentMd5Schema = z.string();
+
 export const contentRangeSchema = z.string();
+
 export const contentTypeSchema = z.string();
+
 export const copySourceSchema = z.string().regex(new RegExp("^\\/?.+\\/.+$"));
+
 export const copySourceIfMatchSchema = z.string();
+
 export const copySourceIfNoneMatchSchema = z.string();
+
 export const copySourceRangeSchema = z.string();
+
 export const copySourceSseCustomerAlgorithmSchema = z.string();
+
 export const copySourceSseCustomerKeySchema = z.string();
+
 export const copySourceSseCustomerKeyMd5Schema = z.string();
+
 export const copySourceVersionIdSchema = z.string();
+
 export const deleteMarkerVersionIdSchema = z.string();
+
 export const delimiterSchema = z.string();
+
 export const descriptionSchema = z.string();
+
 export const directoryBucketTokenSchema = z.string().min(0).max(1024);
+
 export const displayNameSchema = z.string();
+
 export const eTagSchema = z.string();
+
 export const emailAddressSchema = z.string();
+
 export const errorCodeSchema = z.string();
+
 export const errorMessageSchema = z.string();
+
 export const expirationSchema = z.string();
+
 export const expiresSchema = z.string();
+
 export const exposeHeaderSchema = z.string();
+
 export const expressionSchema = z.string();
+
 export const fieldDelimiterSchema = z.string();
+
 export const filterRuleValueSchema = z.string();
+
 export const grantFullControlSchema = z.string();
+
 export const grantReadSchema = z.string();
+
 export const grantReadAcpSchema = z.string();
+
 export const grantWriteSchema = z.string();
+
 export const grantWriteAcpSchema = z.string();
+
 export const hostNameSchema = z.string();
+
 export const httpErrorCodeReturnedEqualsSchema = z.string();
+
 export const httpRedirectCodeSchema = z.string();
+
 export const idSchema = z.string();
+
 export const ifMatchSchema = z.string();
+
 export const ifNoneMatchSchema = z.string();
+
 export const intelligentTieringIdSchema = z.string();
+
 export const inventoryIdSchema = z.string();
+
 export const kmsContextSchema = z.string();
+
 export const keyMarkerSchema = z.string();
+
 export const keyPrefixEqualsSchema = z.string();
+
 export const kmsKeyArnSchema = z.string();
+
 export const lambdaFunctionArnSchema = z.string();
+
 export const locationSchema = z.string();
+
 export const locationNameAsStringSchema = z.string();
+
 export const locationPrefixSchema = z.string();
+
 export const mfaSchema = z.string();
+
 export const markerSchema = z.string();
+
 export const messageSchema = z.string();
+
 export const metadataKeySchema = z.string();
+
 export const metadataTableStatusSchema = z.string();
+
 export const metadataValueSchema = z.string();
+
 export const metricsIdSchema = z.string();
+
 export const multipartUploadIdSchema = z.string();
+
 export const nextKeyMarkerSchema = z.string();
+
 export const nextMarkerSchema = z.string();
+
 export const nextPartNumberMarkerSchema = z.string();
+
 export const nextTokenSchema = z.string();
+
 export const nextUploadIdMarkerSchema = z.string();
+
 export const nextVersionIdMarkerSchema = z.string();
+
 export const nonEmptyKmsKeyArnStringSchema = z.string().min(20).max(2048).regex(
   new RegExp("^arn:aws[a-zA-Z0-9-]*:kms:[a-z0-9-]+:[0-9]{12}:key/[a-zA-Z0-9-]+$"),
 );
+
 /**
  * ```xml
  * <p>An optional unique identifier for configurations in a notification configuration. If you don't
@@ -200,59 +339,111 @@ export const nonEmptyKmsKeyArnStringSchema = z.string().min(20).max(2048).regex(
  * ```
  */
 export const notificationIdSchema = z.string();
+
 export const objectKeySchema = z.string().min(1);
+
 export const objectLockTokenSchema = z.string();
+
 export const objectVersionIdSchema = z.string();
+
 export const partNumberMarkerSchema = z.string();
+
 export const policySchema = z.string();
+
 export const prefixSchema = z.string();
+
 export const queueArnSchema = z.string();
+
 export const quoteCharacterSchema = z.string();
+
 export const quoteEscapeCharacterSchema = z.string();
+
 export const rangeSchema = z.string();
+
 export const recordDelimiterSchema = z.string();
+
 export const regionSchema = z.string().min(0).max(20);
+
 export const renameSourceSchema = z.string().regex(new RegExp("^\\/?.+\\/.+$"));
+
 export const renameSourceIfMatchSchema = z.string();
+
 export const renameSourceIfNoneMatchSchema = z.string();
+
 export const replaceKeyPrefixWithSchema = z.string();
+
 export const replaceKeyWithSchema = z.string();
+
 export const replicaKmsKeyIdSchema = z.string();
+
 export const requestRouteSchema = z.string();
+
 export const requestTokenSchema = z.string();
+
 export const responseCacheControlSchema = z.string();
+
 export const responseContentDispositionSchema = z.string();
+
 export const responseContentEncodingSchema = z.string();
+
 export const responseContentLanguageSchema = z.string();
+
 export const responseContentTypeSchema = z.string();
+
 export const restoreSchema = z.string();
+
 export const restoreOutputPathSchema = z.string();
+
 export const roleSchema = z.string();
+
 export const s3RegionalOrS3ExpressBucketArnStringSchema = z.string().min(1).max(128).regex(
   new RegExp("^arn:[^:]+:(s3|s3express):"),
 );
+
 export const s3TablesArnSchema = z.string();
+
 export const s3TablesBucketArnSchema = z.string();
+
 export const s3TablesNameSchema = z.string();
+
 export const s3TablesNamespaceSchema = z.string();
+
 export const sseCustomerAlgorithmSchema = z.string();
+
 export const sseCustomerKeySchema = z.string();
+
 export const sseCustomerKeyMd5Schema = z.string();
+
 export const ssekmsEncryptionContextSchema = z.string();
+
 export const ssekmsKeyIdSchema = z.string();
+
 export const sessionCredentialValueSchema = z.string();
+
 export const startAfterSchema = z.string();
+
 export const suffixSchema = z.string();
+
 export const taggingHeaderSchema = z.string();
+
 export const targetBucketSchema = z.string();
+
 export const targetPrefixSchema = z.string();
+
 export const tokenSchema = z.string();
+
 export const topicArnSchema = z.string();
+
 export const uriSchema = z.string();
+
 export const uploadIdMarkerSchema = z.string();
+
 export const valueSchema = z.string();
+
 export const versionIdMarkerSchema = z.string();
+
 export const websiteRedirectLocationSchema = z.string();
+
 export const abortDateSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -262,6 +453,7 @@ export const abortDateSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const copySourceIfModifiedSinceSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -271,6 +463,7 @@ export const copySourceIfModifiedSinceSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const copySourceIfUnmodifiedSinceSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -280,6 +473,7 @@ export const copySourceIfUnmodifiedSinceSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const creationDateSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -289,6 +483,7 @@ export const creationDateSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const dateSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -298,6 +493,7 @@ export const dateSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const ifMatchInitiatedTimeSchema = z.string().regex(
   new RegExp(
     "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
@@ -306,6 +502,7 @@ export const ifMatchInitiatedTimeSchema = z.string().regex(
   const parsed = new Date(value);
   return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
 }, "Invalid IMF-fixdate timestamp");
+
 export const ifMatchLastModifiedTimeSchema = z.string().regex(
   new RegExp(
     "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
@@ -314,6 +511,7 @@ export const ifMatchLastModifiedTimeSchema = z.string().regex(
   const parsed = new Date(value);
   return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
 }, "Invalid IMF-fixdate timestamp");
+
 export const ifModifiedSinceSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -323,6 +521,7 @@ export const ifModifiedSinceSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const ifUnmodifiedSinceSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -332,6 +531,7 @@ export const ifUnmodifiedSinceSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const initiatedSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -341,6 +541,7 @@ export const initiatedSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const lastModifiedSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -350,6 +551,7 @@ export const lastModifiedSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const lastModifiedTimeSchema = z.string().regex(
   new RegExp(
     "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
@@ -358,6 +560,7 @@ export const lastModifiedTimeSchema = z.string().regex(
   const parsed = new Date(value);
   return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
 }, "Invalid IMF-fixdate timestamp");
+
 export const objectLockRetainUntilDateSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -367,6 +570,7 @@ export const objectLockRetainUntilDateSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const renameSourceIfModifiedSinceSchema = z.string().regex(
   new RegExp(
     "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
@@ -375,6 +579,7 @@ export const renameSourceIfModifiedSinceSchema = z.string().regex(
   const parsed = new Date(value);
   return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
 }, "Invalid IMF-fixdate timestamp");
+
 export const renameSourceIfUnmodifiedSinceSchema = z.string().regex(
   new RegExp(
     "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
@@ -383,6 +588,7 @@ export const renameSourceIfUnmodifiedSinceSchema = z.string().regex(
   const parsed = new Date(value);
   return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
 }, "Invalid IMF-fixdate timestamp");
+
 export const responseExpiresSchema = z.string().regex(
   new RegExp(
     "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \\d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{4} \\d{2}:\\d{2}:\\d{2} GMT$",
@@ -391,6 +597,7 @@ export const responseExpiresSchema = z.string().regex(
   const parsed = new Date(value);
   return !Number.isNaN(parsed.getTime()) && parsed.toUTCString() === value;
 }, "Invalid IMF-fixdate timestamp");
+
 export const restoreExpiryDateSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -400,6 +607,7 @@ export const restoreExpiryDateSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const sessionExpirationSchema = z.string().regex(
   new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"),
 ).refine((value) => {
@@ -409,66 +617,114 @@ export const sessionExpirationSchema = z.string().regex(
   const truncated = value.replace(/\.(\d{3})\d+(?=Z|[+-]\d{2}:\d{2}$)/, ".$1");
   return new Date(truncated).toISOString();
 });
+
 export const allowedHeadersSchema = z.array(allowedHeaderSchema);
+
 export const allowedMethodsSchema = z.array(allowedMethodSchema);
+
 export const allowedOriginsSchema = z.array(allowedOriginSchema);
+
 export const analyticsConfigurationListSchema = z.array(analyticsConfigurationSchema);
+
 // TODO: smithy.api#xmlName ("Bucket") on list member is not mapped to zod.
 export const bucketsSchema = z.array(bucketSchema);
+
 export const corsRulesSchema = z.array(corsRuleSchema);
+
 export const checksumAlgorithmListSchema = z.array(checksumAlgorithmSchema);
+
 export const commonPrefixListSchema = z.array(commonPrefixSchema);
+
 export const completedPartListSchema = z.array(completedPartSchema);
+
 export const deleteMarkersSchema = z.array(deleteMarkerEntrySchema);
+
 export const deletedObjectsSchema = z.array(deletedObjectSchema);
+
 // TODO: smithy.api#xmlName ("EncryptionType") on list member is not mapped to zod.
 export const encryptionTypeListSchema = z.array(encryptionTypeSchema);
+
 export const errorsSchema = z.array(errorSchema);
+
 export const eventListSchema = z.array(eventSchema);
+
 export const exposeHeadersSchema = z.array(exposeHeaderSchema);
+
 /**
  * ```xml
  * <p>A list of containers for the key-value pair that defines the criteria for the filter rule.</p>
  * ```
  */
 export const filterRuleListSchema = z.array(filterRuleSchema);
+
 // TODO: smithy.api#xmlName ("Grant") on list member is not mapped to zod.
 export const grantsSchema = z.array(grantSchema);
+
 export const intelligentTieringConfigurationListSchema = z.array(intelligentTieringConfigurationSchema);
+
 export const inventoryConfigurationListSchema = z.array(inventoryConfigurationSchema);
+
 // TODO: smithy.api#xmlName ("Field") on list member is not mapped to zod.
 export const inventoryOptionalFieldsSchema = z.array(inventoryOptionalFieldSchema);
+
 export const lambdaFunctionConfigurationListSchema = z.array(lambdaFunctionConfigurationSchema);
+
 export const lifecycleRulesSchema = z.array(lifecycleRuleSchema);
+
 export const metricsConfigurationListSchema = z.array(metricsConfigurationSchema);
+
 export const multipartUploadListSchema = z.array(multipartUploadSchema);
+
 export const noncurrentVersionTransitionListSchema = z.array(noncurrentVersionTransitionSchema);
+
 export const objectAttributesListSchema = z.array(objectAttributesSchema);
+
 export const objectIdentifierListSchema = z.array(objectIdentifierSchema);
+
 export const objectListSchema = z.array(objectSchema);
+
 export const objectVersionListSchema = z.array(objectVersionSchema);
+
 export const optionalObjectAttributesListSchema = z.array(optionalObjectAttributesSchema);
+
 export const ownershipControlsRulesSchema = z.array(ownershipControlsRuleSchema);
+
 export const partsSchema = z.array(partSchema);
+
 export const partsListSchema = z.array(objectPartSchema);
+
 export const queueConfigurationListSchema = z.array(queueConfigurationSchema);
+
 export const replicationRulesSchema = z.array(replicationRuleSchema);
+
 // TODO: smithy.api#xmlName ("RoutingRule") on list member is not mapped to zod.
 export const routingRulesSchema = z.array(routingRuleSchema);
+
 export const serverSideEncryptionRulesSchema = z.array(serverSideEncryptionRuleSchema);
+
 // TODO: smithy.api#xmlName ("Tag") on list member is not mapped to zod.
 export const tagSetSchema = z.array(tagSchema);
+
 // TODO: smithy.api#xmlName ("Grant") on list member is not mapped to zod.
 export const targetGrantsSchema = z.array(targetGrantSchema);
+
 export const tieringListSchema = z.array(tieringSchema);
+
 export const topicConfigurationListSchema = z.array(topicConfigurationSchema);
+
 export const transitionListSchema = z.array(transitionSchema);
+
 // TODO: smithy.api#xmlName ("MetadataEntry") on list member is not mapped to zod.
 export const userMetadataSchema = z.array(metadataEntrySchema);
+
 export const metadataSchema = z.record(metadataKeySchema, metadataValueSchema);
+
 export const analyticsFilterSchema = z.union([prefixSchema, tagSchema, analyticsAndOperatorSchema]);
+
 export const metricsFilterSchema = z.union([prefixSchema, tagSchema, accessPointArnSchema, metricsAndOperatorSchema]);
+
 export const objectEncryptionSchema = z.union([ssekmsEncryptionSchema]);
+
 export const selectObjectContentEventStreamSchema = z.union([
   recordsEventSchema,
   statsEventSchema,

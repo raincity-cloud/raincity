@@ -36,6 +36,7 @@ export const taggableApiConfigSchema = z.object({
    */
   listTagsApi: tagOperationReferenceSchema,
 });
+
 /**
  * ```xml
  * Specifies an ARN template for the resource.
@@ -106,6 +107,7 @@ export const arnSchema = z.object({
   // TODO: structure member target smithy.api#Boolean for arn.reusable is not generated yet.
   reusable: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * Marks a string as containing an ARN.
@@ -144,6 +146,7 @@ export const arnReferenceSchema = z.object({
   // TODO: structure member target smithy.api#String for arnReference.service is not generated yet.
   service: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * Indicates that the target operation should use the client's endpoint
@@ -164,6 +167,7 @@ export const clientDiscoveredEndpointSchema = z.object({
   // TODO: structure member target smithy.api#Boolean for clientDiscoveredEndpoint.required is not generated yet.
   required: z.unknown(),
 });
+
 /**
  * ```xml
  * Configures endpoint discovery for the service.
@@ -192,6 +196,7 @@ export const clientEndpointDiscoverySchema = z.object({
   // TODO: structure member target smithy.api#String for clientEndpointDiscovery.error is not generated yet.
   error: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * Indicates members of the operation input which should be use to discover
@@ -200,6 +205,7 @@ export const clientEndpointDiscoverySchema = z.object({
  */
 // TODO: smithy.api#trait ({"selector":"operation[trait|aws.api#clientDiscoveredEndpoint] -[input]->\nstructure > :test(member[trait|required] > string)"}) on structure clientEndpointDiscoveryId is not mapped to zod.
 export const clientEndpointDiscoveryIdSchema = z.object({});
+
 /**
  * ```xml
  * Defines a service, resource, or operation as operating on the control plane.
@@ -207,6 +213,7 @@ export const clientEndpointDiscoveryIdSchema = z.object({});
  */
 // TODO: smithy.api#trait ({"selector":":test(service, resource, operation)","conflicts":["aws.api#dataPlane"]}) on structure controlPlane is not mapped to zod.
 export const controlPlaneSchema = z.object({});
+
 /**
  * ```xml
  * Defines a service, resource, or operation as operating on the data plane.
@@ -214,6 +221,7 @@ export const controlPlaneSchema = z.object({});
  */
 // TODO: smithy.api#trait ({"selector":":test(service, resource, operation)","conflicts":["aws.api#controlPlane"]}) on structure dataPlane is not mapped to zod.
 export const dataPlaneSchema = z.object({});
+
 /**
  * ```xml
  * An AWS service is defined using the `aws.api#service` trait. This trait
@@ -297,6 +305,7 @@ export const serviceSchema = z.object({
    */
   cloudWatchNamespace: cloudWatchMetricNamespaceSchema.optional(),
 });
+
 /**
  * ```xml
  * Annotates a service as having tagging on 1 or more resources and associated
@@ -315,6 +324,7 @@ export const tagEnabledSchema = z.object({
   // TODO: structure member target smithy.api#Boolean for tagEnabled.disableDefaultOperations is not generated yet.
   disableDefaultOperations: z.unknown().optional(),
 });
+
 /**
  * ```xml
  * Indicates a resource supports CRUD operations for tags. Either through
