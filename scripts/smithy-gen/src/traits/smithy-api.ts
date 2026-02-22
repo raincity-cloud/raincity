@@ -196,6 +196,10 @@ export const timestampFormatTrait = {
   "smithy.api#timestampFormat": z.enum(["date-time", "http-date"]).optional(),
 };
 
+export const titleTrait = {
+  "smithy.api#title": z.string().optional(),
+};
+
 export const traitTrait = {
   "smithy.api#trait": z
     .object({

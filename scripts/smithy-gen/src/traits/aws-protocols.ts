@@ -11,3 +11,12 @@ export const httpChecksumTrait = {
     .strict()
     .optional(),
 };
+
+export const restXmlTrait = {
+  "aws.protocols#restXml": z
+    .object({
+      noErrorWrapping: z.boolean().optional(),
+    })
+    .strict()
+    .optional(),
+};
