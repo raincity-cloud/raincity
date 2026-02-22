@@ -71,6 +71,7 @@ ctx.generate();
 const outputPaths: Record<string, string> = {
   "s3-schemas:service": join(s3GeneratedDir, "service.ts"),
   "s3-schemas:enums": join(s3GeneratedDir, "enums.ts"),
+  "s3-schemas:errors": join(s3GeneratedDir, "errors.ts"),
   "s3-schemas:structures": join(s3GeneratedDir, "structures.ts"),
   "s3-schemas:schema": join(s3GeneratedDir, "schema.ts"),
 };
