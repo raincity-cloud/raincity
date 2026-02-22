@@ -1,6 +1,9 @@
 import { camelCase } from "lodash-es";
 import { code, imp } from "ts-poet";
-import type { CodeGenContext } from "../codegen-context.js";
+import type {
+  CodeGenContext,
+  OperationMethodSignature,
+} from "../codegen-context.js";
 import type { OperationShape } from "../shapes/operation-shape.js";
 import type { SmithyAstModel } from "../smithy-ast-model.js";
 
@@ -156,12 +159,23 @@ export function generateOperationShapes(
     const throwsEntries = buildThrowsEntries(ctx, shape);
     const documentation = shape.traits?.["smithy.api#documentation"];
     const tsDoc = buildOperationTsDoc(documentation, throwsEntries);
-    const tsDocPrefix = tsDoc ? `${tsDoc}\n` : "";
+    const unresolvedTargets = [
+      inputType.unresolvedTarget,
+      outputType.unresolvedTarget,
+    ].filter((target): target is string => target !== undefined);
 
-    const operationCode = code`${tsDocPrefix}export function ${operationName}(_input: ${inputType.typeExpr}): ${outputType.typeExpr} {
-  throw new Error("Operation ${name} is not implemented.");
-}`;
+    const unresolvedComment =
+      unresolvedTargets.length > 0
+        ? `// TODO: operation ${name} references unresolved target(s): ${unresolvedTargets.join(", ")}.`
+        : undefined;
 
-    ctx.addCode(fileKey, operationCode);
+    const signature: OperationMethodSignature = {
+      methodName: operationName,
+      inputTypeExpr: inputType.typeExpr,
+      outputTypeExpr: outputType.typeExpr,
+      ...(tsDoc ? { tsDoc } : {}),
+      ...(unresolvedComment ? { unresolvedComment } : {}),
+    };
+    ctx.registerOperationMethod(key, signature);
   }
 }

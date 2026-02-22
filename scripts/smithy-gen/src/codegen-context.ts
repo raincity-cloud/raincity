@@ -12,6 +12,7 @@ import { generateListShapes } from "./generators/list-shape-gen.js";
 import { generateLongShapes } from "./generators/long-shape-gen.js";
 import { generateMapShapes } from "./generators/map-shape-gen.js";
 import { generateOperationShapes } from "./generators/operation-shape-gen.js";
+import { generateServiceShapes } from "./generators/service-shape-gen.js";
 import { generateStringShapes } from "./generators/string-shape-gen.js";
 import { generateStructureShapes } from "./generators/structure-shape-gen.js";
 import { generateTimestampShapes } from "./generators/timestamp-shape-gen.js";
@@ -25,6 +26,7 @@ import type { ListShape } from "./shapes/list-shape.js";
 import type { LongShape } from "./shapes/long-shape.js";
 import type { MapShape } from "./shapes/map-shape.js";
 import type { OperationShape } from "./shapes/operation-shape.js";
+import type { ServiceShape } from "./shapes/service-shape.js";
 import type { StringShape } from "./shapes/string-shape.js";
 import type { StructureShape } from "./shapes/structure-shape.js";
 import type { TimestampShape } from "./shapes/timestamp-shape.js";
@@ -32,6 +34,15 @@ import type { SmithyAstModel } from "./smithy-ast-model.js";
 
 type Shape = SmithyAstModel["shapes"][string];
 type UnionShape = Extract<Shape, { type: "union" }>;
+type TypeExpr = string | Import | Code;
+
+export interface OperationMethodSignature {
+  methodName: string;
+  inputTypeExpr: TypeExpr;
+  outputTypeExpr: TypeExpr;
+  tsDoc?: string;
+  unresolvedComment?: string;
+}
 
 interface ShapeEntry<S extends Shape = Shape> {
   key: string;
@@ -100,10 +111,15 @@ function isOperationShape(
   return entry.shape.type === "operation";
 }
 
+function isServiceShape(entry: ShapeEntry): entry is ShapeEntry<ServiceShape> {
+  return entry.shape.type === "service";
+}
+
 export class CodeGenContext {
   private model: SmithyAstModel;
   private shapeRegistry = new Map<string, Import>();
   private fileCode = new Map<string, Code[]>();
+  private operationMethodRegistry = new Map<string, OperationMethodSignature>();
 
   constructor(model: SmithyAstModel) {
     this.model = model;
@@ -153,6 +169,19 @@ export class CodeGenContext {
       this.fileCode.set(fileKey, codes);
     }
     codes.push(codeItem);
+  }
+
+  registerOperationMethod(
+    operationShapeKey: string,
+    signature: OperationMethodSignature,
+  ): void {
+    this.operationMethodRegistry.set(operationShapeKey, signature);
+  }
+
+  getOperationMethod(
+    operationShapeKey: string,
+  ): OperationMethodSignature | undefined {
+    return this.operationMethodRegistry.get(operationShapeKey);
   }
 
   generate(): void {
@@ -205,6 +234,9 @@ export class CodeGenContext {
       isOperationShape,
     );
     generateOperationShapes(this, operationShapes);
+
+    const serviceShapes = (grouped["service"] ?? []).filter(isServiceShape);
+    generateServiceShapes(this, serviceShapes);
   }
 
   renderFiles(): Map<string, string> {

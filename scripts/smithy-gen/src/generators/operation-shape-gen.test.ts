@@ -8,7 +8,7 @@ function makeModel(shapes: SmithyAstModel["shapes"]): SmithyAstModel {
 }
 
 describe("CodeGenContext operation shape generation", () => {
-  it("generates operation functions with typed input and output", () => {
+  it("registers operation methods with typed input and output", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#GetObjectInput": {
@@ -30,14 +30,10 @@ describe("CodeGenContext operation shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const method = ctx.getOperationMethod("com.amazonaws.s3#GetObject");
 
-    expect(output).toContain(
-      "export function getObject(_input: z.infer<typeof getObjectInputSchema>): z.infer<typeof getObjectOutputSchema> {",
-    );
-    expect(output).toContain(
-      'throw new Error("Operation GetObject is not implemented.");',
-    );
+    expect(method?.methodName).toBe("getObject");
+    expect(method?.tsDoc).toBeUndefined();
   });
 
   it("adds operation documentation and @throws entries from modeled errors", () => {
@@ -86,18 +82,18 @@ describe("CodeGenContext operation shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const method = ctx.getOperationMethod("com.amazonaws.s3#GetObject");
 
-    expect(output).toContain("* Retrieves an object from S3.");
-    expect(output).toContain(
+    expect(method?.tsDoc).toContain("* Retrieves an object from S3.");
+    expect(method?.tsDoc).toContain(
       "* @throws {NoSuchKey} The specified key does not exist.",
     );
-    expect(output).toContain(
+    expect(method?.tsDoc).toContain(
       "* @throws {InvalidState} This operation may throw InvalidState.",
     );
   });
 
-  it("falls back to unknown for unresolved input, output, and error targets", () => {
+  it("tracks unresolved input/output targets in operation method metadata", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#GetObject": {
@@ -110,49 +106,20 @@ describe("CodeGenContext operation shape generation", () => {
     );
 
     ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
+    const method = ctx.getOperationMethod("com.amazonaws.s3#GetObject");
 
-    expect(output).toContain(
-      "export function getObject(_input: unknown): unknown {",
+    expect(method?.unresolvedComment).toContain(
+      "com.amazonaws.s3#MissingInput",
     );
-    expect(output).toContain(
+    expect(method?.unresolvedComment).toContain(
+      "com.amazonaws.s3#MissingOutput",
+    );
+    expect(method?.tsDoc).toContain(
       "* @throws {unknown} This operation may throw an unknown error type (com.amazonaws.s3#MissingError).",
     );
   });
 
-  it("imports cross-namespace operation input and output types", () => {
-    const ctx = new CodeGenContext(
-      makeModel({
-        "com.amazonaws.shared#SharedInput": {
-          type: "structure",
-          members: {},
-          mixins: {},
-        },
-        "com.amazonaws.shared#SharedOutput": {
-          type: "structure",
-          members: {},
-          mixins: {},
-        },
-        "com.amazonaws.s3#CrossNamespaceOperation": {
-          type: "operation",
-          input: { target: "com.amazonaws.shared#SharedInput" },
-          output: { target: "com.amazonaws.shared#SharedOutput" },
-        },
-      }),
-    );
-
-    ctx.generate();
-    const output = ctx.renderFiles().get("s3-schemas") ?? "";
-
-    expect(output).toContain(
-      'import { sharedInputSchema, sharedOutputSchema } from "./common-schemas:com.amazonaws.shared";',
-    );
-    expect(output).toContain(
-      "export function crossNamespaceOperation(_input: z.infer<typeof sharedInputSchema>): z.infer<typeof sharedOutputSchema> {",
-    );
-  });
-
-  it("generates operations after other shape types", () => {
+  it("does not emit operation functions directly", () => {
     const ctx = new CodeGenContext(
       makeModel({
         "com.amazonaws.s3#GetObjectInput": {
@@ -176,12 +143,6 @@ describe("CodeGenContext operation shape generation", () => {
     ctx.generate();
     const output = ctx.renderFiles().get("s3-schemas") ?? "";
 
-    expect(
-      output.indexOf("export const getObjectInputSchema = z.object({});"),
-    ).toBeLessThan(
-      output.indexOf(
-        "export function getObject(_input: z.infer<typeof getObjectInputSchema>): z.infer<typeof getObjectOutputSchema> {",
-      ),
-    );
+    expect(output).not.toContain("export function getObject(");
   });
 });
